@@ -1,5 +1,5 @@
 /* global it:true, describe:true */
-import 'traceur/bin/traceur-runtime';
+//import 'traceur/bin/traceur-runtime';
 import { Chromedriver } from '../lib/chromedriver';
 import should from 'should';
 import 'mochawait';
@@ -13,3 +13,4 @@ describe('chromedriver', () => {
     should.exist(Chromedriver.getPath());
   });
 });
+

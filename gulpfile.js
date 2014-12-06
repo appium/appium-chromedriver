@@ -4,6 +4,7 @@ var gulp = require('gulp')
   , gutil = require('gulp-util')
   , merge = require('merge-stream')
   , sourcemaps = require('gulp-sourcemaps')
+  , mocha = require('gulp-mocha')
   , traceur = require('gulp-traceur')
   , clear = require('clear')
   , Q = require('q')
@@ -52,6 +53,13 @@ gulp.task('transpile', function () {
   transpile();
 });
 
+gulp.task('test', ['transpile'], function () {
+ return gulp
+   .src('build/test/specs.js', {read: false})
+   .pipe(mocha({reporter: 'nyan'}))
+   .on('error', handleError);
+});
+
 gulp.task('kill-gulp', function() {
   process.exit(0);
 });
@@ -65,8 +73,9 @@ gulp.task('clear-terminal', function() {
 // so we have to do that to be safe.
 // that should not be needed in gulp 4.0
 gulp.task('watch-build', function() {
-  return runSequence('clear-terminal', ['transpile']);
+  return runSequence('clear-terminal', ['transpile', 'test']);
 });
+
 gulp.task('watch', function () {
   exitOnError = true;
   gulp.watch(['src/**/*.js'], ['watch-build']);
