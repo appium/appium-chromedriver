@@ -42,7 +42,9 @@ var getTraceurStream = function (src, dest) {
 };
 
 var transpile = function () {
-  return getTraceurStream('src/**/*.js', 'build');
+  var lib = getTraceurStream('lib/**/*.js', 'build/lib');
+  var test = getTraceurStream('test/**/*.js', 'build/test');
+  return merge(lib, test);
 };
 
 gulp.task('transpile', function () {
@@ -78,7 +80,7 @@ gulp.task('watch-build', function() {
 
 gulp.task('watch', function () {
   exitOnError = true;
-  gulp.watch(['src/**/*.js'], ['watch-build']);
+  gulp.watch(['lib/**/*.js', 'test/**/*.js'], ['watch-build']);
   gulp.watch('gulpfile.js', ['clear-terminal','kill-gulp']);
 });
 gulp.task('spawn-watch', ['clear-terminal'], function() {
