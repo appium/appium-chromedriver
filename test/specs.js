@@ -1,8 +1,9 @@
-/* global it:true, describe:true */
-//import 'traceur/bin/traceur-runtime';
-import { Chromedriver } from '../lib/chromedriver';
-import should from 'should';
+// transpile:mocha
+import { default as Chromedriver } from '../lib/chromedriver';
+import chai from 'chai';
 import 'mochawait';
+
+should = chai.should();
 
 describe('chromedriver', () => {
   it('should exist', () => {
