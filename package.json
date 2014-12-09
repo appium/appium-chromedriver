@@ -31,9 +31,9 @@
     "lib": "./src/lib"
   },
   "dependencies": {
+    "appium-transpile-runtime": "0.0.2",
     "npmlog": "~0.1.1",
-    "q": "~1.0.1",
-    "source-map-support": "^0.2.8"
+    "q": "^1.1.2"
   },
   "scripts": {
     "test": "$(npm bin)/mocha -t 15000 ./build/test/specs.js"
