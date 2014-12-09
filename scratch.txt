@@ -1,0 +1,33 @@
+goals:
+
+- control chromedriver
+- emit chromedriver state
+- state
+    - stopped
+    - starting
+    - online
+    - stopping
+    - stopped abnormally
+- transitions [see image]
+- external interface
+    - new Chromedriver
+        - params: chromedriverHost, chromedriverPort, deviceId,
+                  enablePerformanceLogging, customChromedriverPath
+    - startSession
+        - params: desiredCaps
+    - async sendCommand
+        - params: method, url (sans session id), JSON params
+        - return: response (JS object/value)
+        - throws: error obj (w/ selenium status etc)
+    - restartSession
+    - stopSession
+    - async hasWorkingWebview
+        - return: true/false
+    - state
+- internal data
+    - session id
+
+to do:
+    - create abstract node library for proxying JSONWP
+    - add 'install_all' script to node-chromedriver
+    - decide whether to fork node-chromedriver or investigate selenium's version
