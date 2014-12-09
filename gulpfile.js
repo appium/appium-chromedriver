@@ -13,13 +13,6 @@ var argv = require('yargs')
             .count('prod')
             .argv;
 
-var getTraceurStream = function (src, dest) {
-  return gulp.src(src)
-    .pipe(transpile())
-    .on('error', spawnWatcher.handleError)
-    .pipe(gulp.dest(dest));
-};
-
 gulp.task('transpile', function () {
   var transpiler = new Transpiler();
   if (!argv.prod) {
