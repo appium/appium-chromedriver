@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "appium-transpile-runtime": "0.0.2",
+    "chromedriver": "^2.12.0",
     "is-os": "^1.0.0",
     "npmlog": "~0.1.1",
     "q": "^1.1.2"

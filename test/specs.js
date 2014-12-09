@@ -15,4 +15,3 @@ describe('chromedriver', () => {
     Chromedriver.getPath().should.exist;
   });
 });
-
