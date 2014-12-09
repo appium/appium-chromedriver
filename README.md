@@ -1,6 +1,8 @@
 appium-chromedriver
 ===================
 
+WORK IN PROGRESS, DO NOT USE!
+
 Node.js wrapper around [Chromedriver](https://sites.google.com/a/chromium.org/chromedriver/)
 
 This module is written using [Traceur](https://code.google.com/p/traceur-compiler/wiki/GettingStarted) which is essentially ECMAscript6 along with the proposed `await` command for es7.
