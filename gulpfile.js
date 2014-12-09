@@ -40,6 +40,8 @@ gulp.task('test', ['transpile'], function () {
    .on('error', spawnWatcher.handleError);
 });
 
+process.env.APPIUM_NOTIF_BUILD_NAME = 'appium-chromedriver';
+
 spawnWatcher.configure('watch', ['lib/**/*.js','test/**/*.js'], function() {
   return runSequence('test');
 });
