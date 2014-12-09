@@ -52,5 +52,5 @@ spawnWatcher.configure('watch', ['lib/**/*.js','test/**/*.js'], function() {
 });
 
 // default target is watch
-gulp.task('default', ['spawn-watch']);
+gulp.task('default', ['watch']);
 
