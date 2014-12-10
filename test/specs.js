@@ -1,7 +1,7 @@
 // transpile:mocha
 /* global it:true, describe:true, before:true */
 
-import { default as Chromedriver } from '../lib/chromedriver';
+import Chromedriver from '../lib/chromedriver';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import Q from 'q';
