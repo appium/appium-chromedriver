@@ -3,24 +3,28 @@
 
 import { default as Chromedriver } from '../lib/chromedriver';
 import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import Q from 'q';
-//let cbIt = it;
-//import 'mochawait';
+import psNode from 'ps-node';
+import cp from 'child_process';
+import should from 'should';
+const { exec } = cp;
+import 'mochawait';
 
 chai.should();
+chai.use(chaiAsPromised);
 
-async function nextState (cd) {
+function nextState (cd) {
   let d = Q.defer();
-  cd.on('stateChanged', d.resolve);
+  cd.on('stateChanged', msg => {
+    d.resolve(msg.state);
+  });
   return d.promise;
 }
 
-async function assertNextState (cd, state) {
-  let msg = await nextState(cd);
-  msg.state.should.equal(state);
-}
-
 async function assertNoRunningChromedrivers () {
+  let res = await Q.nfcall(psNode.lookup, {command: 'chromedriver'});
+  res.should.have.length(0);
 }
 
 describe('chromedriver', () => {
@@ -29,19 +33,24 @@ describe('chromedriver', () => {
   before(async () => {
     let opts = {};
     cd = new Chromedriver(opts);
-    await assertNoRunningChromedrivers();
+    try {
+      await Q.nfcall(exec, `pkill -f ${Chromedriver.getPath()}`);
+    } catch (e) {}
   });
   it('should start a session', async () => {
     cd.state.should.eql('stopped');
+    let nextStatePromise = nextState(cd);
     cd.start(caps);
     cd.capabilities.should.eql(caps);
-    await assertNextState(cd, 'starting');
-    await assertNextState(cd, 'online');
+    await nextStatePromise.should.become('starting');
+    await nextState(cd).should.become('online');
+    should.ok(cd.sessionId);
   });
   it('should stop a session', async () => {
+    let nextStatePromise = nextState(cd);
     cd.stop();
-    await assertNextState(cd, 'stopping');
-    await assertNextState(cd, 'stopped');
+    await nextStatePromise.should.become('stopping');
+    await nextState(cd).should.become('stopped');
     await assertNoRunningChromedrivers();
   });
 });
