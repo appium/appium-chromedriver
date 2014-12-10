@@ -40,7 +40,7 @@
     "through": "^2.3.6",
     "lodash": "^2.4.1",
     "request": "^2.50.0",
-    "asyncbox": "^1.0.3"
+    "asyncbox": "^1.0.4"
   },
   "scripts": {
     "test": "$(npm bin)/mocha -t 15000 ./build/test/specs.js"
