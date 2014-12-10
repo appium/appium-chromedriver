@@ -1,7 +1,6 @@
 "use strict";
 
 var gulp = require('gulp')
-  , gutil = require('gulp-util')
   , merge = require('merge-stream')
   , mocha = require('gulp-mocha')
   , Q = require('q')
