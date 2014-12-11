@@ -35,7 +35,7 @@ gulp.task('test', ['transpile'], function () {
   process.env.SKIP_TRACEUR_RUNTIME = true;
   return gulp
    .src('build/test/specs.js', {read: false})
-   .pipe(mocha({reporter: 'nyan'}))
+   .pipe(mocha({reporter: 'nyan', timeout: 6000}))
    .on('error', spawnWatcher.handleError);
 });
 
