@@ -1,5 +1,4 @@
 // transpile:mocha
-/* global it:true, describe:true, before:true */
 
 import Chromedriver from '../lib/chromedriver';
 import chai from 'chai';
@@ -7,11 +6,10 @@ import chaiAsPromised from 'chai-as-promised';
 import Q from 'q';
 import psNode from 'ps-node';
 import cp from 'child_process';
-import should from 'should';
 const { exec } = cp;
 import 'mochawait';
 
-chai.should();
+let should = chai.should();
 chai.use(chaiAsPromised);
 
 function nextState (cd) {
@@ -44,7 +42,7 @@ describe('chromedriver', () => {
     cd.capabilities.should.eql(caps);
     await nextStatePromise.should.become('starting');
     await nextState(cd).should.become('online');
-    should.ok(cd.sessionId);
+    should.exist(cd.sessionId);
   });
   it('should stop a session', async () => {
     let nextStatePromise = nextState(cd);

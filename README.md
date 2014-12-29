@@ -1,7 +1,7 @@
 appium-chromedriver
 ===================
 
-WORK IN PROGRESS, DO NOT USE!
+Work in progress, stay tuned!
 
 Node.js wrapper around [Chromedriver](https://sites.google.com/a/chromium.org/chromedriver/)
 
@@ -9,19 +9,15 @@ This module is written using [Traceur](https://code.google.com/p/traceur-compile
 
 Uses Gulp for building.
 
-Install
--------
-`npm install appium-chromedriver`
+## Watch
 
-To Develop
-----------
-Gulp will transpile every time you save, if you run the following:
-`gulp`
+```
+npm run-script watch
+```
 
-To Build
---------
-`gulp transpile`
+## Test
 
-To Test
--------
-`npm test`
+```
+npm test
+```
+
