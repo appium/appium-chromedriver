@@ -12,7 +12,7 @@ Uses Gulp for building.
 ## Watch
 
 ```
-npm run-script watch
+npm run watch
 ```
 
 ## Test
