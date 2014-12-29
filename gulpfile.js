@@ -78,6 +78,10 @@ spawnWatcher.configure('watch', ['index.js','lib/**/*.js','test/**/*.js'], funct
   return runSequence('clean', 'lint', 'transpile', 'test');
 });
 
+gulp.task('prepublish', function () {
+    return runSequence('clean', 'transpile');
+});
+
 gulp.task('once', function () {
   return runSequence('clean','lint', 'transpile','test');
 });
