@@ -1,4 +1,3 @@
-import {default as sample} from './lib/sample';
+import {default as chromedriver} from './lib/chromedriver';
 
-export {sample};
-
+export default chromedriver;
