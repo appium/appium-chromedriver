@@ -19,7 +19,7 @@
   "engines": [
     "node"
   ],
-  "main": "./index.js",
+  "main": "./build/index.js",
   "bin": {},
   "directories": {
     "lib": "lib"
@@ -37,6 +37,7 @@
     "asyncbox": "^1.0.4"
   },
   "scripts": {
+    "prepublish": "./node_modules/.bin/gulp once",
     "test": "./node_modules/.bin/gulp once",
     "watch": "./node_modules/.bin/gulp"
   },
