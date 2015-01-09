@@ -20,6 +20,14 @@ function nextState (cd) {
   return d.promise;
 }
 
+function nextError (cd) {
+  let d = Q.defer();
+  cd.on('error', err => {
+    d.resolve(err);
+  });
+  return d.promise;
+}
+
 async function assertNoRunningChromedrivers () {
   let res = await Q.nfcall(psNode.lookup, {command: 'chromedriver'});
   res.should.have.length(0);
@@ -74,5 +82,12 @@ describe('chromedriver', () => {
     nextStatePromise = nextState(cd);
     await killChromedrivers();
     await nextStatePromise.should.become('stopped');
+  });
+  it('should throw an error when chromedriver doesnt exist', async () => {
+    let cd2 = new Chromedriver({executable: '/does/not/exist'});
+    let nextErrP = nextError(cd2);
+    cd2.start({});
+    let err = await nextErrP;
+    err.message.should.contain('ENOENT');
   });
 });
