@@ -25,6 +25,10 @@ async function assertNoRunningChromedrivers () {
   res.should.have.length(0);
 }
 
+function killChromedrivers () {
+  return Q.nfcall(exec, `pkill -f ${Chromedriver.getPath()}`);
+}
+
 describe('chromedriver', () => {
   let cd = null;
   const caps = {browserName: 'chrome'};
@@ -32,7 +36,7 @@ describe('chromedriver', () => {
     let opts = {};
     cd = new Chromedriver(opts);
     try {
-      await Q.nfcall(exec, `pkill -f ${Chromedriver.getPath()}`);
+      await killChromedrivers();
     } catch (e) {}
   });
   it('should start a session', async () => {
@@ -42,7 +46,13 @@ describe('chromedriver', () => {
     cd.capabilities.should.eql(caps);
     await nextStatePromise.should.become('starting');
     await nextState(cd).should.become('online');
-    should.exist(cd.sessionId);
+    should.exist(cd.jwproxy.sessionId);
+  });
+  it('should run some commands', async () => {
+    let res = await cd.sendCommand('/url', 'POST', {url: 'http://google.com'});
+    should.not.exist(res);
+    res = await cd.sendCommand('/url', 'GET');
+    res.should.contain('google');
   });
   it('should stop a session', async () => {
     let nextStatePromise = nextState(cd);
@@ -50,5 +60,19 @@ describe('chromedriver', () => {
     await nextStatePromise.should.become('stopping');
     await nextState(cd).should.become('stopped');
     await assertNoRunningChromedrivers();
+  });
+  it.skip('should change state to stopped if chromedriver crashes', async () => {
+    // test works but is skipped because it leaves a chrome window orphaned
+    // and I can't figure out a way to safely kill only that one
+    cd.state.should.eql('stopped');
+    let nextStatePromise = nextState(cd);
+    cd.start(caps);
+    cd.capabilities.should.eql(caps);
+    await nextStatePromise.should.become('starting');
+    await nextState(cd).should.become('online');
+    should.exist(cd.jwproxy.sessionId);
+    nextStatePromise = nextState(cd);
+    await killChromedrivers();
+    await nextStatePromise.should.become('stopped');
   });
 });
