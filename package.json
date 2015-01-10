@@ -25,7 +25,7 @@
     "lib": "lib"
   },
   "dependencies": {
-    "appium-jsonwp-proxy": "0.0.2",
+    "appium-jsonwp-proxy": "0.0.3",
     "appium-transpile-runtime": "^0.0.3",
     "asyncbox": "^1.0.4",
     "chromedriver": "^2.12.0",
