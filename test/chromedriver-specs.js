@@ -5,8 +5,6 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import Q from 'q';
 import psNode from 'ps-node';
-import cp from 'child_process';
-const { exec } = cp;
 import 'mochawait';
 
 let should = chai.should();
@@ -33,10 +31,6 @@ async function assertNoRunningChromedrivers () {
   res.should.have.length(0);
 }
 
-function killChromedrivers () {
-  return Q.nfcall(exec, `pkill -f ${Chromedriver.getPath()}`);
-}
-
 describe('chromedriver', () => {
   let cd = null;
   const caps = {browserName: 'chrome'};
@@ -44,7 +38,7 @@ describe('chromedriver', () => {
     let opts = {};
     cd = new Chromedriver(opts);
     try {
-      await killChromedrivers();
+      await cd.killAll();
     } catch (e) {}
   });
   it('should start a session', async () => {
@@ -61,6 +55,10 @@ describe('chromedriver', () => {
     should.not.exist(res);
     res = await cd.sendCommand('/url', 'GET');
     res.should.contain('google');
+  });
+  it('should say whether there is a working webview', async () => {
+    let res = await cd.hasWorkingWebview();
+    res.should.equal(true);
   });
   it('should stop a session', async () => {
     let nextStatePromise = nextState(cd);
@@ -80,7 +78,7 @@ describe('chromedriver', () => {
     await nextState(cd).should.become('online');
     should.exist(cd.jwproxy.sessionId);
     nextStatePromise = nextState(cd);
-    await killChromedrivers();
+    await cd.killAll();
     await nextStatePromise.should.become('stopped');
   });
   it('should throw an error when chromedriver doesnt exist', async () => {
