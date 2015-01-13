@@ -37,9 +37,6 @@ describe('chromedriver', () => {
   before(async () => {
     let opts = {};
     cd = new Chromedriver(opts);
-    try {
-      await cd.killAll();
-    } catch (e) {}
   });
   it('should start a session', async () => {
     cd.state.should.eql('stopped');
@@ -59,6 +56,14 @@ describe('chromedriver', () => {
   it('should say whether there is a working webview', async () => {
     let res = await cd.hasWorkingWebview();
     res.should.equal(true);
+  });
+  it('should restart a session', async () => {
+    let p1 = nextState(cd);
+    cd.restart();
+    await p1.should.become('stopping');
+    await nextState(cd).should.become('stopped');
+    // we miss the opportunity to listen for the 'starting' state
+    await nextState(cd).should.become('online');
   });
   it('should stop a session', async () => {
     let nextStatePromise = nextState(cd);
