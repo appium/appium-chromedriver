@@ -12,7 +12,7 @@ chai.use(chaiAsPromised);
 
 function nextState (cd) {
   let d = Q.defer();
-  cd.on('stateChanged', msg => {
+  cd.on(Chromedriver.EVENT_CHANGED, msg => {
     d.resolve(msg.state);
   });
   return d.promise;
@@ -20,7 +20,7 @@ function nextState (cd) {
 
 function nextError (cd) {
   let d = Q.defer();
-  cd.on('error', err => {
+  cd.on(Chromedriver.EVENT_ERROR, err => {
     d.resolve(err);
   });
   return d.promise;
