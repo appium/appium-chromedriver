@@ -43,8 +43,8 @@ describe('chromedriver', () => {
     let nextStatePromise = nextState(cd);
     cd.start(caps);
     cd.capabilities.should.eql(caps);
-    await nextStatePromise.should.become('starting');
-    await nextState(cd).should.become('online');
+    await nextStatePromise.should.become(Chromedriver.STATE_STARTING);
+    await nextState(cd).should.become(Chromedriver.STATE_ONLINE);
     should.exist(cd.jwproxy.sessionId);
   });
   it('should run some commands', async () => {
@@ -60,31 +60,31 @@ describe('chromedriver', () => {
   it('should restart a session', async () => {
     let p1 = nextState(cd);
     cd.restart();
-    await p1.should.become('stopping');
-    await nextState(cd).should.become('stopped');
+    await p1.should.become(Chromedriver.STATE_STOPPING);
+    await nextState(cd).should.become(Chromedriver.STATE_STOPPED);
     // we miss the opportunity to listen for the 'starting' state
-    await nextState(cd).should.become('online');
+    await nextState(cd).should.become(Chromedriver.STATE_ONLINE);
   });
   it('should stop a session', async () => {
     let nextStatePromise = nextState(cd);
     cd.stop();
-    await nextStatePromise.should.become('stopping');
-    await nextState(cd).should.become('stopped');
+    await nextStatePromise.should.become(Chromedriver.STATE_STOPPING);
+    await nextState(cd).should.become(Chromedriver.STATE_STOPPED);
     await assertNoRunningChromedrivers();
   });
   it.skip('should change state to stopped if chromedriver crashes', async () => {
     // test works but is skipped because it leaves a chrome window orphaned
     // and I can't figure out a way to safely kill only that one
-    cd.state.should.eql('stopped');
+    cd.state.should.eql(Chromedriver.STATE_STOPPED);
     let nextStatePromise = nextState(cd);
     cd.start(caps);
     cd.capabilities.should.eql(caps);
-    await nextStatePromise.should.become('starting');
-    await nextState(cd).should.become('online');
+    await nextStatePromise.should.become(Chromedriver.STATE_STARTING);
+    await nextState(cd).should.become(Chromedriver.STATE_ONLINE);
     should.exist(cd.jwproxy.sessionId);
     nextStatePromise = nextState(cd);
     await cd.killAll();
-    await nextStatePromise.should.become('stopped');
+    await nextStatePromise.should.become(Chromedriver.STATE_STOPPED);
   });
   it('should throw an error when chromedriver doesnt exist', async () => {
     let cd2 = new Chromedriver({executable: '/does/not/exist'});
