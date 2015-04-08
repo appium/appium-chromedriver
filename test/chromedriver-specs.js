@@ -31,7 +31,7 @@ async function assertNoRunningChromedrivers () {
   res.should.have.length(0);
 }
 
-describe('chromedriver', () => {
+describe('chromedriver with EventEmitter', () => {
   let cd = null;
   const caps = {browserName: 'chrome'};
   before(async () => {
@@ -92,5 +92,41 @@ describe('chromedriver', () => {
     cd2.start({});
     let err = await nextErrP;
     err.message.should.contain('ENOENT');
+  });
+});
+
+
+describe('chromedriver with asyncawait', () => {
+  let cd = null;
+  const caps = {browserName: 'chrome'};
+  before(async () => {
+    let opts = {};
+    cd = new Chromedriver(opts);
+  });
+  it('should start a session', async () => {
+    cd.state.should.eql('stopped');
+    await cd.start(caps);
+    cd.capabilities.should.eql(caps);
+    cd.state.should.eql(Chromedriver.STATE_ONLINE);
+    should.exist(cd.jwproxy.sessionId);
+  });
+  it('should restart a session', async () => {
+    cd.state.should.eql(Chromedriver.STATE_ONLINE);
+    await cd.restart();
+    cd.state.should.eql(Chromedriver.STATE_ONLINE);
+  });
+  it('should stop a session', async () => {
+    cd.state.should.eql(Chromedriver.STATE_ONLINE);
+    await cd.stop();
+    cd.state.should.eql(Chromedriver.STATE_STOPPED);
+  });
+  it('should throw an error during start if spawn doesnt work', async () => {
+    let badCd = new Chromedriver({port: 1});
+    await badCd.start(caps).should.eventually.be.rejectedWith('Could not proxy');
+  });
+  it('should throw an error during start if session doesnt work', async () => {
+    let badCd = new Chromedriver();
+    await badCd.start({chromeOptions: {badCap: 'foo'}})
+               .should.eventually.be.rejectedWith('cannot parse capability');
   });
 });
