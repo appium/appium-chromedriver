@@ -31,6 +31,20 @@ async function assertNoRunningChromedrivers () {
   res.should.have.length(0);
 }
 
+function buildReqRes (url, method, body) {
+  let req = {originalUrl: url, method, body};
+  let res = {};
+  res.headers = {};
+  res.set = (k, v) => { res[k] = v; };
+  res.send = (code, body) => {
+    try {
+      body = JSON.parse(body);
+    } catch (e) {}
+    res.sentCode = code; res.sentBody = body;
+  };
+  return [req, res];
+}
+
 describe('chromedriver with EventEmitter', () => {
   let cd = null;
   const caps = {browserName: 'chrome'};
@@ -53,6 +67,16 @@ describe('chromedriver with EventEmitter', () => {
     should.not.exist(res);
     res = await cd.sendCommand('/url', 'GET');
     res.should.contain('google');
+  });
+  it('should proxy commands', async () => {
+    let initSessId = cd.sessionId();
+    let [req, res] = buildReqRes('/url', 'GET');
+    await cd.proxyReq(req, res);
+    res.headers['content-type'].should.contain('application/json');
+    res.sentCode.should.equal(200);
+    res.sentBody.status.should.equal(0);
+    res.sentBody.value.should.contain('google');
+    res.sentBody.sessionId.should.equal(initSessId);
   });
   it('should say whether there is a working webview', async () => {
     let res = await cd.hasWorkingWebview();
