@@ -46,6 +46,7 @@ describe('chromedriver with EventEmitter', () => {
     await nextStatePromise.should.become(Chromedriver.STATE_STARTING);
     await nextState(cd).should.become(Chromedriver.STATE_ONLINE);
     should.exist(cd.jwproxy.sessionId);
+    should.exist(cd.sessionId());
   });
   it('should run some commands', async () => {
     let res = await cd.sendCommand('/url', 'POST', {url: 'http://google.com'});
@@ -69,7 +70,9 @@ describe('chromedriver with EventEmitter', () => {
     let nextStatePromise = nextState(cd);
     cd.stop();
     await nextStatePromise.should.become(Chromedriver.STATE_STOPPING);
+    should.not.exist(cd.sessionId());
     await nextState(cd).should.become(Chromedriver.STATE_STOPPED);
+    should.not.exist(cd.sessionId());
     await assertNoRunningChromedrivers();
   });
   it.skip('should change state to stopped if chromedriver crashes', async () => {
@@ -82,6 +85,7 @@ describe('chromedriver with EventEmitter', () => {
     await nextStatePromise.should.become(Chromedriver.STATE_STARTING);
     await nextState(cd).should.become(Chromedriver.STATE_ONLINE);
     should.exist(cd.jwproxy.sessionId);
+    should.exist(cd.sessionId());
     nextStatePromise = nextState(cd);
     await cd.killAll();
     await nextStatePromise.should.become(Chromedriver.STATE_STOPPED);
@@ -105,10 +109,12 @@ describe('chromedriver with asyncawait', () => {
   });
   it('should start a session', async () => {
     cd.state.should.eql('stopped');
+    should.not.exist(cd.sessionId());
     await cd.start(caps);
     cd.capabilities.should.eql(caps);
     cd.state.should.eql(Chromedriver.STATE_ONLINE);
     should.exist(cd.jwproxy.sessionId);
+    should.exist(cd.sessionId());
   });
   it('should restart a session', async () => {
     cd.state.should.eql(Chromedriver.STATE_ONLINE);
@@ -119,6 +125,7 @@ describe('chromedriver with asyncawait', () => {
     cd.state.should.eql(Chromedriver.STATE_ONLINE);
     await cd.stop();
     cd.state.should.eql(Chromedriver.STATE_STOPPED);
+    should.not.exist(cd.sessionId());
   });
   it('should throw an error during start if spawn doesnt work', async () => {
     let badCd = new Chromedriver({port: 1});
