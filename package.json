@@ -25,14 +25,14 @@
     "lib": "lib"
   },
   "dependencies": {
+    "adm-zip": "^0.4.7",
     "appium-jsonwp-proxy": "^1.1.0",
     "appium-logger": "^1.0.0",
-    "appium-support": "^1.0.2",
+    "appium-support": "^1.1.0",
     "asyncbox": "^2.0.2",
     "babel-runtime": "^5.1.9",
-    "chromedriver": "^2.14.1",
     "is-os": "^1.0.0",
-    "lodash": "^3.6.0",
+    "lodash": "^3.8.0",
     "ps-node": "0.0.3",
     "q": "^1.2.0",
     "request": "^2.55.0",
@@ -42,7 +42,10 @@
   "scripts": {
     "prepublish": "./node_modules/.bin/gulp prepublish",
     "test": "./node_modules/.bin/gulp once",
-    "watch": "./node_modules/.bin/gulp"
+    "watch": "./node_modules/.bin/gulp",
+    "install": "npm run-script chromedriver",
+    "chromedriver": "node ./build/bin/install.js",
+    "chromedriver_all": "node ./build/bin/install.js --all"
   },
   "devDependencies": {
     "appium-gulp-plugins": "^1.1.0",

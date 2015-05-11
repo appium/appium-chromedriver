@@ -3,4 +3,6 @@
 var gulp = require('gulp'),
     boilerplate = require('appium-gulp-plugins').boilerplate.use(gulp);
 
-boilerplate({build: "Appium Chromedriver", jscs: false});
+var files = ["*.js", "bin/**/*.js", "lib/**/*.js", "test/**/*.js",
+             "!gulpfile.js"];
+boilerplate({build: "Appium Chromedriver", jscs: false, files: files});

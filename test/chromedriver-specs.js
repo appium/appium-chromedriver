@@ -1,6 +1,7 @@
 // transpile:mocha
 
 import Chromedriver from '../..';
+import { getChromedriverBinaryPath, install } from '../lib/install';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import Q from 'q';
@@ -36,14 +37,37 @@ function buildReqRes (url, method, body) {
   let res = {};
   res.headers = {};
   res.set = (k, v) => { res[k] = v; };
-  res.send = (code, body) => {
-    try {
-      body = JSON.parse(body);
-    } catch (e) {}
-    res.sentCode = code; res.sentBody = body;
+  res.status = (code) => {
+    res.sentCode = code;
+    return {
+      send: (body) => {
+        try {
+          body = JSON.parse(body);
+        } catch (e) {}
+        res.sentBody = body;
+      }
+    };
   };
   return [req, res];
 }
+
+describe('chromedriver binary setup', () => {
+  before(async () => {
+    let cd = new Chromedriver();
+    try {
+      await cd.initChromedriverPath();
+    } catch (err) {
+      if (err.message.indexOf("Trying to use") !== -1) {
+        await install();
+      }
+    }
+  });
+
+  it('should start with a binary that exists', async () => {
+    let cd = new Chromedriver();
+    await cd.initChromedriverPath();
+  });
+});
 
 describe('chromedriver with EventEmitter', () => {
   let cd = null;
@@ -119,7 +143,7 @@ describe('chromedriver with EventEmitter', () => {
     let nextErrP = nextError(cd2);
     cd2.start({});
     let err = await nextErrP;
-    err.message.should.contain('ENOENT');
+    err.message.should.contain('Trying to use');
   });
 });
 
