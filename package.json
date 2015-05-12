@@ -44,8 +44,8 @@
     "test": "./node_modules/.bin/gulp once",
     "watch": "./node_modules/.bin/gulp",
     "install": "npm run-script chromedriver",
-    "chromedriver": "node ./build/bin/install.js",
-    "chromedriver_all": "node ./build/bin/install.js --all"
+    "chromedriver": "npm run-script prepublish && node ./build/bin/install.js",
+    "chromedriver_all": "npm run-script prepublish && node ./build/bin/install.js --all"
   },
   "devDependencies": {
     "appium-gulp-plugins": "^1.1.0",
