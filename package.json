@@ -36,6 +36,7 @@
     "ps-node": "0.0.3",
     "q": "^1.2.0",
     "request": "^2.55.0",
+    "rimraf": "^2.3.3",
     "source-map-support": "^0.2.10",
     "through": "^2.3.7"
   },
