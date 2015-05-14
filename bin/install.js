@@ -1,9 +1,11 @@
 import _ from 'lodash';
-import { install, installAll } from '../lib/install';
+import { install, conditionalInstall, installAll } from '../lib/install';
 
 function main () {
   if (_.contains(process.argv, '--all')) {
     return installAll();
+  } else if (_.contains(process.argv, '--conditional')) {
+    return conditionalInstall();
   } else {
     return install();
   }
