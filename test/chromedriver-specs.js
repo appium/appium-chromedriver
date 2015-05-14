@@ -1,7 +1,7 @@
 // transpile:mocha
 
 import Chromedriver from '../..';
-import { getChromedriverBinaryPath, install } from '../lib/install';
+import install from '../lib/install';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import Q from 'q';
