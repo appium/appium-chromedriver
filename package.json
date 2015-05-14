@@ -6,7 +6,7 @@
     "chrome",
     "android"
   ],
-  "version": "2.0.0",
+  "version": "2.0.1",
   "author": "appium",
   "license": "Apache License 2.0",
   "repository": {
