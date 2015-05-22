@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import _ from 'lodash';
 import { install, conditionalInstall, installAll } from '../lib/install';
 
