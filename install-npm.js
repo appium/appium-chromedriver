@@ -3,13 +3,13 @@ var fs = require('fs')
 
 if (require.main === module) {
   // check if cur dir exists
-  var installScript = path.resolve(__dirname, "build", "bin",
-                                   "install.js");
+  var installScript = path.resolve(__dirname, "build", "lib",
+     "install.js");
   fs.stat(installScript, function (err) {
     if (err) {
       console.warn("NOTE: Run 'npm run-script chromedriver' before using");
       return;
     }
-    require(installScript).doInstall();
+    require('./build/lib/install').doInstall();
   });
 }
