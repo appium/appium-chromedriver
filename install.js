@@ -1,6 +1,5 @@
-#!/usr/bin/env node
 import _ from 'lodash';
-import { install, conditionalInstall, installAll } from '../lib/install';
+import { install, conditionalInstall, installAll } from 'lib/install';
 
 function doInstall () {
   if (_.contains(process.argv, '--all')) {
