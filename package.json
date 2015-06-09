@@ -45,8 +45,8 @@
     "test": "gulp once",
     "watch": "gulp",
     "install": "node install-npm.js",
-    "chromedriver": "gulp prepublish && node install.js",
-    "chromedriver_all": "gulp prepublish && node install.js --all"
+    "chromedriver": "node install-npm.js",
+    "chromedriver_all": "node install-npm.js --all"
   },
   "devDependencies": {
     "appium-gulp-plugins": "^1.1.0",
