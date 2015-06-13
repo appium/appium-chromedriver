@@ -52,6 +52,41 @@ Here are the events you can listen for:
     * `Chromedriver.STATE_ONLINE`
     * `Chromedriver.STATE_STOPPING`
 
+## Custom Chromedriver version
+
+To use a version of Chromedriver not set in the code, use npm config property `chromedriver_version`.
+
+```bash
+npm install appium-chromedriver --chromedriver_version="2.16"
+```
+
+Or add the property into your [`.npmrc`](https://docs.npmjs.com/files/npmrc) file.
+
+```bash
+chromedriver_version=2.16
+```
+
+## Custom binaries url
+
+To use a mirror of the ChromeDriver binaries use npm config property `chromedriver_cdnurl`.
+Default is `http://chromedriver.storage.googleapis.com`.
+
+```bash
+npm install appium-chromedriver --chromedriver_cdnurl=http://npm.taobao.org/mirrors/chromedriver
+```
+
+Or add the property into your [`.npmrc`](https://docs.npmjs.com/files/npmrc) file.
+
+```bash
+chromedriver_cdnurl=http://npm.taobao.org/mirrors/chromedriver
+```
+
+Another option is to use PATH variable `CHROMEDRIVER_CDNURL`.
+
+```bash
+CHROMEDRIVER_CDNURL=http://npm.taobao.org/mirrors/chromedriver npm install appium-chromedriver
+```
+
 ## Dev
 
 We use Gulp for building/transpiling.
@@ -66,25 +101,4 @@ npm run watch
 
 ```
 npm test
-```
-
-## Custom binaries url
-
-To use a mirror of the ChromeDriver binaries use npm config property `chromedriver_cdnurl`.
-Default is `http://chromedriver.storage.googleapis.com`.
-
-```bash
-npm install appium-chromedriver --chromedriver_cdnurl=http://npm.taobao.org/mirrors/chromedriver
-```
-
-Or add property into your [`.npmrc`](https://docs.npmjs.com/files/npmrc) file.
-
-```bash
-chromedriver_cdnurl=http://npm.taobao.org/mirrors/chromedriver
-```
-
-Another option is to use PATH variable `CHROMEDRIVER_CDNURL`.
-
-```bash
-CHROMEDRIVER_CDNURL=http://npm.taobao.org/mirrors/chromedriver npm install appium-chromedriver
 ```

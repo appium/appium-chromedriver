@@ -10,6 +10,9 @@ if (require.main === module) {
       console.warn("NOTE: Run 'npm run-script chromedriver' before using");
       return;
     }
-    require('./build/lib/install').doInstall();
+    require('./build/lib/install').doInstall().catch(function (err) {
+      console.error(err.stack ? err.stack : err);
+      process.exit(1);
+    });
   });
 }

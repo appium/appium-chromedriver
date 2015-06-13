@@ -9,5 +9,5 @@ boilerplate({
   build: "Appium Chromedriver",
   jscs: false,
   files: files,
-  testTimeout: 12000
+  testTimeout: 30000
 });
