@@ -28,7 +28,8 @@ function nextError (cd) {
 }
 
 async function assertNoRunningChromedrivers () {
-  let res = await Q.nfcall(psNode.lookup, {command: 'chromedriver'});
+  let res = await Q.nfcall(psNode.lookup, {command: /([^ ]*)chromedriver$/,
+                                           psargs: 'aux'});
   res.should.have.length(0);
 }
 
@@ -174,14 +175,17 @@ describe('chromedriver with asyncawait', () => {
     await cd.stop();
     cd.state.should.eql(Chromedriver.STATE_STOPPED);
     should.not.exist(cd.sessionId());
+    await assertNoRunningChromedrivers();
   });
   it('should throw an error during start if spawn doesnt work', async () => {
     let badCd = new Chromedriver({port: 1});
     await badCd.start(caps).should.eventually.be.rejectedWith('Could not proxy');
+    await assertNoRunningChromedrivers();
   });
   it('should throw an error during start if session doesnt work', async () => {
     let badCd = new Chromedriver();
     await badCd.start({chromeOptions: {badCap: 'foo'}})
                .should.eventually.be.rejectedWith('cannot parse capability');
+    await assertNoRunningChromedrivers();
   });
 });
