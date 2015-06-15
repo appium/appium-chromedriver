@@ -38,6 +38,7 @@
     "request": "^2.55.0",
     "rimraf": "^2.3.3",
     "source-map-support": "^0.3.1",
+    "teen_process": "^1.2.0",
     "through": "^2.3.7"
   },
   "scripts": {
