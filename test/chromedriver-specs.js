@@ -110,8 +110,7 @@ describe('chromedriver with EventEmitter', () => {
   it('should restart a session', async () => {
     let p1 = nextState(cd);
     cd.restart();
-    await p1.should.become(Chromedriver.STATE_STOPPING);
-    await nextState(cd).should.become(Chromedriver.STATE_STOPPED);
+    await p1.should.become(Chromedriver.STATE_RESTARTING);
     // we miss the opportunity to listen for the 'starting' state
     await nextState(cd).should.become(Chromedriver.STATE_ONLINE);
   });
