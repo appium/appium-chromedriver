@@ -51,6 +51,7 @@ Here are the events you can listen for:
     * `Chromedriver.STATE_STARTING`
     * `Chromedriver.STATE_ONLINE`
     * `Chromedriver.STATE_STOPPING`
+    * `Chromedriver.STATE_RESTARTING`
 
 ## Custom Chromedriver version
 
