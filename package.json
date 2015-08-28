@@ -30,7 +30,7 @@
     "appium-logger": "^1.0.0",
     "appium-support": "^1.1.1",
     "asyncbox": "^2.0.2",
-    "babel-runtime": "5.5.5",
+    "babel-runtime": "=5.5.5",
     "is-os": "^1.0.0",
     "lodash": "^3.8.0",
     "ps-node": "^0.0.4",
