@@ -6,7 +6,7 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import Q from 'q';
 import psNode from 'ps-node';
-import 'mochawait';
+
 
 let should = chai.should();
 chai.use(chaiAsPromised);
