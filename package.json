@@ -8,7 +8,7 @@
   ],
   "version": "2.3.3",
   "author": "appium",
-  "license": "Apache License 2.0",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/appium/appium-chromedriver.git"
@@ -26,20 +26,19 @@
   },
   "dependencies": {
     "adm-zip": "^0.4.7",
-    "appium-jsonwp-proxy": "^1.1.0",
-    "appium-logger": "^1.0.0",
+    "appium-jsonwp-proxy": "^1.2.4",
+    "appium-logger": "^2.0.0",
     "appium-support": "^2.0.0",
     "asyncbox": "^2.0.2",
-    "babel-runtime": "=5.5.5",
+    "babel-runtime": "=5.8.24",
     "is-os": "^1.0.0",
-    "lodash": "^3.8.0",
-    "ps-node": "^0.0.4",
+    "lodash": "^3.10.1",
+    "ps-node": "^0.0.5",
     "q": "^1.2.0",
     "request": "^2.57.0",
     "request-promise": "^0.4.2",
-    "rimraf": "^2.3.3",
-    "source-map-support": "^0.3.1",
-    "teen_process": "^1.2.0",
+    "source-map-support": "^0.3.2",
+    "teen_process": "^1.3.1",
     "through": "^2.3.7"
   },
   "scripts": {
@@ -51,11 +50,10 @@
     "chromedriver_all": "node install-npm.js --all"
   },
   "devDependencies": {
-    "appium-gulp-plugins": "^1.1.0",
-    "chai": "^3.0.0",
+    "appium-gulp-plugins": "^1.3.11",
+    "chai": "^3.3.0",
     "chai-as-promised": "^5.1.0",
-    "gulp": "^3.8.11",
-    "mocha": "^2.2.1",
-    "mochawait": "^2.0.0"
+    "gulp": "^3.9.0",
+    "mocha": "^2.3.3"
   }
 }
