@@ -1,0 +1,23 @@
+sudo: required
+language:
+  # Setting language to objective-c sends us to an OSX VM
+  - objective-c
+before_install:
+  # TavisCI's OSX environment gives us node 0.10.32
+  # Use NVM to update it to 0.12
+  - rm -rf ~/.nvm
+  - git clone https://github.com/creationix/nvm.git ~/.nvm
+  - source ~/.nvm/nvm.sh
+  - nvm install 0.12
+  # Chrome Driver needs Chrome >= 43.0.2357.0
+  # Update to the latest version
+  - wget -P /tmp/ https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg
+  - hdiutil attach /tmp/googlechrome.dmg
+  - sudo cp -r /Volumes/Google\ Chrome/Google\ Chrome.app /Applications/
+before_script:
+  - npm install
+  - npm install -g gulp
+script:
+  - gulp test
+after_success:
+  - gulp coveralls
