@@ -1,13 +1,11 @@
 "use strict";
 
 var gulp = require('gulp'),
-    boilerplate = require('appium-gulp-plugins').boilerplate.use(gulp);
+    boilerplate = require('appium-gulp-plugins').boilerplate.use(gulp),
+    DEFAULTS = require('appium-gulp-plugins').boilerplate.DEFAULTS;
 
-var files = ["*.js", "bin/**/*.js", "lib/**/*.js", "test/**/*.js",
-             "!gulpfile.js","!install*.js"];
 boilerplate({
-  build: "Appium Chromedriver",
-  jscs: false,
-  files: files,
-  testTimeout: 30000
+  build: 'Appium Chromedriver',
+  files: DEFAULTS.files.concat('bin/**/*.js'),
+  jscs: false
 });
