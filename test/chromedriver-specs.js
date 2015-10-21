@@ -1,6 +1,6 @@
 // transpile:mocha
 
-import Chromedriver from '../..';
+import Chromedriver from '../lib/chromedriver';
 import { install } from '../lib/install';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -52,7 +52,8 @@ function buildReqRes (url, method, body) {
   return [req, res];
 }
 
-describe('chromedriver binary setup', () => {
+describe('chromedriver binary setup', function () {
+  this.timeout(20000);
   before(async () => {
     let cd = new Chromedriver();
     try {
@@ -148,7 +149,8 @@ describe('chromedriver with EventEmitter', () => {
 });
 
 
-describe('chromedriver with asyncawait', () => {
+describe('chromedriver with asyncawait', function() {
+  this.timeout(20000);
   let cd = null;
   const caps = {browserName: 'chrome'};
   before(async () => {

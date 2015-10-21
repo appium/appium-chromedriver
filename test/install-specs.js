@@ -11,23 +11,22 @@ import Chromedriver from '../lib/chromedriver';
 let should = chai.should();
 chai.use(chaiAsPromised);
 
-describe('install scripts', () => {
-
-  async function assertNoPreviousDirs () {
-    let err;
-    try {
-      await fs.stat(CD_BASE_DIR);
-    } catch (e) {
-      err = e;
-    }
-    should.exist(err);
-    err.code.should.eql("ENOENT");
+async function assertNoPreviousDirs () {
+  let err;
+  try {
+    await fs.stat(CD_BASE_DIR);
+  } catch (e) {
+    err = e;
   }
+  should.exist(err);
+  err.code.should.eql("ENOENT");
+}
 
+describe('install scripts', function () {
+  this.timeout(20000);
   beforeEach(async () => {
     await fs.rimraf(CD_BASE_DIR);
   });
-
   it('should install for this platform', async () => {
     await assertNoPreviousDirs();
     await install();
@@ -39,7 +38,6 @@ describe('install scripts', () => {
     await cd.initChromedriverPath();
     cd.chromedriver.should.equal(cdPath);
   });
-
   it('should install for all platforms', async () => {
     await assertNoPreviousDirs();
     await installAll();
@@ -61,7 +59,6 @@ describe('install scripts', () => {
       }
     }
   });
-
   it('should throw an error in chromedriver if nothing is installed', async () => {
     await assertNoPreviousDirs();
     let cd = new Chromedriver();
