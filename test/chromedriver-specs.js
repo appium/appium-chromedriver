@@ -4,7 +4,7 @@ import Chromedriver from '../lib/chromedriver';
 import { install } from '../lib/install';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import Q from 'q';
+import B from 'bluebird';
 import psNode from 'ps-node';
 
 
@@ -12,24 +12,27 @@ let should = chai.should();
 chai.use(chaiAsPromised);
 
 function nextState (cd) {
-  let d = Q.defer();
-  cd.on(Chromedriver.EVENT_CHANGED, msg => {
-    d.resolve(msg.state);
+  return new B((resolve) => {
+    cd.on(Chromedriver.EVENT_CHANGED, msg => {
+      resolve(msg.state);
+    });
   });
-  return d.promise;
 }
 
 function nextError (cd) {
-  let d = Q.defer();
-  cd.on(Chromedriver.EVENT_ERROR, err => {
-    d.resolve(err);
+  return new B((resolve) => {
+    cd.on(Chromedriver.EVENT_ERROR, err => {
+      resolve(err);
+    });
   });
-  return d.promise;
 }
 
 async function assertNoRunningChromedrivers () {
-  let res = await Q.nfcall(psNode.lookup, {command: /([^ ]*)chromedriver$/,
-                                           psargs: 'aux'});
+  // let res = await Q.nfcall(psNode.lookup, {command: /([^ ]*)chromedriver$/,
+  //                                          psargs: 'aux'});
+  let f = B.promisify(psNode.lookup);
+  let res = await f({command: /([^ ]*)chromedriver$/, psargs: 'aux'});
+
   res.should.have.length(0);
 }
 
