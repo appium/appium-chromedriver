@@ -6,7 +6,7 @@
     "chrome",
     "android"
   ],
-  "version": "2.3.7",
+  "version": "2.3.8",
   "author": "appium",
   "license": "Apache-2.0",
   "repository": {
@@ -28,10 +28,11 @@
     "adm-zip": "^0.4.7",
     "appium-jsonwp-proxy": "^1.4.1",
     "appium-logger": "^2.0.0",
-    "appium-support": "^2.0.6",
+    "appium-support": "^2.0.7",
     "asyncbox": "^2.0.2",
     "babel-runtime": "=5.8.24",
     "bluebird": "^2.10.2",
+    "continuation-local-storage": "^3.1.4",
     "is-os": "^1.0.0",
     "lodash": "^3.10.1",
     "ps-node": "^0.0.5",
