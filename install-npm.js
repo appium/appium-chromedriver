@@ -14,11 +14,15 @@ function waitForDeps (cb) {
       require('./build/lib/install');
       cb();
     } catch (err) {
-      console.warn('Error trying to install Chromedriver binary. Waiting and trying again.');
+      if (err.message.indexOf("Cannot find module './build/lib/install'") !== -1) {
+        console.warn('Project does not appear to built yet. Please run `gulp transpile` first.');
+        return cb('Could not install module: ' + err);
+      }
+      console.warn('Error trying to install Chromedriver binary. Waiting and trying again.', err.message);
       if (i <= 200) {
         setTimeout(check, 1000);
       } else {
-        cb('Could not import install module: ' + err);
+        cb('Could not install module: ' + err);
       }
     }
   }
@@ -31,7 +35,7 @@ if (require.main === module) {
   waitForDeps(function (err) {
     if (err) {
       console.warn("Unable to import install script. Re-run `install appium-chromedriver` manually.");
-      return;
+      process.exit(1);
     }
     fs.stat(installScript, function (err) {
       if (err) {
