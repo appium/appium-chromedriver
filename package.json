@@ -43,15 +43,14 @@
     "through": "^2.3.7"
   },
   "scripts": {
-    "prepublish": "gulp prepublish",
+    "prepublish": "gulp prepublish && node install-npm.js",
     "test": "gulp once",
     "watch": "gulp",
-    "install": "node install-npm.js",
     "chromedriver": "node install-npm.js",
     "chromedriver_all": "node install-npm.js --all"
   },
   "devDependencies": {
-    "appium-gulp-plugins": "^1.3.12",
+    "appium-gulp-plugins": "^1.4.0",
     "chai": "^3.3.0",
     "chai-as-promised": "^5.1.0",
     "gulp": "^3.9.0",
