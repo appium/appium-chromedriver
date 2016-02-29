@@ -181,12 +181,12 @@ describe('chromedriver with asyncawait', function() {
     should.not.exist(cd.sessionId());
     await assertNoRunningChromedrivers();
   });
-  it('should throw an error during start if spawn doesnt work', async () => {
+  it('should throw an error during start if spawn does not work', async () => {
     let badCd = new Chromedriver({port: 1});
-    await badCd.start(caps).should.eventually.be.rejectedWith('Could not proxy');
+    await badCd.start(caps).should.eventually.be.rejectedWith('ChromeDriver crashed during startup');
     await assertNoRunningChromedrivers();
   });
-  it('should throw an error during start if session doesnt work', async () => {
+  it('should throw an error during start if session does not work', async () => {
     let badCd = new Chromedriver();
     await badCd.start({chromeOptions: {badCap: 'foo'}})
                .should.eventually.be.rejectedWith('cannot parse capability');
