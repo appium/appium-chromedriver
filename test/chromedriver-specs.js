@@ -74,7 +74,8 @@ describe('chromedriver binary setup', function () {
   });
 });
 
-describe('chromedriver with EventEmitter', () => {
+describe('chromedriver with EventEmitter', function () {
+  this.timeout(120000);
   let cd = null;
   const caps = {browserName: 'chrome'};
   before(async () => {
@@ -152,8 +153,8 @@ describe('chromedriver with EventEmitter', () => {
 });
 
 
-describe('chromedriver with asyncawait', function() {
-  this.timeout(20000);
+describe('chromedriver with async/await', function () {
+  this.timeout(120000);
   let cd = null;
   const caps = {browserName: 'chrome'};
   before(async () => {
@@ -181,12 +182,12 @@ describe('chromedriver with asyncawait', function() {
     should.not.exist(cd.sessionId());
     await assertNoRunningChromedrivers();
   });
-  it('should throw an error during start if spawn doesnt work', async () => {
+  it('should throw an error during start if spawn does not work', async () => {
     let badCd = new Chromedriver({port: 1});
-    await badCd.start(caps).should.eventually.be.rejectedWith('Could not proxy');
+    await badCd.start(caps).should.eventually.be.rejectedWith('ChromeDriver crashed during startup');
     await assertNoRunningChromedrivers();
   });
-  it('should throw an error during start if session doesnt work', async () => {
+  it('should throw an error during start if session does not work', async () => {
     let badCd = new Chromedriver();
     await badCd.start({chromeOptions: {badCap: 'foo'}})
                .should.eventually.be.rejectedWith('cannot parse capability');

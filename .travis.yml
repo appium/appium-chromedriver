@@ -16,11 +16,11 @@ before_install:
 before_script:
   - rm -rf node_modules
   - npm install
-  - pushd node_modules/appium-gulp-plugins 
+  - pushd node_modules/appium-gulp-plugins
   - npm install
   - popd
   - npm install -g gulp
 script:
-  - npm test
+  - _FORCE_LOGS=1 npm test
 after_success:
   - gulp coveralls

@@ -38,7 +38,8 @@ describe('install scripts', function () {
     await cd.initChromedriverPath();
     cd.chromedriver.should.equal(cdPath);
   });
-  it('should install for all platforms', async () => {
+  it('should install for all platforms', async function () {
+    this.timeout(120000);
     await assertNoPreviousDirs();
     await installAll();
     const plats = [
