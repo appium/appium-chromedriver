@@ -44,7 +44,7 @@
   },
   "scripts": {
     "prepublish": "gulp prepublish",
-    "install": "gulp transpile && node install-npm.js",
+    "install": "node install-npm.js",
     "test": "gulp once",
     "watch": "gulp",
     "chromedriver": "node install-npm.js",

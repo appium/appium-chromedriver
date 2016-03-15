@@ -22,7 +22,7 @@ function waitForDeps (cb) {
       if (i <= 200) {
         setTimeout(check, 1000);
       } else {
-        cb('Could not install module: ' + err);
+        cb('Could not import installation module: ' + err);
       }
     }
   }
@@ -35,7 +35,7 @@ if (require.main === module) {
   waitForDeps(function (err) {
     if (err) {
       console.warn("Unable to import install script. Re-run `install appium-chromedriver` manually.");
-      process.exit(1);
+      return;
     }
     fs.stat(installScript, function (err) {
       if (err) {

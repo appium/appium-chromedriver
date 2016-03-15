@@ -7,6 +7,13 @@ Node.js wrapper around [Chromedriver](https://sites.google.com/a/chromium.org/ch
 
 This module is written using [Traceur](https://code.google.com/p/traceur-compiler/wiki/GettingStarted) which is essentially ECMAscript6 along with the proposed `await` command for es7.
 
+## Local installation
+
+Because of the oddities of `npm`'s lifecycle hooks, installing locally the first time _will_ fail, saying `Project does not appear to built yet. Please run `gulp transpile` first.`. This is because we transpile in the `prepublish` phase, but run the install script in the `install` phase. Any other way would make development dependencies necessary on user's machines, or make the binary not install, unfortunately.
+
+The solution, however, is simple. Simple run `gulp transpile` and then `npm install`. The former will build the project and the latter will simply install the binary.
+
+
 ## Usage
 
 ```js
