@@ -43,7 +43,8 @@
     "through": "^2.3.7"
   },
   "scripts": {
-    "prepublish": "gulp prepublish && node install-npm.js",
+    "prepublish": "gulp prepublish",
+    "install": "gulp transpile && node install-npm.js",
     "test": "gulp once",
     "watch": "gulp",
     "chromedriver": "node install-npm.js",
