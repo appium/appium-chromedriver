@@ -23,7 +23,7 @@ async function assertNoPreviousDirs () {
 }
 
 describe('install scripts', function () {
-  this.timeout(20000);
+  this.timeout(2000000);
   beforeEach(async () => {
     await fs.rimraf(CD_BASE_DIR);
   });
