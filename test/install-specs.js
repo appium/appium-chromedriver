@@ -32,7 +32,7 @@ describe('install scripts', function () {
     await install();
     let cdPath = await getChromedriverBinaryPath();
     let cdStat = await fs.stat(cdPath);
-    cdStat.size.should.be.above(5000000);
+    cdStat.size.should.be.above(500000);
     cdPath.should.contain(getCurPlatform());
     let cd = new Chromedriver();
     await cd.initChromedriverPath();
@@ -46,12 +46,12 @@ describe('install scripts', function () {
       ['linux', '32'],
       ['linux', '64'],
       ['win', '32'],
-      ['mac', '32']
+      ['mac', '64']
     ];
     for (let [platform, arch] of plats) {
       let cdPath = await getChromedriverBinaryPath(platform, arch);
       let cdStat = await fs.stat(cdPath);
-      cdStat.size.should.be.above(5000000);
+      cdStat.size.should.be.above(500000);
       cdPath.should.contain(platform);
       if (platform === "linux") {
         cdPath.should.contain(arch);
