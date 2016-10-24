@@ -35,7 +35,6 @@
     "continuation-local-storage": "^3.1.4",
     "is-os": "^1.0.0",
     "lodash": "^3.10.1",
-    "ps-node": "^0.0.5",
     "request": "^2.57.0",
     "request-promise": "^1.0.1",
     "source-map-support": "^0.3.2",
