@@ -5,8 +5,7 @@ import { install } from '../lib/install';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import B from 'bluebird';
-import psNode from 'ps-node';
-
+import { exec } from 'teen_process';
 
 let should = chai.should();
 chai.use(chaiAsPromised);
@@ -28,12 +27,15 @@ function nextError (cd) {
 }
 
 async function assertNoRunningChromedrivers () {
-  // let res = await Q.nfcall(psNode.lookup, {command: /([^ ]*)chromedriver$/,
-  //                                          psargs: 'aux'});
-  let f = B.promisify(psNode.lookup);
-  let res = await f({command: /([^ ]*)chromedriver$/, psargs: 'aux'});
+  let {stdout} = await exec('ps', ['aux']);
+  let count = 0;
+  for (let line of stdout.split('\n')) {
+    if (line.indexOf(/chromedriver/i) !== -1) {
+      count++;
+    }
+  }
 
-  res.should.have.length(0);
+  count.should.eql(0);
 }
 
 function buildReqRes (url, method, body) {
