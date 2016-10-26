@@ -1,14 +1,11 @@
 sudo: required
-language:
-  # Setting language to objective-c sends us to an OSX VM
-  - objective-c
+os: osx
+osx_image: xcode8
+language: node_js
+node_js:
+  - "6"
+  - "4"
 before_install:
-  # TavisCI's OSX environment gives us node 0.10.32
-  # Use NVM to update it to 0.12
-  - rm -rf ~/.nvm
-  - git clone https://github.com/creationix/nvm.git ~/.nvm
-  - source ~/.nvm/nvm.sh
-  - nvm install 0.12
   # Chrome Driver needs an updated version of Chrome
   - wget -P /tmp/ https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg
   - hdiutil attach /tmp/googlechrome.dmg
@@ -20,6 +17,8 @@ before_script:
   - npm install
   - popd
   - npm install -g gulp
+  - node -v
+  - npm -v
 script:
   - _FORCE_LOGS=1 npm test
 after_success:
