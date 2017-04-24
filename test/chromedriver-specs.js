@@ -148,7 +148,7 @@ describe('chromedriver with EventEmitter', function () {
   it('should throw an error when chromedriver doesnt exist', async () => {
     let cd2 = new Chromedriver({executable: '/does/not/exist'});
     let nextErrP = nextError(cd2);
-    cd2.start({});
+    await cd2.start({}).should.eventually.be.rejectedWith(/Trying to use/);
     let err = await nextErrP;
     err.message.should.contain('Trying to use');
   });
