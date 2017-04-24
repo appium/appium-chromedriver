@@ -25,7 +25,6 @@
     "lib": "lib"
   },
   "dependencies": {
-    "adm-zip": "^0.4.7",
     "appium-base-driver": "^2.0.0",
     "appium-support": "^2.5.0",
     "asyncbox": "^2.0.2",
