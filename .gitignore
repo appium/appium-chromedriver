@@ -2,3 +2,4 @@ node_modules
 build
 chromedriver
 *.log
+.DS_Store
