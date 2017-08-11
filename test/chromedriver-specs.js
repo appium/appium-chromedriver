@@ -20,7 +20,7 @@ function nextState (cd) {
 
 function nextError (cd) {
   return new B((resolve) => {
-    cd.on(Chromedriver.EVENT_ERROR, (err) => {
+    cd.on(Chromedriver.EVENT_ERROR, (err) => { // eslint-disable-line promise/prefer-await-to-callbacks
       resolve(err);
     });
   });
