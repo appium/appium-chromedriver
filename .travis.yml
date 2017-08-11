@@ -5,22 +5,15 @@ language: node_js
 node_js:
   - "7"
   - "6"
-  - "4"
+env:
+  global:
+    - _FORCE_LOGS=1
 before_install:
   # Chrome Driver needs an updated version of Chrome
   - wget -P /tmp/ https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg
   - hdiutil attach /tmp/googlechrome.dmg
   - sudo cp -r /Volumes/Google\ Chrome/Google\ Chrome.app /Applications/
-before_script:
-  - rm -rf node_modules
-  - npm install
-  - pushd node_modules/appium-gulp-plugins
-  - npm install
-  - popd
-  - npm install -g gulp
-  - node -v
-  - npm -v
 script:
-  - _FORCE_LOGS=1 npm test
+  - npm test
 after_success:
-  - gulp coveralls
+  - npm run coverage
