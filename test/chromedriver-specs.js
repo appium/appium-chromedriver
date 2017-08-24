@@ -6,6 +6,8 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import B from 'bluebird';
 import { exec } from 'teen_process';
+import ADB from 'appium-adb';
+
 
 let should = chai.should();
 chai.use(chaiAsPromised);
@@ -60,7 +62,9 @@ function buildReqRes (url, method, body) {
 describe('chromedriver binary setup', function () {
   this.timeout(20000);
   before(async () => {
-    let cd = new Chromedriver();
+    let cd = new Chromedriver({
+      adb: await ADB.createADB(),
+    });
     try {
       await cd.initChromedriverPath();
     } catch (err) {
@@ -81,7 +85,9 @@ describe('chromedriver with EventEmitter', function () {
   let cd = null;
   const caps = {browserName: 'chrome'};
   before(async () => {
-    let opts = {};
+    let opts = {
+      adb: await ADB.createADB(),
+    };
     cd = new Chromedriver(opts);
   });
   it('should start a session', async () => {
@@ -146,7 +152,10 @@ describe('chromedriver with EventEmitter', function () {
     await nextStatePromise.should.become(Chromedriver.STATE_STOPPED);
   });
   it('should throw an error when chromedriver doesnt exist', async () => {
-    let cd2 = new Chromedriver({executable: '/does/not/exist'});
+    let cd2 = new Chromedriver({
+      adb: await ADB.createADB(),
+      executable: '/does/not/exist',
+    });
     let nextErrP = nextError(cd2);
     await cd2.start({}).should.eventually.be.rejectedWith(/Trying to use/);
     let err = await nextErrP;
@@ -160,7 +169,9 @@ describe('chromedriver with async/await', function () {
   let cd = null;
   const caps = {browserName: 'chrome'};
   before(async () => {
-    let opts = {};
+    let opts = {
+      adb: await ADB.createADB(),
+    };
     cd = new Chromedriver(opts);
   });
   it('should start a session', async () => {
@@ -185,12 +196,17 @@ describe('chromedriver with async/await', function () {
     await assertNoRunningChromedrivers();
   });
   it('should throw an error during start if spawn does not work', async () => {
-    let badCd = new Chromedriver({port: 1});
+    let badCd = new Chromedriver({
+      adb: await ADB.createADB(),
+      port: 1,
+    });
     await badCd.start(caps).should.eventually.be.rejectedWith('ChromeDriver crashed during startup');
     await assertNoRunningChromedrivers();
   });
   it('should throw an error during start if session does not work', async () => {
-    let badCd = new Chromedriver();
+    let badCd = new Chromedriver({
+      adb: await ADB.createADB(),
+    });
     await badCd.start({chromeOptions: {badCap: 'foo'}})
                .should.eventually.be.rejectedWith('cannot parse capability');
     await assertNoRunningChromedrivers();
