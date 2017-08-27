@@ -6,7 +6,6 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import B from 'bluebird';
 import { exec } from 'teen_process';
-import ADB from 'appium-adb';
 
 
 let should = chai.should();
@@ -62,9 +61,7 @@ function buildReqRes (url, method, body) {
 describe('chromedriver binary setup', function () {
   this.timeout(20000);
   before(async () => {
-    let cd = new Chromedriver({
-      adb: await ADB.createADB(),
-    });
+    let cd = new Chromedriver({});
     try {
       await cd.initChromedriverPath();
     } catch (err) {
@@ -85,10 +82,7 @@ describe('chromedriver with EventEmitter', function () {
   let cd = null;
   const caps = {browserName: 'chrome'};
   before(async () => {
-    let opts = {
-      adb: await ADB.createADB(),
-    };
-    cd = new Chromedriver(opts);
+    cd = new Chromedriver({});
   });
   it('should start a session', async () => {
     cd.state.should.eql('stopped');
@@ -122,10 +116,12 @@ describe('chromedriver with EventEmitter', function () {
   });
   it('should restart a session', async () => {
     let p1 = nextState(cd);
-    cd.restart();
+    let restartPromise = cd.restart();
     await p1.should.become(Chromedriver.STATE_RESTARTING);
     // we miss the opportunity to listen for the 'starting' state
     await nextState(cd).should.become(Chromedriver.STATE_ONLINE);
+
+    await restartPromise;
   });
   it('should stop a session', async () => {
     let nextStatePromise = nextState(cd);
@@ -153,7 +149,6 @@ describe('chromedriver with EventEmitter', function () {
   });
   it('should throw an error when chromedriver doesnt exist', async () => {
     let cd2 = new Chromedriver({
-      adb: await ADB.createADB(),
       executable: '/does/not/exist',
     });
     let nextErrP = nextError(cd2);
@@ -169,10 +164,7 @@ describe('chromedriver with async/await', function () {
   let cd = null;
   const caps = {browserName: 'chrome'};
   before(async () => {
-    let opts = {
-      adb: await ADB.createADB(),
-    };
-    cd = new Chromedriver(opts);
+    cd = new Chromedriver({});
   });
   it('should start a session', async () => {
     cd.state.should.eql('stopped');
@@ -197,16 +189,13 @@ describe('chromedriver with async/await', function () {
   });
   it('should throw an error during start if spawn does not work', async () => {
     let badCd = new Chromedriver({
-      adb: await ADB.createADB(),
       port: 1,
     });
     await badCd.start(caps).should.eventually.be.rejectedWith('ChromeDriver crashed during startup');
     await assertNoRunningChromedrivers();
   });
   it('should throw an error during start if session does not work', async () => {
-    let badCd = new Chromedriver({
-      adb: await ADB.createADB(),
-    });
+    let badCd = new Chromedriver({});
     await badCd.start({chromeOptions: {badCap: 'foo'}})
                .should.eventually.be.rejectedWith('cannot parse capability');
     await assertNoRunningChromedrivers();
