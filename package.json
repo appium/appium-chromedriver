@@ -57,6 +57,7 @@
     "lint": "gulp eslint"
   },
   "devDependencies": {
+    "appium-adb": "^2.28.0",
     "appium-gulp-plugins": "^2.1.4",
     "babel-eslint": "^7.1.1",
     "chai": "^3.0.0",
