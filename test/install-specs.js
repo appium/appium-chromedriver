@@ -3,8 +3,8 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { fs } from 'appium-support';
-import { CD_VER, CD_BASE_DIR, install, installAll, getChromedriverBinaryPath,
-         getCurPlatform } from '../lib/install';
+import { CD_BASE_DIR, install, installAll, getChromedriverBinaryPath,
+         getCurPlatform, getPlatforms } from '../lib/install';
 import Chromedriver from '../lib/chromedriver';
 
 
@@ -42,13 +42,8 @@ describe('install scripts', function () {
     this.timeout(120000);
     await assertNoPreviousDirs();
     await installAll();
-    const plats = [
-      ['linux', '32'],
-      ['linux', '64'],
-      ['win', '32']
-    ];
-    plats.push(parseFloat(CD_VER) < 2.23 ? ['mac', '32'] : ['mac', '64']);
-    for (let [platform, arch] of plats) {
+
+    for (let [platform, arch] of getPlatforms()) {
       let cdPath = await getChromedriverBinaryPath(platform, arch);
       let cdStat = await fs.stat(cdPath);
       cdStat.size.should.be.above(500000);
