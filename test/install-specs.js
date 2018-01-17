@@ -24,10 +24,10 @@ async function assertNoPreviousDirs () {
 
 describe('install scripts', function () {
   this.timeout(2000000);
-  beforeEach(async () => {
+  beforeEach(async function () {
     await fs.rimraf(CD_BASE_DIR);
   });
-  it('should install for this platform', async () => {
+  it('should install for this platform', async function () {
     await assertNoPreviousDirs();
     await install();
     let cdPath = await getChromedriverBinaryPath();
@@ -55,7 +55,7 @@ describe('install scripts', function () {
       }
     }
   });
-  it('should throw an error in chromedriver if nothing is installed', async () => {
+  it('should throw an error in chromedriver if nothing is installed', async function () {
     await assertNoPreviousDirs();
     let cd = new Chromedriver();
     let err;
