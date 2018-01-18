@@ -60,7 +60,7 @@ function buildReqRes (url, method, body) {
 
 describe('chromedriver binary setup', function () {
   this.timeout(20000);
-  before(async () => {
+  before(async function () {
     let cd = new Chromedriver({});
     try {
       await cd.initChromedriverPath();
@@ -71,7 +71,7 @@ describe('chromedriver binary setup', function () {
     }
   });
 
-  it('should start with a binary that exists', async () => {
+  it('should start with a binary that exists', async function () {
     let cd = new Chromedriver();
     await cd.initChromedriverPath();
   });
@@ -81,10 +81,10 @@ describe('chromedriver with EventEmitter', function () {
   this.timeout(120000);
   let cd = null;
   const caps = {browserName: 'chrome'};
-  before(async () => {
+  before(async function () {
     cd = new Chromedriver({});
   });
-  it('should start a session', async () => {
+  it('should start a session', async function () {
     cd.state.should.eql('stopped');
     let nextStatePromise = nextState(cd);
     cd.start(caps);
@@ -94,13 +94,13 @@ describe('chromedriver with EventEmitter', function () {
     should.exist(cd.jwproxy.sessionId);
     should.exist(cd.sessionId());
   });
-  it('should run some commands', async () => {
+  it('should run some commands', async function () {
     let res = await cd.sendCommand('/url', 'POST', {url: 'http://google.com'});
     should.not.exist(res);
     res = await cd.sendCommand('/url', 'GET');
     res.should.contain('google');
   });
-  it('should proxy commands', async () => {
+  it('should proxy commands', async function () {
     let initSessId = cd.sessionId();
     let [req, res] = buildReqRes('/url', 'GET');
     await cd.proxyReq(req, res);
@@ -110,11 +110,11 @@ describe('chromedriver with EventEmitter', function () {
     res.sentBody.value.should.contain('google');
     res.sentBody.sessionId.should.equal(initSessId);
   });
-  it('should say whether there is a working webview', async () => {
+  it('should say whether there is a working webview', async function () {
     let res = await cd.hasWorkingWebview();
     res.should.equal(true);
   });
-  it('should restart a session', async () => {
+  it('should restart a session', async function () {
     let p1 = nextState(cd);
     let restartPromise = cd.restart();
     await p1.should.become(Chromedriver.STATE_RESTARTING);
@@ -123,7 +123,7 @@ describe('chromedriver with EventEmitter', function () {
 
     await restartPromise;
   });
-  it('should stop a session', async () => {
+  it('should stop a session', async function () {
     let nextStatePromise = nextState(cd);
     cd.stop();
     await nextStatePromise.should.become(Chromedriver.STATE_STOPPING);
@@ -147,7 +147,7 @@ describe('chromedriver with EventEmitter', function () {
     await cd.killAll();
     await nextStatePromise.should.become(Chromedriver.STATE_STOPPED);
   });
-  it('should throw an error when chromedriver doesnt exist', async () => {
+  it('should throw an error when chromedriver doesnt exist', async function () {
     let cd2 = new Chromedriver({
       executable: '/does/not/exist',
     });
@@ -163,10 +163,10 @@ describe('chromedriver with async/await', function () {
   this.timeout(120000);
   let cd = null;
   const caps = {browserName: 'chrome'};
-  before(async () => {
+  before(async function () {
     cd = new Chromedriver({});
   });
-  it('should start a session', async () => {
+  it('should start a session', async function () {
     cd.state.should.eql('stopped');
     should.not.exist(cd.sessionId());
     await cd.start(caps);
@@ -175,26 +175,26 @@ describe('chromedriver with async/await', function () {
     should.exist(cd.jwproxy.sessionId);
     should.exist(cd.sessionId());
   });
-  it('should restart a session', async () => {
+  it('should restart a session', async function () {
     cd.state.should.eql(Chromedriver.STATE_ONLINE);
     await cd.restart();
     cd.state.should.eql(Chromedriver.STATE_ONLINE);
   });
-  it('should stop a session', async () => {
+  it('should stop a session', async function () {
     cd.state.should.eql(Chromedriver.STATE_ONLINE);
     await cd.stop();
     cd.state.should.eql(Chromedriver.STATE_STOPPED);
     should.not.exist(cd.sessionId());
     await assertNoRunningChromedrivers();
   });
-  it('should throw an error during start if spawn does not work', async () => {
+  it('should throw an error during start if spawn does not work', async function () {
     let badCd = new Chromedriver({
       port: 1,
     });
     await badCd.start(caps).should.eventually.be.rejectedWith('ChromeDriver crashed during startup');
     await assertNoRunningChromedrivers();
   });
-  it('should throw an error during start if session does not work', async () => {
+  it('should throw an error during start if session does not work', async function () {
     let badCd = new Chromedriver({});
     await badCd.start({chromeOptions: {badCap: 'foo'}})
                .should.eventually.be.rejectedWith('cannot parse capability');
