@@ -132,7 +132,7 @@ describe('chromedriver with EventEmitter', function () {
     should.not.exist(cd.sessionId());
     await assertNoRunningChromedrivers();
   });
-  it.skip('should change state to stopped if chromedriver crashes', async () => {
+  it.skip('should change state to stopped if chromedriver crashes', async function () {
     // test works but is skipped because it leaves a chrome window orphaned
     // and I can't figure out a way to safely kill only that one
     cd.state.should.eql(Chromedriver.STATE_STOPPED);
