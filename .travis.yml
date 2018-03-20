@@ -11,6 +11,8 @@ before_install:
   - wget -P /tmp/ https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg
   - hdiutil attach /tmp/googlechrome.dmg
   - sudo cp -r /Volumes/Google\ Chrome/Google\ Chrome.app /Applications/
+before_script:
+  - node install-npm.js
 script:
   - npm test
 after_success:
