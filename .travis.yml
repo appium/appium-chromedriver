@@ -16,6 +16,6 @@ before_install:
 before_script:
   - node install-npm.js
 script:
-  - npm test
+  - $COMMAND
 after_success:
   - npm run coverage
