@@ -108,6 +108,38 @@ describe('chromedriver', function () {
         binPath.should.eql('/path/to/chromedriver-36');
       });
 
+      it('should find most recent binary from a number of possibilities when chrome is too new', async function () {
+        sandbox.stub(utils, 'getChromeVersion')
+          .returns('70.0.0.42');
+        sandbox.stub(fs, 'glob')
+          .returns([
+            '/path/to/chromedriver-9000',
+            '/path/to/chromedriver-8999',
+            '/path/to/chromedriver-36',
+            '/path/to/chromedriver-35',
+          ]);
+        sandbox.stub(tp, 'exec')
+          .onCall(0)
+            .returns({
+              stdout: 'ChromeDriver 2.9000.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
+            })
+          .onCall(0)
+            .returns({
+              stdout: 'ChromeDriver 2.8999.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
+            })
+          .onCall(0)
+            .returns({
+              stdout: 'ChromeDriver 2.36.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
+            })
+          .onCall(0)
+            .returns({
+              stdout: 'ChromeDriver 2.35.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
+            });
+
+        const binPath = await cd.getCompatibleChromedriver();
+        binPath.should.eql('/path/to/chromedriver-9000');
+      });
+
       it('should search specified directory if provided', async function () {
         const cd = new Chromedriver({
           adb: {},
