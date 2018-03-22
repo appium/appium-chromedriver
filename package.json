@@ -42,7 +42,7 @@
   },
   "pre-commit": [
     "precommit-msg",
-    "lint"
+    "precommit-test"
   ],
   "scripts": {
     "prepublish": "gulp prepublish",
@@ -55,6 +55,7 @@
     "chromedriver": "node install-npm.js",
     "chromedriver_all": "node install-npm.js --all",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
+    "precommit-test": "REPORTER=dot gulp once",
     "lint": "gulp eslint",
     "lint:fix": "gulp eslint --fix"
   },
