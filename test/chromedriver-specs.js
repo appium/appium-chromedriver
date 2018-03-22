@@ -1,203 +1,134 @@
-// transpile:mocha
-
 import Chromedriver from '../lib/chromedriver';
-import { install } from '../lib/install';
+import * as install from '../lib/install';
+import * as utils from '../lib/utils';
+import sinon from 'sinon';
 import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
-import B from 'bluebird';
-import { exec } from 'teen_process';
+import { fs } from 'appium-support';
+import * as tp from 'teen_process';
 
 
-let should = chai.should();
-chai.use(chaiAsPromised);
+chai.should();
 
-function nextState (cd) {
-  return new B((resolve) => {
-    cd.on(Chromedriver.EVENT_CHANGED, (msg) => {
-      resolve(msg.state);
+describe('chromedriver', function () {
+  let sandbox;
+  beforeEach(function () {
+    sandbox = sinon.createSandbox();
+  });
+  afterEach(function () {
+    sandbox.restore();
+  });
+
+  describe('getCompatibleChromedriver', function () {
+    describe('desktop', function () {
+      it('should find generic binary', async function () {
+        sandbox.stub(install, 'getChromedriverBinaryPath')
+          .returns('/path/to/chromedriver');
+
+        const cd = new Chromedriver({});
+        const binPath = await cd.getCompatibleChromedriver();
+        binPath.should.eql('/path/to/chromedriver');
+      });
     });
-  });
-}
 
-function nextError (cd) {
-  return new B((resolve) => {
-    cd.on(Chromedriver.EVENT_ERROR, (err) => { // eslint-disable-line promise/prefer-await-to-callbacks
-      resolve(err);
+    describe('Android', function () {
+      let cd;
+      let getChromedriverBinaryPathSpy;
+      before(function () {
+        cd = new Chromedriver({
+          adb: {},
+        });
+      });
+      beforeEach(function () {
+        getChromedriverBinaryPathSpy = sandbox.spy(install, 'getChromedriverBinaryPath');
+      });
+      afterEach(function () {
+        getChromedriverBinaryPathSpy.called.should.be.false;
+      });
+
+      it('should find a compatible binary if only one binary exists', async function () {
+        sandbox.stub(utils, 'getChromeVersion')
+          .returns('63.0.3239.99');
+        sandbox.stub(fs, 'glob')
+          .returns([
+            '/path/to/chromedriver',
+          ]);
+        sandbox.stub(tp, 'exec')
+          .returns({
+            stdout: 'ChromeDriver 2.36.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
+          });
+
+        const binPath = await cd.getCompatibleChromedriver();
+        binPath.should.eql('/path/to/chromedriver');
+      });
+
+      it('should find most recent compatible binary from a number of possibilities', async function () {
+        sandbox.stub(utils, 'getChromeVersion')
+          .returns('59.0.3029.42');
+        sandbox.stub(fs, 'glob')
+          .returns([
+            '/path/to/chromedriver-36',
+            '/path/to/chromedriver-35',
+            '/path/to/chromedriver-34',
+            '/path/to/chromedriver-33',
+            '/path/to/chromedriver-32',
+            '/path/to/chromedriver-31',
+            '/path/to/chromedriver-30',
+          ]);
+        sandbox.stub(tp, 'exec')
+          .onCall(0)
+            .returns({
+              stdout: 'ChromeDriver 2.36.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
+            })
+          .onCall(0)
+            .returns({
+              stdout: 'ChromeDriver 2.35.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
+            })
+          .onCall(0)
+            .returns({
+              stdout: 'ChromeDriver 2.34.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
+            })
+          .onCall(0)
+            .returns({
+              stdout: 'ChromeDriver 2.33.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
+            })
+          .onCall(0)
+            .returns({
+              stdout: 'ChromeDriver 2.32.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
+            })
+          .onCall(0)
+            .returns({
+              stdout: 'ChromeDriver 2.31.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
+            })
+          .onCall(0)
+            .returns({
+              stdout: 'ChromeDriver 2.30.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
+            });
+
+        const binPath = await cd.getCompatibleChromedriver();
+        binPath.should.eql('/path/to/chromedriver-36');
+      });
+
+      it('should search specified directory if provided', async function () {
+        const cd = new Chromedriver({
+          adb: {},
+          executableDir: '/some/local/dir/for/chromedrivers',
+        });
+
+        sandbox.stub(utils, 'getChromeVersion')
+          .returns('63.0.3239.99');
+        sandbox.stub(fs, 'glob')
+          .withArgs('/some/local/dir/for/chromedrivers/*')
+            .returns([
+              '/some/local/dir/for/chromedrivers/chromedriver',
+            ]);
+        sandbox.stub(tp, 'exec')
+          .returns({
+            stdout: 'ChromeDriver 2.36.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
+          });
+
+        const binPath = await cd.getCompatibleChromedriver();
+        binPath.should.eql('/some/local/dir/for/chromedrivers/chromedriver');
+      });
     });
-  });
-}
-
-async function assertNoRunningChromedrivers () {
-  let {stdout} = await exec('ps', ['aux']);
-  let count = 0;
-  for (let line of stdout.split('\n')) {
-    if (line.indexOf(/chromedriver/i) !== -1) {
-      count++;
-    }
-  }
-
-  count.should.eql(0);
-}
-
-function buildReqRes (url, method, body) {
-  let req = {originalUrl: url, method, body};
-  let res = {};
-  res.headers = {};
-  res.set = (k, v) => { res[k] = v; };
-  res.status = (code) => {
-    res.sentCode = code;
-    return {
-      send: (body) => {
-        try {
-          body = JSON.parse(body);
-        } catch (e) {}
-        res.sentBody = body;
-      }
-    };
-  };
-  return [req, res];
-}
-
-describe('chromedriver binary setup', function () {
-  this.timeout(20000);
-  before(async function () {
-    let cd = new Chromedriver({});
-    try {
-      await cd.initChromedriverPath();
-    } catch (err) {
-      if (err.message.indexOf("Trying to use") !== -1) {
-        await install();
-      }
-    }
-  });
-
-  it('should start with a binary that exists', async function () {
-    let cd = new Chromedriver();
-    await cd.initChromedriverPath();
-  });
-});
-
-describe('chromedriver with EventEmitter', function () {
-  this.timeout(120000);
-  let cd = null;
-  const caps = {browserName: 'chrome'};
-  before(async function () {
-    cd = new Chromedriver({});
-  });
-  it('should start a session', async function () {
-    cd.state.should.eql('stopped');
-    let nextStatePromise = nextState(cd);
-    cd.start(caps);
-    cd.capabilities.should.eql(caps);
-    await nextStatePromise.should.become(Chromedriver.STATE_STARTING);
-    await nextState(cd).should.become(Chromedriver.STATE_ONLINE);
-    should.exist(cd.jwproxy.sessionId);
-    should.exist(cd.sessionId());
-  });
-  it('should run some commands', async function () {
-    let res = await cd.sendCommand('/url', 'POST', {url: 'http://google.com'});
-    should.not.exist(res);
-    res = await cd.sendCommand('/url', 'GET');
-    res.should.contain('google');
-  });
-  it('should proxy commands', async function () {
-    let initSessId = cd.sessionId();
-    let [req, res] = buildReqRes('/url', 'GET');
-    await cd.proxyReq(req, res);
-    res.headers['content-type'].should.contain('application/json');
-    res.sentCode.should.equal(200);
-    res.sentBody.status.should.equal(0);
-    res.sentBody.value.should.contain('google');
-    res.sentBody.sessionId.should.equal(initSessId);
-  });
-  it('should say whether there is a working webview', async function () {
-    let res = await cd.hasWorkingWebview();
-    res.should.equal(true);
-  });
-  it('should restart a session', async function () {
-    let p1 = nextState(cd);
-    let restartPromise = cd.restart();
-    await p1.should.become(Chromedriver.STATE_RESTARTING);
-    // we miss the opportunity to listen for the 'starting' state
-    await nextState(cd).should.become(Chromedriver.STATE_ONLINE);
-
-    await restartPromise;
-  });
-  it('should stop a session', async function () {
-    let nextStatePromise = nextState(cd);
-    cd.stop();
-    await nextStatePromise.should.become(Chromedriver.STATE_STOPPING);
-    should.not.exist(cd.sessionId());
-    await nextState(cd).should.become(Chromedriver.STATE_STOPPED);
-    should.not.exist(cd.sessionId());
-    await assertNoRunningChromedrivers();
-  });
-  it.skip('should change state to stopped if chromedriver crashes', async function () {
-    // test works but is skipped because it leaves a chrome window orphaned
-    // and I can't figure out a way to safely kill only that one
-    cd.state.should.eql(Chromedriver.STATE_STOPPED);
-    let nextStatePromise = nextState(cd);
-    cd.start(caps);
-    cd.capabilities.should.eql(caps);
-    await nextStatePromise.should.become(Chromedriver.STATE_STARTING);
-    await nextState(cd).should.become(Chromedriver.STATE_ONLINE);
-    should.exist(cd.jwproxy.sessionId);
-    should.exist(cd.sessionId());
-    nextStatePromise = nextState(cd);
-    await cd.killAll();
-    await nextStatePromise.should.become(Chromedriver.STATE_STOPPED);
-  });
-  it('should throw an error when chromedriver doesnt exist', async function () {
-    let cd2 = new Chromedriver({
-      executable: '/does/not/exist',
-    });
-    let nextErrP = nextError(cd2);
-    await cd2.start({}).should.eventually.be.rejectedWith(/Trying to use/);
-    let err = await nextErrP;
-    err.message.should.contain('Trying to use');
-  });
-});
-
-
-describe('chromedriver with async/await', function () {
-  this.timeout(120000);
-  let cd = null;
-  const caps = {browserName: 'chrome'};
-  before(async function () {
-    cd = new Chromedriver({});
-  });
-  it('should start a session', async function () {
-    cd.state.should.eql('stopped');
-    should.not.exist(cd.sessionId());
-    await cd.start(caps);
-    cd.capabilities.should.eql(caps);
-    cd.state.should.eql(Chromedriver.STATE_ONLINE);
-    should.exist(cd.jwproxy.sessionId);
-    should.exist(cd.sessionId());
-  });
-  it('should restart a session', async function () {
-    cd.state.should.eql(Chromedriver.STATE_ONLINE);
-    await cd.restart();
-    cd.state.should.eql(Chromedriver.STATE_ONLINE);
-  });
-  it('should stop a session', async function () {
-    cd.state.should.eql(Chromedriver.STATE_ONLINE);
-    await cd.stop();
-    cd.state.should.eql(Chromedriver.STATE_STOPPED);
-    should.not.exist(cd.sessionId());
-    await assertNoRunningChromedrivers();
-  });
-  it('should throw an error during start if spawn does not work', async function () {
-    let badCd = new Chromedriver({
-      port: 1,
-    });
-    await badCd.start(caps).should.eventually.be.rejectedWith('ChromeDriver crashed during startup');
-    await assertNoRunningChromedrivers();
-  });
-  it('should throw an error during start if session does not work', async function () {
-    let badCd = new Chromedriver({});
-    await badCd.start({chromeOptions: {badCap: 'foo'}})
-               .should.eventually.be.rejectedWith('cannot parse capability');
-    await assertNoRunningChromedrivers();
   });
 });
