@@ -4,8 +4,6 @@ osx_image: xcode9.2
 language: node_js
 node_js: "8"
 env:
-  global:
-    - _FORCE_LOGS=1
   - COMMAND="npm test"
   - COMMAND="npm run e2e-test" _FORCE_LOGS=1
 before_install:
@@ -14,7 +12,7 @@ before_install:
   - hdiutil attach /tmp/googlechrome.dmg
   - sudo cp -r /Volumes/Google\ Chrome/Google\ Chrome.app /Applications/
 before_script:
-  - node install-npm.js
+  - npm run chromedriver
 script:
   - $COMMAND
 after_success:
