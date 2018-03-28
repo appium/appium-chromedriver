@@ -5,6 +5,7 @@ import sinon from 'sinon';
 import chai from 'chai';
 import { fs } from 'appium-support';
 import * as tp from 'teen_process';
+import path from 'path';
 
 
 chai.should();
@@ -160,6 +161,27 @@ describe('chromedriver', function () {
 
         const binPath = await cd.getCompatibleChromedriver();
         binPath.should.eql('/some/local/dir/for/chromedrivers/chromedriver');
+      });
+
+      it('should use alternative mapping if provided', async function () {
+        const cd = new Chromedriver({
+          adb: {},
+          mappingPath: path.resolve(__dirname, '..', '..', 'test', 'fixtures', 'alt-mapping.json'),
+        });
+
+        sandbox.stub(utils, 'getChromeVersion')
+          .returns('63.0.3239.99');
+        sandbox.stub(fs, 'glob')
+          .returns([
+            '/path/to/chromedriver-42',
+          ]);
+        sandbox.stub(tp, 'exec')
+          .returns({
+            stdout: 'ChromeDriver 2.42.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
+          });
+
+        const binPath = await cd.getCompatibleChromedriver();
+        binPath.should.eql('/path/to/chromedriver-42');
       });
     });
   });
