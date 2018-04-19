@@ -6,7 +6,7 @@ import chai from 'chai';
 import { fs } from 'appium-support';
 import * as tp from 'teen_process';
 import path from 'path';
-
+import _ from 'lodash';
 
 chai.should();
 
@@ -107,6 +107,53 @@ describe('chromedriver', function () {
 
         const binPath = await cd.getCompatibleChromedriver();
         binPath.should.eql('/path/to/chromedriver-36');
+      });
+
+      it('should correctly determine Chromedriver versions', async function () {
+        sandbox.stub(fs, 'glob')
+          .returns([
+            '/path/to/chromedriver-36',
+            '/path/to/chromedriver-35',
+            '/path/to/chromedriver-34',
+            '/path/to/chromedriver-33',
+            '/path/to/chromedriver-32',
+            '/path/to/chromedriver-31',
+            '/path/to/chromedriver-30',
+          ]);
+        sandbox.stub(tp, 'exec')
+          .onCall(0)
+            .returns({
+              stdout: 'ChromeDriver 2.36.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
+            })
+          .onCall(1)
+            .returns({
+              stdout: 'ChromeDriver 2.35.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
+            })
+          .onCall(2)
+            .returns({
+              stdout: 'ChromeDriver 2.34.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
+            })
+          .onCall(3)
+            .returns({
+              stdout: 'ChromeDriver 2.33.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
+            })
+          .onCall(4)
+            .returns({
+              stdout: 'ChromeDriver 2.32.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
+            })
+          .onCall(5)
+            .returns({
+              stdout: 'ChromeDriver 2.31.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
+            })
+          .onCall(6)
+            .returns({
+              stdout: 'ChromeDriver 2.30.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
+            });
+
+        const chromedrivers = await cd.getChromedrivers({});
+        for (const [cd, expectedVersion] of _.zip(chromedrivers, ['2.36', '2.35', '2.34', '2.33', '2.32', '2.31', '2.30'])) {
+          cd.version.should.eql(expectedVersion);
+        }
       });
 
       it('should find most recent binary from a number of possibilities when chrome is too new', async function () {
