@@ -151,7 +151,9 @@ describe('chromedriver', function () {
             });
 
         const chromedrivers = await cd.getChromedrivers({});
-        _.map(chromedrivers, cd => cd.version).should.eql(['2.36', '2.35', '2.34', '2.33', '2.32', '2.31', '2.30']);
+        for (const [cd, expectedVersion] of _.zip(chromedrivers, ['2.36', '2.35', '2.34', '2.33', '2.32', '2.31', '2.30'])) {
+          cd.version.should.eql(expectedVersion);
+        }
       });
 
       it('should find most recent binary from a number of possibilities when chrome is too new', async function () {
