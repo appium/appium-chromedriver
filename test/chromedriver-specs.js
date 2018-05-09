@@ -230,6 +230,27 @@ describe('chromedriver', function () {
         const binPath = await cd.getCompatibleChromedriver();
         binPath.should.eql('/path/to/chromedriver-42');
       });
+
+      it('should use alternative mapping if provided even if semver is broken', async function () {
+        const cd = new Chromedriver({
+          adb: {},
+          mappingPath: path.resolve(__dirname, '..', '..', 'test', 'fixtures', 'alt-mapping-nonsemver.json'),
+        });
+
+        sandbox.stub(utils, 'getChromeVersion')
+          .returns('63.0.3239.99');
+        sandbox.stub(fs, 'glob')
+          .returns([
+            '/path/to/chromedriver-42',
+          ]);
+        sandbox.stub(tp, 'exec')
+          .returns({
+            stdout: 'ChromeDriver 2.42.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
+          });
+
+        const binPath = await cd.getCompatibleChromedriver();
+        binPath.should.eql('/path/to/chromedriver-42');
+      });
     });
   });
 });
