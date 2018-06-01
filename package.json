@@ -28,7 +28,7 @@
     "appium-base-driver": "^2.25.0",
     "appium-support": "^2.8.0",
     "asyncbox": "^2.0.2",
-    "babel-runtime": "=5.8.24",
+    "babel-runtime": "6.26.0",
     "bluebird": "^3.5.1",
     "continuation-local-storage": "^3.1.4",
     "is-os": "^1.0.0",
@@ -61,18 +61,18 @@
   },
   "devDependencies": {
     "appium-gulp-plugins": "^2.2.1",
-    "babel-eslint": "^7.1.1",
+    "babel-eslint": "^8.2.3",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
-    "eslint": "^3.10.2",
+    "eslint": "^4.19.1",
     "eslint-config-appium": "^2.1.0",
-    "eslint-plugin-babel": "^3.3.0",
+    "eslint-plugin-babel": "^5.1.0",
     "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-mocha": "^4.7.0",
+    "eslint-plugin-mocha": "^5.0.0",
     "eslint-plugin-promise": "^3.3.1",
     "gulp": "^3.9.0",
     "mocha": "^5.0.5",
     "pre-commit": "^1.1.3",
-    "sinon": "^4.4.8"
+    "sinon": "^5.0.10"
   }
 }
