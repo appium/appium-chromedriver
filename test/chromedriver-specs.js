@@ -1,4 +1,4 @@
-import Chromedriver from '../lib/chromedriver';
+import { Chromedriver, getMostRecentChromedriver } from '../lib/chromedriver';
 import * as install from '../lib/install';
 import * as utils from '../lib/utils';
 import sinon from 'sinon';
@@ -22,7 +22,7 @@ describe('chromedriver', function () {
   describe('getCompatibleChromedriver', function () {
     describe('desktop', function () {
       it('should find generic binary', async function () {
-        sandbox.stub(install, 'getChromedriverBinaryPath')
+        sandbox.stub(utils, 'getChromedriverBinaryPath')
           .returns('/path/to/chromedriver');
 
         const cd = new Chromedriver({});
@@ -251,6 +251,40 @@ describe('chromedriver', function () {
         const binPath = await cd.getCompatibleChromedriver();
         binPath.should.eql('/path/to/chromedriver-42');
       });
+    });
+  });
+
+  describe('getMostRecentChromedriver', function () {
+    it('should get a value by default', function () {
+      getMostRecentChromedriver().should.be.a.string;
+    });
+    it('should get the most recent version', function () {
+      const mapping = {
+        '2.12': '36.0.1985',
+        '2.11': '36.0.1985',
+        '2.10': '33.0.1751',
+        '2.9': '31.0.1650',
+        '2.8': '30.0.1573',
+        '2.7': '30.0.1573',
+        '2.6': '29.0.1545',
+      };
+      getMostRecentChromedriver(mapping).should.eql('2.12');
+    });
+    it('should handle broken semver', function () {
+      const mapping = {
+        '2.12': '36.0.1985',
+        'v2.11': '36.0.1985',
+        '2.10.0.0': '33.0.1751',
+        '2.9-beta': '31.0.1650',
+        '2.8': '30.0.1573',
+        '2.7': '30.0.1573',
+        '2.6': '29.0.1545',
+      };
+      getMostRecentChromedriver(mapping).should.eql('2.12');
+    });
+    it('should fail for empty mapping', function () {
+      (() => getMostRecentChromedriver({}))
+        .should.throw('Unable to get most recent Chromedriver from empty mapping');
     });
   });
 });
