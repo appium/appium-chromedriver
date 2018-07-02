@@ -36,7 +36,11 @@ describe('chromedriver', function () {
       let getChromedriverBinaryPathSpy;
       before(function () {
         cd = new Chromedriver({
-          adb: {},
+          adb: {
+            getApiLevel: async function () { // eslint-disable-line
+              return 25;
+            }
+          },
         });
       });
       beforeEach(function () {
