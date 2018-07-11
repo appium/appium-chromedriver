@@ -37,9 +37,7 @@ describe('chromedriver', function () {
       before(function () {
         cd = new Chromedriver({
           adb: {
-            getApiLevel: async function () { // eslint-disable-line
-              return 25;
-            }
+            getApiLevel: () => 25,
           },
         });
       });
@@ -194,7 +192,9 @@ describe('chromedriver', function () {
 
       it('should search specified directory if provided', async function () {
         const cd = new Chromedriver({
-          adb: {},
+          adb: {
+            getApiLevel: () => 25,
+          },
           executableDir: '/some/local/dir/for/chromedrivers',
         });
 
@@ -216,7 +216,9 @@ describe('chromedriver', function () {
 
       it('should use alternative mapping if provided', async function () {
         const cd = new Chromedriver({
-          adb: {},
+          adb: {
+            getApiLevel: () => 25,
+          },
           mappingPath: path.resolve(__dirname, '..', '..', 'test', 'fixtures', 'alt-mapping.json'),
         });
 
@@ -237,7 +239,9 @@ describe('chromedriver', function () {
 
       it('should use alternative mapping if provided even if semver is broken', async function () {
         const cd = new Chromedriver({
-          adb: {},
+          adb: {
+            getApiLevel: () => 25,
+          },
           mappingPath: path.resolve(__dirname, '..', '..', 'test', 'fixtures', 'alt-mapping-nonsemver.json'),
         });
 
