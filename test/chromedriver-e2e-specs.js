@@ -147,7 +147,7 @@ describe('chromedriver with EventEmitter', function () {
     await cd.killAll();
     await nextStatePromise.should.become(Chromedriver.STATE_STOPPED);
   });
-  it('should throw an error when chromedriver doesnt exist', async function () {
+  it('should throw an error when chromedriver does not exist', async function () {
     let cd2 = new Chromedriver({
       executable: '/does/not/exist',
     });
