@@ -113,3 +113,33 @@ npm run watch
 ```
 npm test
 ```
+
+## Upgrading Chromedriver Version
+
+When a new [Chromedriver](http://chromedriver.chromium.org/) version is released,
+the details will be [here](http://chromedriver.chromium.org/downloads). Which
+Chromedriver this package selects is based on the `CHROMEDRIVER_CHROME_MAPPING`
+in `lib/chromedriver`. Add a new entry to the top, with the correct version number
+and a random, but low, "minimum chrome version" (this will make it so that while
+this version is chosen, the test in the next step will fail for the right reason
+and give us the correct value to put here). To install, build then re-install
+the package:
+```
+npm run build
+npm install
+```
+Then link to `appium-uiautomator2-driver` and run the "url" test from that package:
+```
+npm run mocha -- -t 900000 --recursive -R spec build/test/functional/commands/general/url-e2e-specs.js --exit
+```
+This **will** fail, but in the error message will be the actual minimum Chrome
+version for this version of Chromedriver:
+```
+Error: Failed to start Chromedriver session: A new session could not be created.
+  Details: session not created exception: Chrome version must be >= 67.0.3396.0
+```
+Take the number (e.g., here, `67.0.3396.0`) and put the first three parts
+(`67.0.3396`) into the `CHROMEDRIVER_CHROME_MAPPING`, replacing the random value
+inserted at the beginning of this process.
+
+Commit, push, and pull request!
