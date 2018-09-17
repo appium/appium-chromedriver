@@ -128,18 +128,31 @@ the package:
 npm run build
 npm install
 ```
-Then link to `appium-uiautomator2-driver` and run the "url" test from that package:
+To get the minimum version of Chrome needed for the new Chromedriver, in one
+shell run Chromedriver
+```shell
+./chromedriver/<PLATFORM>/chromedriver[.exe] --verbose
 ```
-npm run mocha -- -t 900000 --recursive -R spec build/test/functional/commands/general/url-e2e-specs.js --exit
+And in anther shell, create a session by running the [curl](https://curl.haxx.se/) command
+```shell
+curl \
+  -d '{"desiredCapabilities":{"chromeOptions":{"androidPackage":"com.android.chrome","androidDeviceSerial":"emulator-5554"}}}' \
+  -H "Content-Type: application/json" \
+  -XPOST http://localhost:9515/session
 ```
 This **will** fail, but in the error message will be the actual minimum Chrome
 version for this version of Chromedriver:
+```json
+{
+  "sessionId": "55dcde971731f3d1ce04b54d7664069c",
+  "status": 33,
+  "value": {
+    "message": "session not created: Chrome version must be >= 68.0.3440.0\n  (Driver info: chromedriver=2.42.591059 (a3d9684d10d61aa0c45f6723b327283be1ebaad8),platform=Mac OS X 10.13.6 x86_64)"
+  }
+}
 ```
-Error: Failed to start Chromedriver session: A new session could not be created.
-  Details: session not created exception: Chrome version must be >= 67.0.3396.0
-```
-Take the number (e.g., here, `67.0.3396.0`) and put the first three parts
-(`67.0.3396`) into the `CHROMEDRIVER_CHROME_MAPPING`, replacing the random value
+Take the number (e.g., here, `68.0.3440.0`) and put the first three parts
+(`68.0.3440.0`) into the `CHROMEDRIVER_CHROME_MAPPING`, replacing the random value
 inserted at the beginning of this process.
 
 Commit, push, and pull request!
