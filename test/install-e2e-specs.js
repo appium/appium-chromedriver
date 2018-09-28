@@ -3,8 +3,9 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { fs } from 'appium-support';
-import { CD_BASE_DIR, install, installAll, getChromedriverBinaryPath,
-         getCurPlatform, getPlatforms } from '../lib/install';
+import { install, installAll } from '../lib/install';
+import { CD_BASE_DIR, getChromedriverBinaryPath, getPlatforms,
+         getCurPlatform } from '../lib/utils';
 import Chromedriver from '../lib/chromedriver';
 
 

@@ -1,5 +1,4 @@
 import { Chromedriver, getMostRecentChromedriver } from '../lib/chromedriver';
-import * as install from '../lib/install';
 import * as utils from '../lib/utils';
 import sinon from 'sinon';
 import chai from 'chai';
@@ -7,6 +6,7 @@ import { fs } from 'appium-support';
 import * as tp from 'teen_process';
 import path from 'path';
 import _ from 'lodash';
+
 
 chai.should();
 
@@ -42,7 +42,7 @@ describe('chromedriver', function () {
         });
       });
       beforeEach(function () {
-        getChromedriverBinaryPathSpy = sandbox.spy(install, 'getChromedriverBinaryPath');
+        getChromedriverBinaryPathSpy = sandbox.spy(utils, 'getChromedriverBinaryPath');
       });
       afterEach(function () {
         getChromedriverBinaryPathSpy.called.should.be.false;
