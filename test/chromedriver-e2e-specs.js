@@ -81,7 +81,7 @@ describe('chromedriver with EventEmitter', function () {
   this.timeout(120000);
   let cd = null;
   const caps = {browserName: 'chrome'};
-  before(async function () {
+  before(function () {
     cd = new Chromedriver({});
   });
   it('should start a session', async function () {
@@ -163,7 +163,7 @@ describe('chromedriver with async/await', function () {
   this.timeout(120000);
   let cd = null;
   const caps = {browserName: 'chrome'};
-  before(async function () {
+  before(function () {
     cd = new Chromedriver({});
   });
   it('should start a session', async function () {
