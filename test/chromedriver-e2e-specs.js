@@ -65,7 +65,7 @@ describe('chromedriver binary setup', function () {
     try {
       await cd.initChromedriverPath();
     } catch (err) {
-      if (err.message.indexOf("Trying to use") !== -1) {
+      if (err.message.indexOf('Trying to use') !== -1) {
         await install();
       }
     }

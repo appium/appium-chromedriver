@@ -20,7 +20,7 @@ async function assertNoPreviousDirs () {
     err = e;
   }
   should.exist(err);
-  err.code.should.eql("ENOENT");
+  err.code.should.eql('ENOENT');
 }
 
 describe('install scripts', function () {
@@ -49,7 +49,7 @@ describe('install scripts', function () {
       let cdStat = await fs.stat(cdPath);
       cdStat.size.should.be.above(500000);
       cdPath.should.contain(platform);
-      if (platform === "linux") {
+      if (platform === 'linux') {
         cdPath.should.contain(arch);
       } else {
         cdPath.should.not.contain(arch);
@@ -66,6 +66,6 @@ describe('install scripts', function () {
       err = e;
     }
     should.exist(err);
-    err.message.should.contain("path");
+    err.message.should.contain('path');
   });
 });
