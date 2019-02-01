@@ -80,7 +80,7 @@
     "gulp": "^4.0.0",
     "mocha": "^5.0.5",
     "pre-commit": "^1.1.3",
-    "sinon": "^6.0.0"
+    "sinon": "^7.2.3"
   },
   "greenkeeper": {
     "ignore": []
