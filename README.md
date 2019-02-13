@@ -119,21 +119,30 @@ npm test
 When a new [Chromedriver](http://chromedriver.chromium.org/) version is released,
 the details will be [here](http://chromedriver.chromium.org/downloads). Which
 Chromedriver this package selects is based on the `CHROMEDRIVER_CHROME_MAPPING`
-in `lib/chromedriver`. Add a new entry to the top, with the correct version number
-and a random, but low, "minimum chrome version" (this will make it so that while
-this version is chosen, the test in the next step will fail for the right reason
-and give us the correct value to put here). To install, build then re-install
-the package:
+in `lib/chromedriver`.
+
+To add a new entry, you must know the Chromedriver version and the minimum version
+of Chrome which it is capable of automating. Starting with Chromedriver
+[2.46](https://chromedriver.storage.googleapis.com/index.html?path=2.46/) the
+executable has a command line flag `--minimum-chrome-version` to get the latter.
+So, you just need to download the Chromedriver version, and then run it
 ```
-npm run build
-npm install
+path/to/chromedriver[.exe] --minimum-chrome-version
 ```
-To get the minimum version of Chrome needed for the new Chromedriver, in one
+The output will be something like `minimum supported Chrome version: 71.0.3578.0`.
+
+Add a new entry to the top of `CHROMEDRIVER_CHROME_MAPPING` in `lib/chromedriver`,
+consisting of the version of Chromedriver and the first three parts of the
+minimum Chrome version.
+
+If the command line flag is not available, the minimum Chrome version can be
+obtained by attempting to run a session against a low version of Chrome. In one
 shell run Chromedriver
 ```shell
-./chromedriver/<PLATFORM>/chromedriver[.exe] --verbose
+path/to/chromedriver[.exe] --verbose
 ```
-And in anther shell, create a session by running the [curl](https://curl.haxx.se/) command
+And in anther shell, create a session by running the [curl](https://curl.haxx.se/)
+command
 ```shell
 curl \
   -d '{"desiredCapabilities":{"chromeOptions":{"androidPackage":"com.android.chrome","androidDeviceSerial":"emulator-5554"}}}' \
@@ -152,7 +161,7 @@ version for this version of Chromedriver:
 }
 ```
 Take the number (e.g., here, `68.0.3440.0`) and put the first three parts
-(`68.0.3440.0`) into the `CHROMEDRIVER_CHROME_MAPPING`, replacing the random value
-inserted at the beginning of this process.
+(`68.0.3440`) into the `CHROMEDRIVER_CHROME_MAPPING` along with the version of
+Chromedriver being added.
 
 Commit, push, and pull request!
