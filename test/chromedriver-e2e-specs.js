@@ -77,10 +77,12 @@ describe('chromedriver binary setup', function () {
   });
 });
 
+const caps = {browserName: 'chrome'};
+const expectedCaps = {browserName: 'chrome', loggingPrefs: {browser: 'ALL'}};
+
 describe('chromedriver with EventEmitter', function () {
   this.timeout(120000);
   let cd = null;
-  const caps = {browserName: 'chrome'};
   before(function () {
     cd = new Chromedriver({});
   });
@@ -88,7 +90,7 @@ describe('chromedriver with EventEmitter', function () {
     cd.state.should.eql('stopped');
     let nextStatePromise = nextState(cd);
     cd.start(caps);
-    cd.capabilities.should.eql(caps);
+    cd.capabilities.should.eql(expectedCaps);
     await nextStatePromise.should.become(Chromedriver.STATE_STARTING);
     await nextState(cd).should.become(Chromedriver.STATE_ONLINE);
     should.exist(cd.jwproxy.sessionId);
@@ -158,11 +160,9 @@ describe('chromedriver with EventEmitter', function () {
   });
 });
 
-
 describe('chromedriver with async/await', function () {
   this.timeout(120000);
   let cd = null;
-  const caps = {browserName: 'chrome'};
   before(function () {
     cd = new Chromedriver({});
   });
@@ -170,7 +170,7 @@ describe('chromedriver with async/await', function () {
     cd.state.should.eql('stopped');
     should.not.exist(cd.sessionId());
     await cd.start(caps);
-    cd.capabilities.should.eql(caps);
+    cd.capabilities.should.eql(expectedCaps);
     cd.state.should.eql(Chromedriver.STATE_ONLINE);
     should.exist(cd.jwproxy.sessionId);
     should.exist(cd.sessionId());
