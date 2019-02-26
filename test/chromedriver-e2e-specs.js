@@ -77,11 +77,12 @@ describe('chromedriver binary setup', function () {
   });
 });
 
+const caps = {browserName: 'chrome'};
+const expectedCaps = {browserName: 'chrome', loggingPrefs: {browser: 'ALL'}};
+
 describe('chromedriver with EventEmitter', function () {
   this.timeout(120000);
   let cd = null;
-  const caps = {browserName: 'chrome'};
-  const expectedCaps = {browserName: 'chrome', loggingPrefs: {browser: 'ALL'}};
   before(function () {
     cd = new Chromedriver({});
   });
@@ -159,12 +160,9 @@ describe('chromedriver with EventEmitter', function () {
   });
 });
 
-
 describe('chromedriver with async/await', function () {
   this.timeout(120000);
   let cd = null;
-  const caps = {browserName: 'chrome'};
-  const expectedCaps = {browserName: 'chrome', loggingPrefs: {browser: 'ALL'}};
   before(function () {
     cd = new Chromedriver({});
   });
