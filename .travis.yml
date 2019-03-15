@@ -3,11 +3,13 @@ node_js: "8"
 matrix:
   include:
     - os: windows
+      env:
+        - COMMAND="npm install"
     - os: osx
       osx_image: xcode9.2
-env:
-  - COMMAND="npm test"
-  - COMMAND="npm run e2e-test" _FORCE_LOGS=1
+      env:
+        - COMMAND="npm test"
+        - COMMAND="npm run e2e-test" _FORCE_LOGS=1
 before_install:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then
       wget -P /tmp/ https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg;
@@ -17,9 +19,7 @@ before_install:
 before_script:
   - npm run chromedriver
 script:
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then
-      $COMMAND
-    fi
+  - $COMMAND
 after_success:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then
       npm run coverage
