@@ -1,18 +1,26 @@
-os: osx
-osx_image: xcode9.2
 language: node_js
 node_js: "8"
+matrix:
+  include:
+    - os: windows
+    - os: osx
+      osx_image: xcode9.2
 env:
   - COMMAND="npm test"
   - COMMAND="npm run e2e-test" _FORCE_LOGS=1
 before_install:
-  # Chrome Driver needs an updated version of Chrome
-  - wget -P /tmp/ https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg
-  - hdiutil attach /tmp/googlechrome.dmg
-  - sudo cp -r /Volumes/Google\ Chrome/Google\ Chrome.app /Applications/
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then
+      wget -P /tmp/ https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg;
+      hdiutil attach /tmp/googlechrome.dmg;
+      sudo cp -r /Volumes/Google\ Chrome/Google\ Chrome.app /Applications/;
+    fi
 before_script:
   - npm run chromedriver
 script:
-  - $COMMAND
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then
+      $COMMAND
+    fi
 after_success:
-  - npm run coverage
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then
+      npm run coverage
+    fi
