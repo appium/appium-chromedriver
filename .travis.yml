@@ -10,17 +10,13 @@ matrix:
       env:
         - COMMAND="npm test"
         - COMMAND="npm run e2e-test" _FORCE_LOGS=1
-before_install:
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then
-      wget -P /tmp/ https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg;
-      hdiutil attach /tmp/googlechrome.dmg;
-      sudo cp -r /Volumes/Google\ Chrome/Google\ Chrome.app /Applications/;
-    fi
+      before_install:
+        - wget -P /tmp/ https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg;
+        - hdiutil attach /tmp/googlechrome.dmg
+        - sudo cp -r /Volumes/Google\ Chrome/Google\ Chrome.app /Applications/
+      after_success:
+        - npm run coverage
 before_script:
   - npm run chromedriver
 script:
   - $COMMAND
-after_success:
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then
-      npm run coverage
-    fi
