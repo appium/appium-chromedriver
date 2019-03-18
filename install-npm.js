@@ -37,6 +37,7 @@ if (require.main === module) {
   waitForDeps(function (err) {
     if (err) {
       console.warn('Unable to import install script. Re-run `install appium-chromedriver` manually.');
+      console.warn(err.message);
       return;
     }
     fs.stat(installScript, function (err) {
