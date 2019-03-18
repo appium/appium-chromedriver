@@ -3,8 +3,19 @@ node_js: "8"
 matrix:
   include:
     - os: windows
-      env:
-        - COMMAND="npm install"
+      install:
+        - ls -la
+      script:
+        - npm install
+        - ls -la
+        - ls -la chromedriver/*
+    - os: windows
+      install:
+        - ls -la
+      script:
+        - npm install --chromedriver_version='2.31'
+        - ls -la
+        - ls -la chromedriver/*
     - os: osx
       osx_image: xcode9.2
       env:
@@ -14,9 +25,9 @@ matrix:
         - wget -P /tmp/ https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg;
         - hdiutil attach /tmp/googlechrome.dmg
         - sudo cp -r /Volumes/Google\ Chrome/Google\ Chrome.app /Applications/
+      before_script:
+        - npm run chromedriver
+      script:
+        - $COMMAND
       after_success:
         - npm run coverage
-before_script:
-  - npm run chromedriver
-script:
-  - $COMMAND
