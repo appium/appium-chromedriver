@@ -52,8 +52,8 @@
   ],
   "scripts": {
     "clean": "rm -rf node_modules && rm -f package-lock.json && npm install",
-    "prepare": "gulp prepublish",
-    "postinstall": "node install-npm.js",
+    "prepublishOnly": "gulp prepublish",
+    "postinstall": "gulp clean && gulp transpile && node install-npm.js",
     "test": "gulp once",
     "watch": "gulp watch",
     "build": "gulp transpile",

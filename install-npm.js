@@ -16,7 +16,8 @@ function waitForDeps (cb) {
       require('./build/lib/install');
       cb();
     } catch (err) {
-      if (err.message.includes(`Cannot find module './build/lib/install'`)) {
+      const pathString = path.join('build', 'lib', 'install');
+      if (err.message.includes(`Cannot find module '${pathString}'`)) {
         console.warn('Project does not appear to be built yet. Please run `gulp transpile` first.');
         return cb('Could not install module: ' + err);
       }
