@@ -35,18 +35,18 @@ function waitForDeps (cb) {
 if (require.main === module) {
   // check if cur dir exists
   const installScript = path.resolve(__dirname, 'build', 'lib', 'install.js');
-  waitForDeps(function (err) {
+  waitForDeps(function wait (err) {
     if (err) {
       console.warn('Unable to import install script. Re-run `install appium-chromedriver` manually.');
       console.warn(err.message);
       return;
     }
-    fs.stat(installScript, function (err) {
+    fs.stat(installScript, function installScriptExists (err) {
       if (err) {
         console.warn(`NOTE: Run 'gulp transpile' before using`);
         return;
       }
-      require('./build/lib/install').doInstall().catch(function (err) {
+      require('./build/lib/install').doInstall().catch(function installError (err) {
         console.error(err.stack ? err.stack : err);
         process.exit(1);
       });
