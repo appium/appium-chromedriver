@@ -4,6 +4,8 @@
 
 const fs = require('fs');
 const path = require('path');
+const log = require('fancy-log');
+const _ = require('lodash');
 
 
 function waitForDeps (cb) {
@@ -32,7 +34,14 @@ function waitForDeps (cb) {
   check();
 }
 
-if (require.main === module) {
+function main () {
+  // check if we should skip install
+  if (!_.isEmpty(process.env.APPIUM_SKIP_CHROMEDRIVER_INSTALL) || !_.isEmpty(process.env.npm_config_chromedriver_skip_install)) {
+    log.warn(`'APPIUM_SKIP_CHROMEDRIVER_INSTALL' environment variable set, or '--chromedriver-skip-install' flag set.`);
+    log.warn(`Skipping Chromedriver installation. Android web/hybrid testing will not be possible`);
+    return;
+  }
+
   // check if cur dir exists
   const installScript = path.resolve(__dirname, 'build', 'lib', 'install.js');
   waitForDeps(function wait (err) {
@@ -52,4 +61,8 @@ if (require.main === module) {
       });
     });
   });
+}
+
+if (require.main === module) {
+  main();
 }
