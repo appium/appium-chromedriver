@@ -7,13 +7,15 @@ matrix:
         - ls -la
       script:
         - npm install
+        - npm run chromedriver
         - ls -la
         - ls -la chromedriver/*
     - os: windows
       install:
         - ls -la
       script:
-        - npm install --chromedriver_version='2.31'
+        - npm install
+        - npm run chromedriver --chromedriver_version='2.31'
         - ls -la
         - ls -la chromedriver/*
     - os: osx

@@ -52,8 +52,8 @@
   ],
   "scripts": {
     "clean": "rm -rf node_modules && rm -f package-lock.json && npm install",
-    "prepublishOnly": "gulp prepublish",
-    "postinstall": "gulp clean && gulp transpile && node install-npm.js",
+    "prepare": "gulp prepublish",
+    "postinstall": "node install-npm.js",
     "test": "gulp once",
     "watch": "gulp watch",
     "build": "gulp transpile",
@@ -63,11 +63,10 @@
     "chromedriver_all": "node install-npm.js --all",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0",
     "precommit-test": "REPORTER=dot gulp once",
-    "lint": "gulp eslint",
-    "lint:fix": "gulp eslint --fix"
+    "lint": "gulp lint",
+    "lint:fix": "gulp lint --fix"
   },
   "devDependencies": {
-    "ajv": "^6.5.3",
     "appium-gulp-plugins": "^3.1.0",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",

@@ -14,6 +14,12 @@ Because of the oddities of `npm`'s lifecycle hooks, installing locally the first
 
 The solution, however, is simple. Simple run `gulp transpile` and then `npm install`. The former will build the project and the latter will simply install the binary.
 
+## Skipping binary installation
+
+If, for some reason, you want to install without installing the Chromedriver
+binary, either set the `APPIUM_SKIP_CHROMEDRIVER_INSTALL` environment variable,
+or pass the `--chromedriver-skip-install` flag while running `npm install`.
+
 
 ## Usage
 
