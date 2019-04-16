@@ -147,7 +147,7 @@ shell run Chromedriver
 ```shell
 path/to/chromedriver[.exe] --verbose
 ```
-And in anther shell, create a session by running the [curl](https://curl.haxx.se/)
+And in another shell, create a session by running the [curl](https://curl.haxx.se/)
 command
 ```shell
 curl \

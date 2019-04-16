@@ -1,4 +1,4 @@
-import { Chromedriver, getMostRecentChromedriver } from '../lib/chromedriver';
+import { Chromedriver, getMostRecentChromedriver, CHROMEDRIVER_CHROME_MAPPING } from '../lib/chromedriver';
 import * as utils from '../lib/utils';
 import sinon from 'sinon';
 import chai from 'chai';
@@ -152,7 +152,7 @@ describe('chromedriver', function () {
               stdout: 'ChromeDriver 2.30.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
             });
 
-        const chromedrivers = await cd.getChromedrivers({});
+        const chromedrivers = await cd.getChromedrivers(CHROMEDRIVER_CHROME_MAPPING);
         for (const [cd, expectedVersion] of _.zip(chromedrivers, ['2.36', '2.35', '2.34', '2.33', '2.32', '2.31', '2.30'])) {
           cd.version.should.eql(expectedVersion);
         }
@@ -283,7 +283,7 @@ describe('chromedriver', function () {
         '2.12': '36.0.1985',
         'v2.11': '36.0.1985',
         '2.10.0.0': '33.0.1751',
-        '2.9-beta': '31.0.1650',
+        '2.9.3-beta': '31.0.1650',
         '2.8': '30.0.1573',
         '2.7': '30.0.1573',
         '2.6': '29.0.1545',
