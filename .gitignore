@@ -5,3 +5,4 @@ chromedriver
 .DS_Store
 coverage
 package-lock.json*
+.vscode
