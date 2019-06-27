@@ -25,9 +25,9 @@ describe('ChromedriverStorageClient', function () {
       chromedriverDir: tmpRoot,
     });
     try {
-      await client.syncDrivers({
+      (await client.syncDrivers({
         versions: ['2.35', '2.34'],
-      });
+      })).length.should.be.greaterThan(0);
       (await fs.readdir(tmpRoot)).length.should.be.eql(2);
     } finally {
       await fs.rimraf(tmpRoot);
@@ -42,7 +42,7 @@ describe('ChromedriverStorageClient', function () {
     try {
       await client.syncDrivers({
         minBrowserVersion: '60',
-      });
+      }).length.should.be.greaterThan(0);
       (await fs.readdir(tmpRoot)).length.should.be.greaterThan(0);
     } finally {
       await fs.rimraf(tmpRoot);
