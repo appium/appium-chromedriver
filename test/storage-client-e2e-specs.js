@@ -40,9 +40,9 @@ describe('ChromedriverStorageClient', function () {
       chromedriverDir: tmpRoot,
     });
     try {
-      await client.syncDrivers({
+      (await client.syncDrivers({
         minBrowserVersion: '60',
-      }).length.should.be.greaterThan(0);
+      })).length.should.be.greaterThan(0);
       (await fs.readdir(tmpRoot)).length.should.be.greaterThan(0);
     } finally {
       await fs.rimraf(tmpRoot);
