@@ -1,8 +1,10 @@
 language: node_js
 node_js: "10"
-matrix:
+jobs:
   include:
-    - os: windows
+    - stage: tests
+      name: Windows latest
+      os: windows
       install:
         - ls -la
       script:
@@ -10,7 +12,9 @@ matrix:
         - npm run chromedriver
         - ls -la
         - ls -la chromedriver/*
-    - os: windows
+    - stage:
+      name: Windows CD 2.31
+      os: windows
       install:
         - ls -la
       script:
@@ -18,18 +22,26 @@ matrix:
         - npm run chromedriver --chromedriver_version='2.31'
         - ls -la
         - ls -la chromedriver/*
-    - os: osx
-      osx_image: xcode9.2
-      env:
-        - COMMAND="npm test"
-        - COMMAND="npm run e2e-test" _FORCE_LOGS=1
-      before_install:
-        - wget -P /tmp/ https://dl.google.com/chrome/mac/stable/GGRO/googlechrome.dmg;
-        - hdiutil attach /tmp/googlechrome.dmg
-        - sudo cp -r /Volumes/Google\ Chrome/Google\ Chrome.app /Applications/
-      before_script:
-        - npm run chromedriver
+    - stage:
+      name: Unit tests
+      os: linux
+      dist: trusty
       script:
-        - $COMMAND
+        - npm test
       after_success:
         - npm run coverage
+    - stage:
+      name: Functional tests
+      os: linux
+      dist: trusty
+      env:
+        - _FORCE_LOGS=1
+      addons:
+        chrome: stable
+      before_script:
+        - "export DISPLAY=:99.0"
+        - "sh -e /etc/init.d/xvfb start"
+        - sleep 3
+        - npm run chromedriver
+      script:
+        - npm run e2e-test
