@@ -6,6 +6,7 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import B from 'bluebird';
 import { exec } from 'teen_process';
+import _ from 'lodash';
 
 
 let should = chai.should();
@@ -90,7 +91,7 @@ describe('chromedriver with EventEmitter', function () {
     cd.state.should.eql('stopped');
     let nextStatePromise = nextState(cd);
     cd.start(caps);
-    cd.capabilities.should.eql(expectedCaps);
+    _.size(cd.capabilities).should.be.at.least(_.size(expectedCaps));
     await nextStatePromise.should.become(Chromedriver.STATE_STARTING);
     await nextState(cd).should.become(Chromedriver.STATE_ONLINE);
     should.exist(cd.jwproxy.sessionId);
@@ -103,14 +104,11 @@ describe('chromedriver with EventEmitter', function () {
     res.should.contain('google');
   });
   it('should proxy commands', async function () {
-    let initSessId = cd.sessionId();
     let [req, res] = buildReqRes('/url', 'GET');
     await cd.proxyReq(req, res);
     res.headers['content-type'].should.contain('application/json');
     res.sentCode.should.equal(200);
-    res.sentBody.status.should.equal(0);
     res.sentBody.value.should.contain('google');
-    res.sentBody.sessionId.should.equal(initSessId);
   });
   it('should say whether there is a working webview', async function () {
     let res = await cd.hasWorkingWebview();
@@ -140,7 +138,7 @@ describe('chromedriver with EventEmitter', function () {
     cd.state.should.eql(Chromedriver.STATE_STOPPED);
     let nextStatePromise = nextState(cd);
     cd.start(caps);
-    cd.capabilities.should.eql(caps);
+    _.size(cd.capabilities).should.be.at.least(_.size(caps));
     await nextStatePromise.should.become(Chromedriver.STATE_STARTING);
     await nextState(cd).should.become(Chromedriver.STATE_ONLINE);
     should.exist(cd.jwproxy.sessionId);
@@ -170,7 +168,7 @@ describe('chromedriver with async/await', function () {
     cd.state.should.eql('stopped');
     should.not.exist(cd.sessionId());
     await cd.start(caps);
-    cd.capabilities.should.eql(expectedCaps);
+    _.size(cd.capabilities).should.be.at.least(_.size(expectedCaps));
     cd.state.should.eql(Chromedriver.STATE_ONLINE);
     should.exist(cd.jwproxy.sessionId);
     should.exist(cd.sessionId());
@@ -197,7 +195,7 @@ describe('chromedriver with async/await', function () {
   it('should throw an error during start if session does not work', async function () {
     let badCd = new Chromedriver({});
     await badCd.start({chromeOptions: {badCap: 'foo'}})
-               .should.eventually.be.rejectedWith('cannot parse capability');
+      .should.eventually.be.rejectedWith('cannot parse capability');
     await assertNoRunningChromedrivers();
   });
 });
