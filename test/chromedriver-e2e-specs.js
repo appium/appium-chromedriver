@@ -104,13 +104,11 @@ describe('chromedriver with EventEmitter', function () {
     res.should.contain('google');
   });
   it('should proxy commands', async function () {
-    let initSessId = cd.sessionId();
     let [req, res] = buildReqRes('/url', 'GET');
     await cd.proxyReq(req, res);
     res.headers['content-type'].should.contain('application/json');
     res.sentCode.should.equal(200);
     res.sentBody.value.should.contain('google');
-    res.sentBody.sessionId.should.equal(initSessId);
   });
   it('should say whether there is a working webview', async function () {
     let res = await cd.hasWorkingWebview();
