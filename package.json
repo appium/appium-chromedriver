@@ -43,7 +43,7 @@
     "lodash": "^4.17.4",
     "request": "^2.57.0",
     "request-promise": "^4.2.2",
-    "semver": "^6.0.0",
+    "semver": "^7.0.0",
     "source-map-support": "^0.5.5",
     "teen_process": "^1.15.0",
     "xmldom": "^0.1.27",
