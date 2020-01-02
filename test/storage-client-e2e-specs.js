@@ -34,14 +34,29 @@ describe('ChromedriverStorageClient', function () {
     }
   });
 
-  it('should retrieve chromedrivers by minBrowserVersion', async function () {
+  it('should retrieve chromedrivers by minBrowserVersion (non exact match)', async function () {
     const tmpRoot = await tempDir.openDir();
     const client = new ChromedriverStorageClient({
       chromedriverDir: tmpRoot,
     });
     try {
       (await client.syncDrivers({
-        minBrowserVersion: '60',
+        minBrowserVersion: '44',
+      })).length.should.be.greaterThan(0);
+      (await fs.readdir(tmpRoot)).length.should.be.greaterThan(0);
+    } finally {
+      await fs.rimraf(tmpRoot);
+    }
+  });
+
+  it('should retrieve chromedrivers by minBrowserVersion (exact match)', async function () {
+    const tmpRoot = await tempDir.openDir();
+    const client = new ChromedriverStorageClient({
+      chromedriverDir: tmpRoot,
+    });
+    try {
+      (await client.syncDrivers({
+        minBrowserVersion: '74',
       })).length.should.be.greaterThan(0);
       (await fs.readdir(tmpRoot)).length.should.be.greaterThan(0);
     } finally {
