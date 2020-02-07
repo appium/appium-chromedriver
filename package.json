@@ -35,7 +35,7 @@
   "dependencies": {
     "@babel/runtime": "^7.0.0",
     "appium-base-driver": "^5.0.0",
-    "appium-support": "^2.33.1",
+    "appium-support": "^2.39.0",
     "asyncbox": "^2.0.2",
     "bluebird": "^3.5.1",
     "compare-versions": "^3.4.0",
