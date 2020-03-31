@@ -1,8 +1,8 @@
-[![Build Status](https://travis-ci.org/appium/appium-chromedriver.svg)](https://travis-ci.org/appium/appium-chromedriver) [![Coverage Status](https://coveralls.io/repos/appium/appium-chromedriver/badge.svg?branch=master&service=github)](https://coveralls.io/github/appium/appium-chromedriver?branch=master)
-[![Greenkeeper badge](https://badges.greenkeeper.io/appium/appium-chromedriver.svg)](https://greenkeeper.io/)
-
 appium-chromedriver
 ===================
+
+[![Build Status](https://travis-ci.org/appium/appium-chromedriver.svg)](https://travis-ci.org/appium/appium-chromedriver)
+[![Coverage Status](https://coveralls.io/repos/appium/appium-chromedriver/badge.svg?branch=master&service=github)](https://coveralls.io/github/appium/appium-chromedriver?branch=master)
 
 Node.js wrapper around [Chromedriver](https://sites.google.com/a/chromium.org/chromedriver/)
 
