@@ -70,7 +70,7 @@
     "lint:fix": "gulp lint --fix"
   },
   "devDependencies": {
-    "appium-gulp-plugins": "^5.1.0",
+    "appium-gulp-plugins": "^5.2.0",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "eslint-config-appium": "^4.0.1",
