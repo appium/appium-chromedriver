@@ -15,8 +15,7 @@ jobs:
       API_ROOT: https://api.github.com/repos/appium/appium-chromedriver
     script:
     - |-
-      export FEED_PATH=$(mktemp)
-      curl -sf $STORAGE_URL -o "$FEED_PATH"
+      export LATEST_RELEASE=$(curl -sf $STORAGE_URL/LATEST_RELEASE)
       export TMP_ROOT=$(mktemp -d)
       export CUR_DIR=$PWD
       cd "$TMP_ROOT"
@@ -24,7 +23,7 @@ jobs:
       git pull https://${GH_TOKEN}:x-oauth-basic@${PROJECT_URL} master
       export BRANCH_NAME=$(date +%s)
       git checkout -b $BRANCH_NAME
-      python3 "$CUR_DIR/scripts/handle_chromedriver_feed.py" "$FEED_PATH" "$MAPPING_SOURCE"
+      python3 "$CUR_DIR/scripts/handle_chromedriver_feed.py" "$LATEST_RELEASE" "$MAPPING_SOURCE"
       (git status | grep -q 'nothing to commit') && exit 0 || true
       git add -A
       git commit -m "chore: Chromedriver Version Bump"
