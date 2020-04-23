@@ -10,7 +10,7 @@ jobs:
     python: '3.8'
     env:
       STORAGE_URL: https://chromedriver.storage.googleapis.com
-      MAPPING_SOURCE: lib/chromedriver.js
+      MAPPING_SOURCE: lib/mapping.json
       PROJECT_ROOT: github.com/appium/appium-chromedriver.git
       API_ROOT: https://api.github.com/repos/appium/appium-chromedriver
     script:
