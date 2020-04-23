@@ -17,7 +17,7 @@ jobs:
     - |-
       export FEED_PATH=$(mktemp)
       curl -sf $STORAGE_URL -o "$FEED_PATH"
-      export TMP_ROOT=$(mkdtemp)
+      export TMP_ROOT=$(mktemp -d)
       export CUR_DIR=$PWD
       cd "$TMP_ROOT"
       git init
