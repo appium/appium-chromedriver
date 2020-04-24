@@ -21,16 +21,15 @@ jobs:
       cd "$TMP_ROOT"
       git init
       git pull https://${GH_TOKEN}:x-oauth-basic@${PROJECT_URL} master
-      export BRANCH_NAME=$(date +%s)
-      git checkout -b $BRANCH_NAME
+      git checkout -b $LATEST_RELEASE
       python3 "$CUR_DIR/scripts/update_versions_mapping.py" "$LATEST_RELEASE" "$MAPPING_SOURCE"
       if git status | grep -q 'nothing to commit'; then exit 0; fi
       git add -A
       git commit -m "chore: Chromedriver Version Bump"
-      git push --set-upstream https://${GH_TOKEN}:x-oauth-basic@${PROJECT_URL} $BRANCH_NAME
+      git push --set-upstream https://${GH_TOKEN}:x-oauth-basic@${PROJECT_URL} $LATEST_RELEASE
       curl -sf -H "Authorization: token $GH_TOKEN" \
         -H 'Content-Type: application/json' \
-        -d "{\"title\":\"chore: Chromedriver Version Bump\", \"base\":\"master\", \"head\":\"appium:$BRANCH_NAME\"}" \
+        -d "{\"title\":\"chore: Chromedriver Version Bump\", \"base\":\"master\", \"head\":\"appium:$LATEST_RELEASE\"}" \
         $API_ROOT/pulls > /dev/null
   - stage: tests
     if: type != cron
