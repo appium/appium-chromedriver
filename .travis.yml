@@ -23,7 +23,7 @@ jobs:
       git pull https://${GH_TOKEN}:x-oauth-basic@${PROJECT_URL} master
       export BRANCH_NAME=$(date +%s)
       git checkout -b $BRANCH_NAME
-      python3 "$CUR_DIR/scripts/handle_chromedriver_feed.py" "$LATEST_RELEASE" "$MAPPING_SOURCE"
+      python3 "$CUR_DIR/scripts/update_versions_mapping.py" "$LATEST_RELEASE" "$MAPPING_SOURCE"
       if git status | grep -q 'nothing to commit'; then exit 0; fi
       git add -A
       git commit -m "chore: Chromedriver Version Bump"
