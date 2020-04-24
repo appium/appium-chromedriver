@@ -4,7 +4,7 @@ node_js: '10'
 jobs:
   include:
   - stage: chromedriver_bump
-    if: env(TRAVIS_EVENT_TYPE) == cron
+    if: type = cron
     os: linux
     language: python
     python: '3.8'
@@ -33,7 +33,7 @@ jobs:
         -d "{\"title\":\"chore: Chromedriver Version Bump\", \"base\":\"master\", \"head\":\"appium:$BRANCH_NAME\"}" \
         $API_ROOT/pulls > /dev/null
   - stage: tests
-    if: env(TRAVIS_EVENT_TYPE) != cron
+    if: type != cron
     name: Windows latest
     os: windows
     install:
@@ -44,7 +44,7 @@ jobs:
     - ls -la
     - ls -la chromedriver/*
   - stage:
-    if: env(TRAVIS_EVENT_TYPE) != cron
+    if: type != cron
     name: Windows CD 2.31
     os: windows
     install:
@@ -55,7 +55,7 @@ jobs:
     - ls -la
     - ls -la chromedriver/*
   - stage:
-    if: env(TRAVIS_EVENT_TYPE) != cron
+    if: type != cron
     name: Unit tests
     os: linux
     dist: xenial
@@ -64,7 +64,7 @@ jobs:
     after_success:
     - npm run coverage
   - stage:
-    if: env(TRAVIS_EVENT_TYPE) != cron
+    if: type != cron
     name: Functional tests
     os: linux
     dist: xenial
