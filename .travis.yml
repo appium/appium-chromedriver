@@ -24,7 +24,7 @@ jobs:
       export BRANCH_NAME=$(date +%s)
       git checkout -b $BRANCH_NAME
       python3 "$CUR_DIR/scripts/handle_chromedriver_feed.py" "$LATEST_RELEASE" "$MAPPING_SOURCE"
-      (git status | grep -q 'nothing to commit') && exit 0 || true
+      if git status | grep -q 'nothing to commit'; then exit 0; fi
       git add -A
       git commit -m "chore: Chromedriver Version Bump"
       git push --set-upstream https://${GH_TOKEN}:x-oauth-basic@${PROJECT_URL} $BRANCH_NAME
