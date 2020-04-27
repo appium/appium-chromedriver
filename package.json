@@ -25,6 +25,7 @@
     "lib": "lib"
   },
   "files": [
+    "config",
     "index.js",
     "install-npm.js",
     "lib",
