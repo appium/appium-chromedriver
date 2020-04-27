@@ -30,7 +30,8 @@
     "lib",
     "build/index.js",
     "build/install-npm.js",
-    "build/lib"
+    "build/lib",
+    "config/mapping.json"
   ],
   "dependencies": {
     "@babel/runtime": "^7.0.0",
