@@ -297,8 +297,7 @@ describe('chromedriver', function () {
       utils.getMostRecentChromedriver(mapping).should.eql('2.12');
     });
     it('should fail for empty mapping', function () {
-      (() => utils.getMostRecentChromedriver({}))
-        .should.throw('Unable to get most recent Chromedriver from empty mapping');
+      (() => utils.getMostRecentChromedriver({})).should.throw(/empty/);
     });
   });
 });
