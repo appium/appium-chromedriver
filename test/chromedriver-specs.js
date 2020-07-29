@@ -2,6 +2,7 @@ import { Chromedriver } from '../lib/chromedriver';
 import * as utils from '../lib/utils';
 import sinon from 'sinon';
 import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { fs } from 'appium-support';
 import * as tp from 'teen_process';
 import path from 'path';
@@ -9,6 +10,7 @@ import _ from 'lodash';
 
 
 chai.should();
+chai.use(chaiAsPromised);
 
 describe('chromedriver', function () {
   let sandbox;
@@ -64,9 +66,9 @@ describe('chromedriver', function () {
         binPath.should.eql('/path/to/chromedriver');
       });
 
-      it('should find most recent compatible binary from a number of possibilities', async function () {
+      it('should find most recent compatible binary for older driver versions', async function () {
         sandbox.stub(utils, 'getChromeVersion')
-          .returns('7000.0.3029.42');
+          .returns('70.0.3029.42');
         sandbox.stub(fs, 'glob')
           .returns([
             '/path/to/chromedriver-36',
@@ -80,7 +82,7 @@ describe('chromedriver', function () {
         sandbox.stub(tp, 'exec')
           .onCall(0)
             .returns({
-              stdout: 'ChromeDriver 2.360.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
+              stdout: 'ChromeDriver 2.36.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
             })
           .onCall(1)
             .returns({
@@ -164,9 +166,9 @@ describe('chromedriver', function () {
         }
       });
 
-      it('should find most recent binary from a number of possibilities when chrome is too new', async function () {
+      it('should fail when chrome is too new', async function () {
         sandbox.stub(utils, 'getChromeVersion')
-          .returns('7000.0.0.42');
+          .returns('10000.0.0.42');
         sandbox.stub(fs, 'glob')
           .returns([
             '/path/to/chromedriver-9000',
@@ -192,8 +194,7 @@ describe('chromedriver', function () {
               stdout: 'ChromeDriver 2.35.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
             });
 
-        const binPath = await cd.getCompatibleChromedriver();
-        binPath.should.eql('/path/to/chromedriver-9000');
+        await cd.getCompatibleChromedriver().should.eventually.be.rejected;
       });
 
       it('should search specified directory if provided', async function () {
