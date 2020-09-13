@@ -60,8 +60,6 @@ jobs:
     dist: xenial
     script:
     - npm test
-    after_success:
-    - npm run coverage
   - stage:
     if: type != cron
     name: Functional tests
