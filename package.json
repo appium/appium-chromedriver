@@ -48,7 +48,7 @@
     "source-map-support": "^0.5.5",
     "teen_process": "^1.15.0",
     "xmldom": "^0.3.0",
-    "xpath": "^0.0.30"
+    "xpath": "^0.0.31"
   },
   "pre-commit": [
     "precommit-msg",
