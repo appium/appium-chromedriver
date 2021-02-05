@@ -1,0 +1,42 @@
+name: ChromeDriver Update
+on:
+  schedule:
+  - cron: "0 0 * * *"
+
+env:
+  STORAGE_URL: https://chromedriver.storage.googleapis.com
+  CD_VERSIONS_MAPPING: config/mapping.json
+  PYTHON_VERSION: "3.8"
+
+jobs:
+  bump_cd_version:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    - id: release_check
+      run: |
+        export latest_release=$(curl -sf ${{ env.STORAGE_URL }}/LATEST_RELEASE)
+        export did_update=$(python "scripts/update_versions_mapping.py" "$latest_release" "${{ env.CD_VERSIONS_MAPPING }}")
+
+        echo "::set-output name=did_update::$did_update"
+        echo "::set-output name=cd_release::$latest_release"
+    - name: commit-and-push
+      if: steps.release_check.outputs.did_update == '1'
+      uses: EndBug/add-and-commit@v7
+      with:
+        message: "chore: ChromeDriver Bump to v${{ steps.release_check.outputs.cd_release }}"
+        add: ${{ env.CD_VERSIONS_MAPPING }}
+        branch: ${{ steps.release_check.outputs.cd_release }}
+    - name: pull-request
+      if: steps.release_check.outputs.did_update == '1'
+      uses: repo-sync/pull-request@v2
+      with:
+        source_branch: ${{ steps.release_check.outputs.cd_release }}
+        pr_title: "chore: ChromeDriver Bump to v${{ steps.release_check.outputs.cd_release }}"
+        pr_allow_empty: false
+        github_token: ${{ secrets.GITHUB_TOKEN }}
