@@ -1,4 +1,4 @@
-name: ChromeDriver Update
+name: ChromeDriver Version Bump
 on:
   schedule:
   - cron: "0 0 * * *"
