@@ -1,0 +1,56 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Node.js CI
+on: [push, pull_request]
+
+env:
+  NODE_VERSION: 12.x
+  WIN_CD_VERSION: "88.0.4324.96"
+
+jobs:
+  unit_tests:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+    - run: npm run clean
+    - run: npm run test
+
+  e2e_tests:
+    needs: [unit_tests]
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+    - run: npm run clean
+    - run: |
+        export CD_VERSION=$(google-chrome --version | python -c "import sys, re; print(re.search(r'[0-9.]+', sys.stdin.read()).group(0))")
+        npm run chromedriver --chromedriver_version=$CD_VERSION
+    - run: |
+        export DISPLAY=:99
+        sudo Xvfb -ac $DISPLAY -screen 0 1280x1024x24 > /dev/null 2>&1 &
+        npm run e2e-test
+
+  windows_tests:
+    needs: [unit_tests]
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+    - run: npm run clean
+    # Just to check that CD download is not broken on Windows machines
+    - run: npm run chromedriver --chromedriver_version=${{ env.WIN_CD_VERSION }}
