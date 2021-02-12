@@ -35,7 +35,12 @@ jobs:
     - run: npm run clean
     - run: |
         export CD_VERSION=$(google-chrome --version | python -c "import sys, re; print(re.search(r'[0-9.]+', sys.stdin.read()).group(0))")
-        npm run chromedriver --chromedriver_version=$CD_VERSION
+        echo "$CD_VERSION"
+        if grep -q "$CD_VERSION" config/mapping.json; then
+          npm run chromedriver --chromedriver_version=$CD_VERSION
+        else
+          npm run chromedriver
+        fi
     - run: |
         export DISPLAY=:99
         sudo Xvfb -ac $DISPLAY -screen 0 1280x1024x24 > /dev/null 2>&1 &
