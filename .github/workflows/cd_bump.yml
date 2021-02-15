@@ -26,7 +26,7 @@ jobs:
         echo "::set-output name=did_update::$did_update"
         echo "::set-output name=cd_release::$latest_release"
     - name: pull-request
-      if: ${{ steps.release_check.outputs.did_update == '1' }}
+      if: steps.release_check.outputs.did_update == '1'
       uses: peter-evans/create-pull-request@v3
       with:
         branch: ${{ steps.release_check.outputs.cd_release }}
