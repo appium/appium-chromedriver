@@ -3,9 +3,10 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { fs } from 'appium-support';
-import { install, installAll } from '../lib/install';
-import { CD_BASE_DIR, getChromedriverBinaryPath, getPlatforms,
-         getCurPlatform } from '../lib/utils';
+import { install } from '../lib/install';
+import {
+  CD_BASE_DIR, getChromedriverBinaryPath, getOsName
+} from '../lib/utils';
 import Chromedriver from '../lib/chromedriver';
 
 
@@ -34,27 +35,10 @@ describe('install scripts', function () {
     let cdPath = await getChromedriverBinaryPath();
     let cdStat = await fs.stat(cdPath);
     cdStat.size.should.be.above(500000);
-    cdPath.should.contain(getCurPlatform());
+    cdPath.should.contain(getOsName());
     let cd = new Chromedriver();
     await cd.initChromedriverPath();
     cd.chromedriver.should.equal(cdPath);
-  });
-  it('should install for all platforms', async function () {
-    this.timeout(120000);
-    await assertNoPreviousDirs();
-    await installAll();
-
-    for (let [platform, arch] of getPlatforms()) {
-      let cdPath = await getChromedriverBinaryPath(platform, arch);
-      let cdStat = await fs.stat(cdPath);
-      cdStat.size.should.be.above(500000);
-      cdPath.should.contain(platform);
-      if (platform === 'linux') {
-        cdPath.should.contain(arch);
-      } else {
-        cdPath.should.not.contain(arch);
-      }
-    }
   });
   it('should throw an error in chromedriver if nothing is installed', async function () {
     await assertNoPreviousDirs();
