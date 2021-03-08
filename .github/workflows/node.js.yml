@@ -34,13 +34,13 @@ jobs:
         node-version: ${{ env.NODE_VERSION }}
     - run: npm run clean
     - run: |
-        export CD_VERSION=$(google-chrome --version | python -c "import sys, re; print(re.search(r'[0-9.]+', sys.stdin.read()).group(0))")
-        echo "$CD_VERSION"
-        export MAJOR_CD_VERSION=$(python -c "print('.'.join('$CD_VERSION'.split('.')[:-1]))")
-        echo "$MAJOR_CD_VERSION"
-        if grep -q "$MAJOR_CD_VERSION" config/mapping.json; then
-          export CHROMEDRIVER_VERSION=$(grep -m 1 -n "$MAJOR_CD_VERSION" config/mapping.json | cut -d' ' -f4 | tr -d ',"')
-          echo "$CHROMEDRIVER_VERSION"
+        export CHROME_VERSION=$(google-chrome --version | python -c "import sys, re; print(re.search(r'[0-9.]+', sys.stdin.read()).group(0))")
+        echo "Version number of the installed Chrome browser: $CHROME_VERSION"
+        export MAJOR_CHROME_VERSION=$(python -c "print('.'.join('$CHROME_VERSION'.split('.')[:-1]))")
+        echo "Major part of the version number: $MAJOR_CHROME_VERSION"
+        if grep -q "$MAJOR_CHROME_VERSION" config/mapping.json; then
+          export CHROMEDRIVER_VERSION=$(grep -m 1 -n "$MAJOR_CHROME_VERSION" config/mapping.json | cut -d' ' -f4 | tr -d ',"')
+          echo "Matching Chromedriver version: $CHROMEDRIVER_VERSION"
         fi
         npm run chromedriver
     - run: |
