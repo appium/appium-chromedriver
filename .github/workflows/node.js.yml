@@ -36,11 +36,13 @@ jobs:
     - run: |
         export CD_VERSION=$(google-chrome --version | python -c "import sys, re; print(re.search(r'[0-9.]+', sys.stdin.read()).group(0))")
         echo "$CD_VERSION"
-        if grep -q "$CD_VERSION" config/mapping.json; then
-          npm run chromedriver --chromedriver_version=$CD_VERSION
-        else
-          npm run chromedriver
+        export MAJOR_CD_VERSION=$(python -c "print('.'.join('$CD_VERSION'.split('.')[:-1]))")
+        echo "$MAJOR_CD_VERSION"
+        if grep -q "$MAJOR_CD_VERSION" config/mapping.json; then
+          export CHROMEDRIVER_VERSION=$(grep -m 1 -n "$MAJOR_CD_VERSION" config/mapping.json | cut -d' ' -f4 | tr -d ',"')
+          echo "$CHROMEDRIVER_VERSION"
         fi
+        npm run chromedriver
     - run: |
         export DISPLAY=:99
         export _FORCE_LOGS=1
