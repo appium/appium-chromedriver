@@ -17,7 +17,12 @@ The solution, however, is simple. Simple run `gulp transpile` and then `npm inst
 
 If, for some reason, you want to install without installing the Chromedriver
 binary, either set the `APPIUM_SKIP_CHROMEDRIVER_INSTALL` environment variable,
-or pass the `--chromedriver-skip-install` flag while running `npm install`.
+pass the `--chromedriver-skip-install` flag while running `npm install`
+or add the following property into your [`.npmrc`](https://docs.npmjs.com/files/npmrc) file.
+
+```bash
+chromedriver_skip_install=true
+```
 
 
 ## Usage
