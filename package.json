@@ -36,6 +36,7 @@
   ],
   "dependencies": {
     "@babel/runtime": "^7.0.0",
+    "@xmldom/xmldom": "^0.x",
     "appium-base-driver": "^7.1.0",
     "appium-support": "^2.46.0",
     "asyncbox": "^2.0.2",
@@ -47,7 +48,6 @@
     "semver": "^7.0.0",
     "source-map-support": "^0.x",
     "teen_process": "^1.15.0",
-    "xmldom": "^0.x",
     "xpath": "^0.x"
   },
   "pre-commit": [
