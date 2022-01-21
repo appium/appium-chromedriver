@@ -6,6 +6,6 @@ const DEFAULTS = require('@appium/gulp-plugins').boilerplate.DEFAULTS;
 
 boilerplate({
   build: 'Appium Chromedriver',
-  files: DEFAULTS.files.concat('bin/**/*.js'),
+  files: DEFAULTS.files.concat('bin/**/*.js', 'index.js'),
   jscs: false
 });
