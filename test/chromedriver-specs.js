@@ -208,7 +208,6 @@ describe('chromedriver', function () {
         sandbox.stub(utils, 'getChromeVersion')
           .returns('63.0.3239.99');
         sandbox.stub(fs, 'glob')
-          .withArgs('/some/local/dir/for/chromedrivers/*')
             .returns([
               '/some/local/dir/for/chromedrivers/chromedriver',
             ]);
