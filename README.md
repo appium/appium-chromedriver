@@ -1,7 +1,9 @@
 appium-chromedriver
 ===================
 
-[![Build Status](https://travis-ci.org/appium/appium-chromedriver.svg)](https://travis-ci.org/appium/appium-chromedriver)
+[![Node.js CI](https://github.com/appium/appium-chromedriver/actions/workflows/node.js.yml/badge.svg)](https://github.com/appium/appium-chromedriver/actions/workflows/node.js.yml)
+
+[![Release](https://github.com/appium/appium-chromedriver/actions/workflows/publish.js.yml/badge.svg)](https://github.com/appium/appium-chromedriver/actions/workflows/publish.js.yml)
 
 Node.js wrapper around [Chromedriver](https://sites.google.com/a/chromium.org/chromedriver/)
 
