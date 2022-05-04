@@ -71,7 +71,7 @@
     "lint:fix": "gulp lint --fix"
   },
   "devDependencies": {
-    "@appium/gulp-plugins": "^6.0.0",
+    "@appium/gulp-plugins": "^7.0.0",
     "@appium/eslint-config-appium": "^5.0.0",
     "@appium/test-support": "^1.0.0",
     "@babel/core": "^7.16.0",
