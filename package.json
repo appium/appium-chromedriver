@@ -14,13 +14,13 @@
     "url": "https://github.com/appium/appium-chromedriver.git"
   },
   "bugs": {
-    "url": "https://github.com/appium/appium-chromedriver/issues"
+    "url": "https://github.com/appium/appium/issues"
   },
-  "engines": [
-    "node"
-  ],
+  "engines": {
+    "node": ">=14",
+    "npm": ">=6"
+  },
   "main": "./build/index.js",
-  "bin": {},
   "directories": {
     "lib": "lib"
   },
@@ -30,7 +30,6 @@
     "install-npm.js",
     "lib",
     "build/index.js",
-    "build/install-npm.js",
     "build/lib",
     "config/mapping.json"
   ],
@@ -54,8 +53,8 @@
   ],
   "scripts": {
     "clean": "rm -rf node_modules && rm -f package-lock.json && npm install",
-    "prepare": "gulp prepublish",
     "postinstall": "node install-npm.js",
+    "prepublishOnly": "gulp prepublish",
     "test": "gulp once",
     "watch": "gulp watch",
     "build": "gulp transpile",

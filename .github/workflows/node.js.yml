@@ -19,8 +19,8 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ env.NODE_VERSION }}
-    - run: npm run clean
-    - run: npm run test
+    - run: npm install
+    - run: npm test
 
   e2e_tests:
     needs: [unit_tests]
@@ -32,7 +32,6 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ env.NODE_VERSION }}
-    - run: npm run clean
     - run: |
         export CHROME_VERSION=$(google-chrome --version | python -c "import sys, re; print(re.search(r'[0-9.]+', sys.stdin.read()).group(0))")
         echo "Version number of the installed Chrome browser: $CHROME_VERSION"
@@ -42,7 +41,7 @@ jobs:
           export CHROMEDRIVER_VERSION=$(grep -m 1 -n "$MAJOR_CHROME_VERSION" config/mapping.json | cut -d' ' -f4 | tr -d ',"')
           echo "Matching Chromedriver version: $CHROMEDRIVER_VERSION"
         fi
-        npm run chromedriver
+    - run: npm install
     - run: |
         export DISPLAY=:99
         export _FORCE_LOGS=1
@@ -59,6 +58,4 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ env.NODE_VERSION }}
-    - run: npm run clean
-    # Just to check that CD download is not broken on Windows machines
-    - run: npm run chromedriver --chromedriver_version=${{ env.WIN_CD_VERSION }}
+    - run: npm install --chromedriver_version=${{ env.WIN_CD_VERSION }}
