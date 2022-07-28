@@ -17,7 +17,7 @@ B.config({
   cancellation: true,
 });
 
-const {fs} = require('fs/promises');
+const fs = require('fs/promises');
 const path = require('path');
 const log = require('fancy-log');
 const _ = require('lodash');
@@ -31,9 +31,14 @@ async function main() {
   try {
     await fs.stat(BUILD_PATH);
   } catch {
-    log.info('Project not yet built; building...');
+    log.info(`The Chromedriver install script cannot be found at '${BUILD_PATH}'. ` +
+      `Building appium-chromedriver package`);
     const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
-    await exec(npmCommand, ['run', 'build'], {logger: log});
+    try {
+      await exec(npmCommand, ['run', 'build'], {logger: log, cwd: __dirname});
+    } catch (e) {
+      throw new Error(`appium-chromedriver package cannot be built: ${e.stderr || e.message}`);
+    }
   }
 
   // check if we should skip install
