@@ -4,7 +4,7 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import ChromedriverStorageClient from '../lib/storage-client';
 import _ from 'lodash';
-import { fs, tempDir } from 'appium/support';
+import { fs, tempDir } from '@appium/support';
 
 
 chai.should();
