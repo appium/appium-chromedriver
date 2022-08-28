@@ -9,23 +9,10 @@ Node.js wrapper around [Chromedriver](https://sites.google.com/a/chromium.org/ch
 
 Issues for this repo are disabled. Log any issues at the [main Appium repo's issue tracker](https://github.com/appium/appium/issues).
 
-## Local installation
-
-Because of the oddities of `npm`'s lifecycle hooks, installing locally the first time _will_ fail, saying `Project does not appear to built yet. Please run `gulp transpile` first.`. This is because we transpile in the `prepublish` phase, but run the install script in the `install` phase. Any other way would make development dependencies necessary on user's machines, or make the binary not install, unfortunately.
-
-The solution, however, is simple. Simple run `gulp transpile` and then `npm install`. The former will build the project and the latter will simply install the binary.
-
 ## Skipping binary installation
 
 If, for some reason, you want to install without installing the Chromedriver
-binary, either set the `APPIUM_SKIP_CHROMEDRIVER_INSTALL` environment variable,
-pass the `--chromedriver-skip-install` flag while running `npm install`
-or add the following property into your [`.npmrc`](https://docs.npmjs.com/files/npmrc) file.
-
-```bash
-chromedriver_skip_install=true
-```
-
+binary set the `APPIUM_SKIP_CHROMEDRIVER_INSTALL` environment variable.
 
 ## Usage
 
@@ -112,16 +99,16 @@ CHROMEDRIVER_CDNURL=http://npm.taobao.org/mirrors/chromedriver npm install appiu
 
 ## Dev
 
-We use Gulp for building/transpiling.
-
-### Watch
+### Build & Lint
 
 ```
-npm run watch
+npm run build
+npm run lint
 ```
 
 ### Run Tests
 
 ```
 npm test
+npm e2e-test
 ```

@@ -20,7 +20,8 @@ jobs:
       with:
         node-version: ${{ env.NODE_VERSION }}
     - run: npm install
-    - run: npm test
+    - run: npm run lint
+    - run: npm run test
 
   e2e_tests:
     needs: [unit_tests]
@@ -41,7 +42,9 @@ jobs:
           export CHROMEDRIVER_VERSION=$(grep -m 1 -n "$MAJOR_CHROME_VERSION" config/mapping.json | cut -d' ' -f4 | tr -d ',"')
           echo "Matching Chromedriver version: $CHROMEDRIVER_VERSION"
         fi
-    - run: npm install
+    - run: |
+        npm install
+        npm run build
     - run: |
         export DISPLAY=:99
         export _FORCE_LOGS=1
