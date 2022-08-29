@@ -1,4 +1,4 @@
-import ChromedriverStorageClient from '../lib/storage-client';
+import ChromedriverStorageClient from '../../lib/storage-client';
 import chai from 'chai';
 import _ from 'lodash';
 

@@ -1,5 +1,5 @@
-import { Chromedriver } from '../lib/chromedriver';
-import * as utils from '../lib/utils';
+import { Chromedriver } from '../../lib/chromedriver';
+import * as utils from '../../lib/utils';
 import sinon from 'sinon';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
@@ -225,7 +225,7 @@ describe('chromedriver', function () {
           adb: {
             getApiLevel: () => 25,
           },
-          mappingPath: path.resolve(__dirname, '..', '..', 'test', 'fixtures', 'alt-mapping.json'),
+          mappingPath: path.resolve(__dirname, '..', 'fixtures', 'alt-mapping.json'),
         });
 
         sandbox.stub(utils, 'getChromeVersion')
@@ -248,7 +248,7 @@ describe('chromedriver', function () {
           adb: {
             getApiLevel: () => 25,
           },
-          mappingPath: path.resolve(__dirname, '..', '..', 'test', 'fixtures', 'alt-mapping-nonsemver.json'),
+          mappingPath: path.resolve(__dirname, '..', 'fixtures', 'alt-mapping-nonsemver.json'),
         });
 
         sandbox.stub(utils, 'getChromeVersion')
