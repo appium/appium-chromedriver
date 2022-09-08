@@ -1,5 +1,5 @@
-name: Node.js CI
-on: [push, pull_request]
+name: Functional Tests
+on: [pull_request]
 
 
 jobs:
@@ -31,7 +31,7 @@ jobs:
         npm run e2e-test
       name: Run functional tests
 
-  windows_tests:
+  windows_test:
     env:
       WIN_CD_VERSION: "88.0.4324.96"
     runs-on: windows-latest
