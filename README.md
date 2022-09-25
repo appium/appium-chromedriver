@@ -1,18 +1,70 @@
 appium-chromedriver
 ===================
 
-[![Node.js CI](https://github.com/appium/appium-chromedriver/actions/workflows/node.js.yml/badge.svg)](https://github.com/appium/appium-chromedriver/actions/workflows/node.js.yml)
-
 [![Release](https://github.com/appium/appium-chromedriver/actions/workflows/publish.js.yml/badge.svg)](https://github.com/appium/appium-chromedriver/actions/workflows/publish.js.yml)
 
-Node.js wrapper around [Chromedriver](https://sites.google.com/a/chromium.org/chromedriver/)
-
-Issues for this repo are disabled. Log any issues at the [main Appium repo's issue tracker](https://github.com/appium/appium/issues).
+Node.js wrapper around [Chromedriver](https://sites.google.com/a/chromium.org/chromedriver/).
+This wrapper is not used directly in Appium, but rather by various Android drivers to automate
+Chrome/Chromium-based browsers
+and web views using Hybrid Mode approach. Check the corresponding driver tutorials to get
+more details on it.
 
 ## Skipping binary installation
 
-If, for some reason, you want to install without installing the Chromedriver
-binary set the `APPIUM_SKIP_CHROMEDRIVER_INSTALL` environment variable.
+By default, upon installation the package downloads the most recent known Chromedriver version from
+Chromedriver CDN server: http://chromedriver.storage.googleapis.com.
+If, for some reason, you want to install the package without downloading the Chromedriver
+binary set the `APPIUM_SKIP_CHROMEDRIVER_INSTALL` environment variable:
+
+```bash
+APPIUM_SKIP_CHROMEDRIVER_INSTALL=1 npm install appium-chromedriver
+```
+
+## Custom Chromedriver version
+
+By default, the package uses the most recent known Chromedriver version.
+The full list of known Chromedriver versions and their corresponding supported
+Chrome version could be found in
+[mapping.json](https://github.com/appium/appium-chromedriver/blob/master/config/mapping.json)
+
+To download a custom version of Chromedriver, use either npm config property `chromedriver_version`.
+
+```bash
+npm install appium-chromedriver --chromedriver_version="2.16"
+```
+
+The property could also be added into your [`.npmrc`](https://docs.npmjs.com/files/npmrc) file.
+
+```bash
+chromedriver_version=2.16
+```
+
+Another possibility is to set the `CHROMEDRIVER_VERSION` environment variable:
+
+```bash
+CHROMEDRIVER_VERSION=2.20 npm install appium-chromedriver
+```
+
+## Custom binaries url
+
+If you want Chromedriver to be downloaded from another CDN, which differs from the
+default one http://chromedriver.storage.googleapis.com, then either set the npm config property `chromedriver_cdnurl`:
+
+```bash
+npm install appium-chromedriver --chromedriver_cdnurl=http://npm.taobao.org/mirrors/chromedriver
+```
+
+The property could also be added into your [`.npmrc`](https://docs.npmjs.com/files/npmrc) file.
+
+```bash
+chromedriver_cdnurl=http://npm.taobao.org/mirrors/chromedriver
+```
+
+Or set the new URL to `CHROMEDRIVER_CDNURL` environment variable:
+
+```bash
+CHROMEDRIVER_CDNURL=http://npm.taobao.org/mirrors/chromedriver npm install appium-chromedriver
+```
 
 ## Usage
 
@@ -62,53 +114,19 @@ Here are the events you can listen for:
     * `Chromedriver.STATE_STOPPING`
     * `Chromedriver.STATE_RESTARTING`
 
-## Custom Chromedriver version
 
-To use a version of Chromedriver not set in the code, use npm config property `chromedriver_version`.
-
-```bash
-npm install appium-chromedriver --chromedriver_version="2.16"
-```
-
-Or add the property into your [`.npmrc`](https://docs.npmjs.com/files/npmrc) file.
-
-```bash
-chromedriver_version=2.16
-```
-
-## Custom binaries url
-
-To use a mirror of the ChromeDriver binaries use npm config property `chromedriver_cdnurl`.
-Default is `http://chromedriver.storage.googleapis.com`.
-
-```bash
-npm install appium-chromedriver --chromedriver_cdnurl=http://npm.taobao.org/mirrors/chromedriver
-```
-
-Or add the property into your [`.npmrc`](https://docs.npmjs.com/files/npmrc) file.
-
-```bash
-chromedriver_cdnurl=http://npm.taobao.org/mirrors/chromedriver
-```
-
-Another option is to use PATH variable `CHROMEDRIVER_CDNURL`.
-
-```bash
-CHROMEDRIVER_CDNURL=http://npm.taobao.org/mirrors/chromedriver npm install appium-chromedriver
-```
-
-## Dev
+## Development
 
 ### Build & Lint
 
-```
+```bash
 npm run build
 npm run lint
 ```
 
 ### Run Tests
 
-```
+```bash
 npm test
 npm e2e-test
 ```
