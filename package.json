@@ -47,7 +47,7 @@
     "@babel/runtime": "^7.0.0",
     "@xmldom/xmldom": "^0.x",
     "asyncbox": "^2.0.2",
-    "axios": "^0.x",
+    "axios": "^1.x",
     "bluebird": "^3.5.1",
     "compare-versions": "^5.0.0",
     "fancy-log": "^2.0.0",
