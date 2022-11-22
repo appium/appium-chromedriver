@@ -3,7 +3,7 @@ import * as utils from '../../lib/utils';
 import sinon from 'sinon';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { fs } from 'appium/support';
+import { fs } from '@appium/support';
 import * as tp from 'teen_process';
 import path from 'path';
 import _ from 'lodash';

@@ -2,7 +2,7 @@
 
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { fs } from 'appium/support';
+import { fs } from '@appium/support';
 import { install } from '../../lib/install';
 import {
   CD_BASE_DIR, getChromedriverBinaryPath, getOsName
