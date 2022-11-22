@@ -45,6 +45,8 @@
     "CHANGELOG.md"
   ],
   "dependencies": {
+    "@appium/base-driver": "^8.7.3",
+    "@appium/support": "^2.61.0",
     "@babel/runtime": "^7.0.0",
     "@xmldom/xmldom": "^0.x",
     "asyncbox": "^2.0.2",
@@ -73,9 +75,6 @@
     "prepare": "npm run build",
     "test": "mocha --exit --timeout 1m \"./test/unit/**/*-specs.js\"",
     "e2e-test": "mocha --exit --timeout 10m \"./test/functional/**/*-specs.js\""
-  },
-  "peerDependencies": {
-    "appium": "^2.0.0-beta.44"
   },
   "devDependencies": {
     "@appium/eslint-config-appium": "^6.0.0",
