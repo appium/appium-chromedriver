@@ -30,7 +30,7 @@ Chrome version could be found in
 To download a custom version of Chromedriver, please set `CHROMEDRIVER_VERSION` environment variable:
 
 ```bash
-CHROMEDRIVER_VERSION=2.20 npm install appium-chromedriver
+CHROMEDRIVER_VERSION=107.0.5304.62 npm install appium-chromedriver
 ```
 
 ## Custom binaries url
