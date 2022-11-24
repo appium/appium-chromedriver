@@ -27,19 +27,7 @@ The full list of known Chromedriver versions and their corresponding supported
 Chrome version could be found in
 [mapping.json](https://github.com/appium/appium-chromedriver/blob/master/config/mapping.json)
 
-To download a custom version of Chromedriver, use either npm config property `chromedriver_version`.
-
-```bash
-npm install appium-chromedriver --chromedriver_version="2.16"
-```
-
-The property could also be added into your [`.npmrc`](https://docs.npmjs.com/files/npmrc) file.
-
-```bash
-chromedriver_version=2.16
-```
-
-Another possibility is to set the `CHROMEDRIVER_VERSION` environment variable:
+To download a custom version of Chromedriver, please set `CHROMEDRIVER_VERSION` environment variable:
 
 ```bash
 CHROMEDRIVER_VERSION=2.20 npm install appium-chromedriver
