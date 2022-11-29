@@ -9,6 +9,11 @@ Chrome/Chromium-based browsers
 and web views using Hybrid Mode approach. Check the corresponding driver tutorials to get
 more details on it.
 
+> **Note**
+>
+> The normal use of this package is via an Appium driver such as [UiAutomator2](https://github.com/appium/appium-uiautomator2-driver/) and not directly.
+> Please ensure you know what you are doing before using this package directly.
+
 ## Skipping binary installation
 
 By default, upon installation the package downloads the most recent known Chromedriver version from
