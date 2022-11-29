@@ -9,6 +9,11 @@ Chrome/Chromium-based browsers
 and web views using Hybrid Mode approach. Check the corresponding driver tutorials to get
 more details on it.
 
+> **Note**
+>
+> The normal use of this package is via an Appium driver such as [UiAutomator2](https://github.com/appium/appium-uiautomator2-driver/) and not directly.
+> Please ensure you know what you are doing before using this package directly.
+
 ## Skipping binary installation
 
 By default, upon installation the package downloads the most recent known Chromedriver version from
@@ -27,22 +32,10 @@ The full list of known Chromedriver versions and their corresponding supported
 Chrome version could be found in
 [mapping.json](https://github.com/appium/appium-chromedriver/blob/master/config/mapping.json)
 
-To download a custom version of Chromedriver, use either npm config property `chromedriver_version`.
+To download a custom version of Chromedriver, please set `CHROMEDRIVER_VERSION` environment variable:
 
 ```bash
-npm install appium-chromedriver --chromedriver_version="2.16"
-```
-
-The property could also be added into your [`.npmrc`](https://docs.npmjs.com/files/npmrc) file.
-
-```bash
-chromedriver_version=2.16
-```
-
-Another possibility is to set the `CHROMEDRIVER_VERSION` environment variable:
-
-```bash
-CHROMEDRIVER_VERSION=2.20 npm install appium-chromedriver
+CHROMEDRIVER_VERSION=107.0.5304.62 npm install appium-chromedriver
 ```
 
 ## Custom binaries url
