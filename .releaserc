@@ -6,7 +6,7 @@
         {"type": "chore", "release": "patch"}
       ]
     }],
-    ["@semantic-release/release-notes-generator",
+    ["@semantic-release/release-notes-generator", {
       "preset": "conventionalcommits",
       "presetConfig": {
         "types": [
@@ -23,7 +23,7 @@
           {"type": "ci", "section": "Continuous Integration", "hidden": true}
         ]
       }
-    ],
+    }],
     ["@semantic-release/changelog", {
       "changelogFile": "CHANGELOG.md"
     }],
