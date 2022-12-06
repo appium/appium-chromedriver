@@ -41,7 +41,7 @@ CHROMEDRIVER_VERSION=107.0.5304.62 npm install appium-chromedriver
 ## Custom binaries url
 
 If you want Chromedriver to be downloaded from another CDN, which differs from the
-default one http://chromedriver.storage.googleapis.com, then either set the npm config property `chromedriver_cdnurl`:
+default one https://chromedriver.storage.googleapis.com, then either set the npm config property `chromedriver_cdnurl`:
 
 ```bash
 npm install appium-chromedriver --chromedriver_cdnurl=http://npm.taobao.org/mirrors/chromedriver
@@ -58,6 +58,11 @@ Or set the new URL to `CHROMEDRIVER_CDNURL` environment variable:
 ```bash
 CHROMEDRIVER_CDNURL=http://npm.taobao.org/mirrors/chromedriver npm install appium-chromedriver
 ```
+
+If you want automatic chromedrivers download feature to work with a custom CDN URL then make sure
+the server returns a proper list of stored drivers in response to requests having
+`Accept: application/xml` header. An example XML could be retrieved from the original URL using
+`curl -H 'Accept: application/xml' https://chromedriver.storage.googleapis.com` command.
 
 ## Usage
 
@@ -120,6 +125,6 @@ npm run lint
 ### Run Tests
 
 ```bash
-npm test
-npm e2e-test
+npm run test
+npm run e2e-test
 ```
