@@ -1,3 +1,11 @@
+## [5.2.11](https://github.com/appium/appium-chromedriver/compare/v5.2.10...v5.2.11) (2022-12-14)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump @appium/test-support from 2.0.2 to 3.0.0 ([#281](https://github.com/appium/appium-chromedriver/issues/281)) ([bb99b36](https://github.com/appium/appium-chromedriver/commit/bb99b367309b2522dfb2908ada05c3fa91b3d9bd))
+* **deps:** bump @appium/support from 2.61.1 to 3.0.0 ([#280](https://github.com/appium/appium-chromedriver/issues/280)) ([4d1fda9](https://github.com/appium/appium-chromedriver/commit/4d1fda9a9f257ca50bd6e3cadef75505a120351e))
+
 ## [5.2.10](https://github.com/appium/appium-chromedriver/compare/v5.2.9...v5.2.10) (2022-12-01)
 
 
