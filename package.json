@@ -45,7 +45,7 @@
     "CHANGELOG.md"
   ],
   "dependencies": {
-    "@appium/base-driver": "^8.7.3",
+    "@appium/base-driver": "^9.1.0",
     "@appium/support": "^3.0.0",
     "@babel/runtime": "^7.0.0",
     "@xmldom/xmldom": "^0.x",
