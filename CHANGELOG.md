@@ -1,3 +1,10 @@
+## [5.2.12](https://github.com/appium/appium-chromedriver/compare/v5.2.11...v5.2.12) (2022-12-22)
+
+
+### Miscellaneous Chores
+
+* **deps:** bump @appium/base-driver from 8.7.3 to 9.1.0 ([#283](https://github.com/appium/appium-chromedriver/issues/283)) ([b31d0ac](https://github.com/appium/appium-chromedriver/commit/b31d0ac306070017c875d7e6d473edc6ba945a30))
+
 ## [5.2.11](https://github.com/appium/appium-chromedriver/compare/v5.2.10...v5.2.11) (2022-12-14)
 
 
