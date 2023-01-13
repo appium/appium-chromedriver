@@ -1,3 +1,10 @@
+## [5.2.14](https://github.com/appium/appium-chromedriver/compare/v5.2.13...v5.2.14) (2023-01-13)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump rimraf from 3.0.2 to 4.0.4 ([#286](https://github.com/appium/appium-chromedriver/issues/286)) ([791c00a](https://github.com/appium/appium-chromedriver/commit/791c00a0fd709443e1a02e0a8875e219435ef902))
+
 ## [5.2.13](https://github.com/appium/appium-chromedriver/compare/v5.2.12...v5.2.13) (2023-01-12)
 
 
