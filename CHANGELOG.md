@@ -1,3 +1,10 @@
+## [5.2.16](https://github.com/appium/appium-chromedriver/compare/v5.2.15...v5.2.16) (2023-02-02)
+
+
+### Bug Fixes
+
+* Update Apple ARM architecture detection ([#287](https://github.com/appium/appium-chromedriver/issues/287)) ([a10d2d9](https://github.com/appium/appium-chromedriver/commit/a10d2d90f66632dd161aae47a95771fb1c7b5497))
+
 ## [5.2.15](https://github.com/appium/appium-chromedriver/compare/v5.2.14...v5.2.15) (2023-01-17)
 
 
