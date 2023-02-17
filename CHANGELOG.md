@@ -1,3 +1,10 @@
+## [5.3.0](https://github.com/appium/appium-chromedriver/compare/v5.2.17...v5.3.0) (2023-02-17)
+
+
+### Features
+
+* add types ([e4e2a82](https://github.com/appium/appium-chromedriver/commit/e4e2a82664896fb654ceaa89dce64267871752b9))
+
 ## [5.2.17](https://github.com/appium/appium-chromedriver/compare/v5.2.16...v5.2.17) (2023-02-09)
 
 
