@@ -165,7 +165,7 @@ describe('ChromedriverStorageClient', function () {
         name: 'mac',
         arch: '64',
       }, {
-        minBrowserVersion: '60',
+        minBrowserVersion: 60,
       });
       selectedDrivers.should.eql([
         '76.0.3809.12/chromedriver_mac64.zip',
@@ -180,7 +180,7 @@ describe('ChromedriverStorageClient', function () {
         arch: '64',
       }, {
         versions: ['76.0.3809.12'],
-        minBrowserVersion: '60',
+        minBrowserVersion: 60,
       });
       selectedDrivers.should.eql([
         '76.0.3809.12/chromedriver_mac64.zip',
