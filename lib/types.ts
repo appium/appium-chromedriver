@@ -30,7 +30,7 @@ export interface SyncOptions {
    * The minumum supported Chrome version that downloaded chromedrivers should
    * support. Can match multiple drivers.
    */
-  minBrowserVersion?: number;
+  minBrowserVersion?: string | number;
   /**
    * System information used to filter out the list of the retrieved drivers. If
    * not provided then the script will try to retrieve it.
