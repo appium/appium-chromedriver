@@ -10,6 +10,7 @@
  */
 
 const B = require('bluebird');
+const util = require('util')
 
 // this is here because we're using async/await, and this must be set _before_ we use async/await,
 // given that bluebird is used elsewhere via `doInstall()`.
@@ -37,7 +38,7 @@ async function main() {
     try {
       await exec(npmCommand, ['run', 'build'], {logger: log, cwd: __dirname});
     } catch (e) {
-      throw new Error(`appium-chromedriver package cannot be built: ${e.stderr || e.message}`);
+      throw new Error(`appium-chromedriver package cannot be built: ${util.inspect(e)}`);
     }
   }
 
