@@ -1,3 +1,16 @@
+## [5.3.1](https://github.com/appium/appium-chromedriver/compare/v5.3.0...v5.3.1) (2023-03-16)
+
+
+### Bug Fixes
+
+* install-npm.js fails to run npm run build due to type error ([#292](https://github.com/appium/appium-chromedriver/issues/292)) ([1e3014b](https://github.com/appium/appium-chromedriver/commit/1e3014b574d8972dfb2d08c56c700d68f52a58bd))
+* minBrowserVersion in SyncOption should be a number ([#291](https://github.com/appium/appium-chromedriver/issues/291)) ([39d8fdd](https://github.com/appium/appium-chromedriver/commit/39d8fdd37e6a6de5ae5d591d590f1fa879338ee8))
+
+
+### Miscellaneous Chores
+
+* ChromeDriver Bump to v111.0.5563.64 ([#290](https://github.com/appium/appium-chromedriver/issues/290)) ([2c4c144](https://github.com/appium/appium-chromedriver/commit/2c4c144a47a06470c821709a25254ed5bbea1082))
+
 ## [5.3.0](https://github.com/appium/appium-chromedriver/compare/v5.2.17...v5.3.0) (2023-02-17)
 
 
