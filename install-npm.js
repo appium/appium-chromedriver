@@ -10,6 +10,7 @@
  */
 
 const B = require('bluebird');
+const util = require('util');
 
 // this is here because we're using async/await, and this must be set _before_ we use async/await,
 // given that bluebird is used elsewhere via `doInstall()`.
@@ -31,13 +32,15 @@ async function main() {
   try {
     await fs.stat(BUILD_PATH);
   } catch {
-    log.info(`The Chromedriver install script cannot be found at '${BUILD_PATH}'. ` +
-      `Building appium-chromedriver package`);
+    log.info(
+      `The Chromedriver install script cannot be found at '${BUILD_PATH}'. ` +
+        `Building appium-chromedriver package`
+    );
     const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
     try {
       await exec(npmCommand, ['run', 'build'], {logger: log, cwd: __dirname});
     } catch (e) {
-      throw new Error(`appium-chromedriver package cannot be built: ${e.stderr || e.message}`);
+      throw new Error(`appium-chromedriver package cannot be built: ${util.inspect(e)}`);
     }
   }
 
@@ -47,11 +50,9 @@ async function main() {
     !_.isEmpty(process.env.npm_config_chromedriver_skip_install)
   ) {
     log.warn(
-      `'APPIUM_SKIP_CHROMEDRIVER_INSTALL' environment variable is set; skipping Chromedriver installation.`,
+      `'APPIUM_SKIP_CHROMEDRIVER_INSTALL' environment variable is set; skipping Chromedriver installation.`
     );
-    log.warn(
-      `Android web/hybrid testing will not be possible without Chromedriver.`,
-    );
+    log.warn(`Android web/hybrid testing will not be possible without Chromedriver.`);
     return;
   }
 
@@ -62,7 +63,7 @@ async function main() {
     log.error(err.stack ? err.stack : err);
     log.error(
       `Downloading Chromedriver can be skipped by setting the` +
-        `'APPIUM_SKIP_CHROMEDRIVER_INSTALL' environment variable.`,
+        `'APPIUM_SKIP_CHROMEDRIVER_INSTALL' environment variable.`
     );
     process.exit(1);
   }
