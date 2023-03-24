@@ -1,3 +1,10 @@
+## [5.3.2](https://github.com/appium/appium-chromedriver/compare/v5.3.1...v5.3.2) (2023-03-24)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump typescript from 4.9.5 to 5.0.2 ([#293](https://github.com/appium/appium-chromedriver/issues/293)) ([6fd403e](https://github.com/appium/appium-chromedriver/commit/6fd403ea59bda3027242efc2cecbfb708da17f64))
+
 ## [5.3.1](https://github.com/appium/appium-chromedriver/compare/v5.3.0...v5.3.1) (2023-03-16)
 
 
