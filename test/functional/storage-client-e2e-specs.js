@@ -2,9 +2,9 @@
 
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import ChromedriverStorageClient from '../lib/storage-client';
+import ChromedriverStorageClient from '../../lib/storage-client';
 import _ from 'lodash';
-import { fs, tempDir } from 'appium-support';
+import { fs, tempDir } from '@appium/support';
 
 
 chai.should();
@@ -41,7 +41,7 @@ describe('ChromedriverStorageClient', function () {
     });
     try {
       (await client.syncDrivers({
-        minBrowserVersion: '44',
+        minBrowserVersion: 44,
       })).length.should.be.greaterThan(0);
       (await fs.readdir(tmpRoot)).length.should.be.greaterThan(0);
     } finally {
@@ -56,7 +56,7 @@ describe('ChromedriverStorageClient', function () {
     });
     try {
       (await client.syncDrivers({
-        minBrowserVersion: '74',
+        minBrowserVersion: 74,
       })).length.should.be.greaterThan(0);
       (await fs.readdir(tmpRoot)).length.should.be.greaterThan(0);
     } finally {

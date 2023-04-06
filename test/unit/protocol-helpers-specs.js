@@ -1,4 +1,4 @@
-import { toW3cCapNames, getCapValue } from '../lib/protocol-helpers';
+import { toW3cCapNames, getCapValue } from '../../lib/protocol-helpers';
 import chai from 'chai';
 
 chai.should();

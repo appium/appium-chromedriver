@@ -1,24 +1,68 @@
 appium-chromedriver
 ===================
 
-[![Build Status](https://travis-ci.org/appium/appium-chromedriver.svg)](https://travis-ci.org/appium/appium-chromedriver)
+[![Release](https://github.com/appium/appium-chromedriver/actions/workflows/publish.js.yml/badge.svg)](https://github.com/appium/appium-chromedriver/actions/workflows/publish.js.yml)
 
-Node.js wrapper around [Chromedriver](https://sites.google.com/a/chromium.org/chromedriver/)
+Node.js wrapper around [Chromedriver](https://sites.google.com/a/chromium.org/chromedriver/).
+This wrapper is not used directly in Appium, but rather by various Android drivers to automate
+Chrome/Chromium-based browsers
+and web views using Hybrid Mode approach. Check the corresponding driver tutorials to get
+more details on it.
 
-Issues for this repo are disabled. Log any issues at the [main Appium repo's issue tracker](https://github.com/appium/appium/issues).
-
-## Local installation
-
-Because of the oddities of `npm`'s lifecycle hooks, installing locally the first time _will_ fail, saying `Project does not appear to built yet. Please run `gulp transpile` first.`. This is because we transpile in the `prepublish` phase, but run the install script in the `install` phase. Any other way would make development dependencies necessary on user's machines, or make the binary not install, unfortunately.
-
-The solution, however, is simple. Simple run `gulp transpile` and then `npm install`. The former will build the project and the latter will simply install the binary.
+> **Note**
+>
+> The normal use of this package is via an Appium driver such as [UiAutomator2](https://github.com/appium/appium-uiautomator2-driver/) and not directly.
+> Please ensure you know what you are doing before using this package directly.
 
 ## Skipping binary installation
 
-If, for some reason, you want to install without installing the Chromedriver
-binary, either set the `APPIUM_SKIP_CHROMEDRIVER_INSTALL` environment variable,
-or pass the `--chromedriver-skip-install` flag while running `npm install`.
+By default, upon installation the package downloads the most recent known Chromedriver version from
+Chromedriver CDN server: http://chromedriver.storage.googleapis.com.
+If, for some reason, you want to install the package without downloading the Chromedriver
+binary set the `APPIUM_SKIP_CHROMEDRIVER_INSTALL` environment variable:
 
+```bash
+APPIUM_SKIP_CHROMEDRIVER_INSTALL=1 npm install appium-chromedriver
+```
+
+## Custom Chromedriver version
+
+By default, the package uses the most recent known Chromedriver version.
+The full list of known Chromedriver versions and their corresponding supported
+Chrome version could be found in
+[mapping.json](https://github.com/appium/appium-chromedriver/blob/master/config/mapping.json)
+
+To download a custom version of Chromedriver, please set `CHROMEDRIVER_VERSION` environment variable:
+
+```bash
+CHROMEDRIVER_VERSION=107.0.5304.62 npm install appium-chromedriver
+```
+
+## Custom binaries url
+
+If you want Chromedriver to be downloaded from another CDN, which differs from the
+default one https://chromedriver.storage.googleapis.com, then either set the npm config property `chromedriver_cdnurl`:
+
+```bash
+npm install appium-chromedriver --chromedriver_cdnurl=http://npm.taobao.org/mirrors/chromedriver
+```
+
+The property could also be added into your [`.npmrc`](https://docs.npmjs.com/files/npmrc) file.
+
+```bash
+chromedriver_cdnurl=http://npm.taobao.org/mirrors/chromedriver
+```
+
+Or set the new URL to `CHROMEDRIVER_CDNURL` environment variable:
+
+```bash
+CHROMEDRIVER_CDNURL=http://npm.taobao.org/mirrors/chromedriver npm install appium-chromedriver
+```
+
+If you want automatic chromedrivers download feature to work with a custom CDN URL then make sure
+the server returns a proper list of stored drivers in response to requests having
+`Accept: application/xml` header. An example XML could be retrieved from the original URL using
+`curl -H 'Accept: application/xml' https://chromedriver.storage.googleapis.com` command.
 
 ## Usage
 
@@ -68,105 +112,19 @@ Here are the events you can listen for:
     * `Chromedriver.STATE_STOPPING`
     * `Chromedriver.STATE_RESTARTING`
 
-## Custom Chromedriver version
 
-To use a version of Chromedriver not set in the code, use npm config property `chromedriver_version`.
+## Development
 
-```bash
-npm install appium-chromedriver --chromedriver_version="2.16"
-```
-
-Or add the property into your [`.npmrc`](https://docs.npmjs.com/files/npmrc) file.
+### Build & Lint
 
 ```bash
-chromedriver_version=2.16
-```
-
-## Custom binaries url
-
-To use a mirror of the ChromeDriver binaries use npm config property `chromedriver_cdnurl`.
-Default is `http://chromedriver.storage.googleapis.com`.
-
-```bash
-npm install appium-chromedriver --chromedriver_cdnurl=http://npm.taobao.org/mirrors/chromedriver
-```
-
-Or add the property into your [`.npmrc`](https://docs.npmjs.com/files/npmrc) file.
-
-```bash
-chromedriver_cdnurl=http://npm.taobao.org/mirrors/chromedriver
-```
-
-Another option is to use PATH variable `CHROMEDRIVER_CDNURL`.
-
-```bash
-CHROMEDRIVER_CDNURL=http://npm.taobao.org/mirrors/chromedriver npm install appium-chromedriver
-```
-
-## Dev
-
-We use Gulp for building/transpiling.
-
-### Watch
-
-```
-npm run watch
+npm run build
+npm run lint
 ```
 
 ### Run Tests
 
+```bash
+npm run test
+npm run e2e-test
 ```
-npm test
-```
-
-## Upgrading Chromedriver Version
-
-When a new [Chromedriver](http://chromedriver.chromium.org/) version is released,
-the details will be [here](http://chromedriver.chromium.org/downloads). Which
-Chromedriver this package selects is based on the `CHROMEDRIVER_CHROME_MAPPING`
-in `lib/chromedriver`.
-
-To add a new entry, you must know the Chromedriver version and the minimum version
-of Chrome which it is capable of automating. Starting with Chromedriver
-[2.46](https://chromedriver.storage.googleapis.com/index.html?path=2.46/) the
-executable has a command line flag `--minimum-chrome-version` to get the latter.
-So, you just need to download the Chromedriver version, and then run it
-```
-path/to/chromedriver[.exe] --minimum-chrome-version
-```
-The output will be something like `minimum supported Chrome version: 71.0.3578.0`.
-
-Add a new entry to the top of `CHROMEDRIVER_CHROME_MAPPING` in `lib/chromedriver`,
-consisting of the version of Chromedriver and the first three parts of the
-minimum Chrome version.
-
-If the command line flag is not available, the minimum Chrome version can be
-obtained by attempting to run a session against a low version of Chrome. In one
-shell run Chromedriver
-```shell
-path/to/chromedriver[.exe] --verbose
-```
-And in another shell, create a session by running the [curl](https://curl.haxx.se/)
-command
-```shell
-curl \
-  -d '{"desiredCapabilities":{"chromeOptions":{"androidPackage":"com.android.chrome","androidDeviceSerial":"emulator-5554"}}}' \
-  -H "Content-Type: application/json" \
-  -XPOST http://localhost:9515/session
-```
-This **will** fail, but in the error message will be the actual minimum Chrome
-version for this version of Chromedriver:
-```json
-{
-  "sessionId": "55dcde971731f3d1ce04b54d7664069c",
-  "status": 33,
-  "value": {
-    "message": "session not created: Chrome version must be >= 68.0.3440.0\n  (Driver info: chromedriver=2.42.591059 (a3d9684d10d61aa0c45f6723b327283be1ebaad8),platform=Mac OS X 10.13.6 x86_64)"
-  }
-}
-```
-Take the number (e.g., here, `68.0.3440.0`) and put the first three parts
-(`68.0.3440`) into the `CHROMEDRIVER_CHROME_MAPPING` along with the version of
-Chromedriver being added.
-
-Commit, push, and pull request!

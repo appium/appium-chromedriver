@@ -1,7 +1,7 @@
 // transpile:mocha
 
-import Chromedriver from '../lib/chromedriver';
-import { install } from '../lib/install';
+import Chromedriver from '../../lib/chromedriver';
+import { install } from '../../lib/install';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import B from 'bluebird';
