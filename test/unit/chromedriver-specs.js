@@ -3,11 +3,11 @@ import * as utils from '../../lib/utils';
 import sinon from 'sinon';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
+import {PROTOCOLS} from '@appium/base-driver';
 import {fs} from '@appium/support';
 import * as tp from 'teen_process';
 import path from 'path';
 import _ from 'lodash';
-import {PROTOCOLS} from '@appium/base-driver';
 
 chai.should();
 chai.use(chaiAsPromised);
