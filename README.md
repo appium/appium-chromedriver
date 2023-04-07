@@ -5,6 +5,7 @@ appium-chromedriver
 
 Node.js wrapper around [Chromedriver](https://sites.google.com/chromium.org/driver/)
 and [Microsoft Edge WebDriver](https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/).
+The Microsoft Edge WebDriver support is since v5.4.0.
 This wrapper is not used directly in Appium, but rather by various Android drivers to automate
 Chrome/Chromium-based browsers
 and web views using Hybrid Mode approach. Check the corresponding driver tutorials to get
@@ -12,14 +13,16 @@ more details on it.
 
 > **Note**
 >
-> The normal use of this package is via an Appium driver such as [UiAutomator2](https://github.com/appium/appium-uiautomator2-driver/) and
-> [appium-chromium-driver](https://github.com/appium/appium-chromium-driver) and not directly.
+> This package is intended to be used as a helper module for Appium drivers such as
+> [UiAutomator2](https://github.com/appium/appium-uiautomator2-driver/) and
+> [appium-chromium-driver](https://github.com/appium/appium-chromium-driver).
+> It was not created for standalone usage.
 > Please ensure you know what you are doing before using this package directly.
 
 > **Note**
 >
 > This package can work with Microsoft Edge WebDriver as well, but the support is limited.
-> For example, automatic download does not work for Microsoft Edge WebDriver.
+> For example, automatic downloads do not work for Microsoft Edge WebDriver.
 
 ## Skipping binary installation
 
