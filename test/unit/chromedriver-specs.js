@@ -264,37 +264,45 @@ describe('chromedriver', function () {
     it('sync with chrome as mjsonwp', function () {
       const cd = new Chromedriver({});
       cd.desiredProtocol.should.eql(PROTOCOLS.MJSONWP);
+      (cd.driverVersion === null).should.be.true;
       cd.detectWebDriverProtocol(
         'Starting ChromeDriver 2.33.506106 (8a06c39c4582fbfbab6966dbb1c38a9173bfb1a2) on port 9515'
       );
       cd.desiredProtocol.should.eql(PROTOCOLS.MJSONWP);
+      cd.driverVersion.should.eql('2.33.506106');
     });
 
     it('sync with chrome as w3c', function () {
       const cd = new Chromedriver({});
       cd.desiredProtocol.should.eql(PROTOCOLS.MJSONWP);
+      (cd.driverVersion === null).should.be.true;
       cd.detectWebDriverProtocol(
         'Starting ChromeDriver 111.0.1661.41 (8a06c39c4582fbfbab6966dbb1c38a9173bfb1a2) on port 9515'
       );
       cd.desiredProtocol.should.eql(PROTOCOLS.W3C);
+      cd.driverVersion.should.eql('111.0.1661.41');
     });
 
     it('sync with msedge', function () {
       const cd = new Chromedriver({});
       cd.desiredProtocol.should.eql(PROTOCOLS.MJSONWP);
+      (cd.driverVersion === null).should.be.true;
       cd.detectWebDriverProtocol(
         'Starting Microsoft Edge WebDriver 111.0.1661.41 (57be51b50d1be232a9e8186a10017d9e06b1fd16) on port 9515'
       );
       cd.desiredProtocol.should.eql(PROTOCOLS.W3C);
+      cd.driverVersion.should.eql('111.0.1661.41');
     });
 
     it('sync with unknown driver', function () {
       const cd = new Chromedriver({});
       cd.desiredProtocol.should.eql(PROTOCOLS.MJSONWP);
+      (cd.driverVersion === null).should.be.true;
       cd.detectWebDriverProtocol(
         'Starting Unknown WebDriver 111.0.1661.41 (57be51b50d1be232a9e8186a10017d9e06b1fd16) on port 9515'
       );
       cd.desiredProtocol.should.eql(PROTOCOLS.MJSONWP);
+      (cd.driverVersion === null).should.be.true;
     });
   });
 
