@@ -1,3 +1,10 @@
+## [5.4.0](https://github.com/appium/appium-chromedriver/compare/v5.3.4...v5.4.0) (2023-04-13)
+
+
+### Features
+
+* parse msedge as well as chromedriver ([#297](https://github.com/appium/appium-chromedriver/issues/297)) ([a71240b](https://github.com/appium/appium-chromedriver/commit/a71240b60c79abad61217354e392dbed4d5dfec2))
+
 ## [5.3.4](https://github.com/appium/appium-chromedriver/compare/v5.3.3...v5.3.4) (2023-04-10)
 
 
