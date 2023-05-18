@@ -1,3 +1,10 @@
+## [5.4.2](https://github.com/appium/appium-chromedriver/compare/v5.4.1...v5.4.2) (2023-05-18)
+
+
+### Miscellaneous Chores
+
+* **deps:** bump @appium/support from 3.1.11 to 4.0.0 ([#311](https://github.com/appium/appium-chromedriver/issues/311)) ([c12156b](https://github.com/appium/appium-chromedriver/commit/c12156b3ec45027edca554593cc3a5d96f22b274))
+
 ## [5.4.1](https://github.com/appium/appium-chromedriver/compare/v5.4.0...v5.4.1) (2023-05-04)
 
 
