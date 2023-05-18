@@ -50,7 +50,7 @@
   "types": "./build/index.d.ts",
   "dependencies": {
     "@appium/base-driver": "^9.1.0",
-    "@appium/support": "^3.0.0",
+    "@appium/support": "^4.0.0",
     "@babel/runtime": "^7.0.0",
     "@xmldom/xmldom": "^0.x",
     "asyncbox": "^2.0.2",
