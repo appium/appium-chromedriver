@@ -31,13 +31,12 @@
     "printWidth": 100,
     "singleQuote": true
   },
-  "main": "./build/index.js",
+  "main": "./build/lib/index.js",
   "directories": {
     "lib": "lib"
   },
   "files": [
     "config",
-    "index.js",
     "install-npm.js",
     "lib",
     "build",
@@ -47,12 +46,13 @@
     "CHANGELOG.md",
     "tsconfig.json"
   ],
-  "types": "./build/index.d.ts",
+  "types": "./build/lib/index.d.ts",
   "dependencies": {
     "@appium/base-driver": "^9.1.0",
     "@appium/support": "^4.0.0",
     "@babel/runtime": "^7.0.0",
     "@xmldom/xmldom": "^0.x",
+    "appium-adb": "^9.14.1",
     "asyncbox": "^2.0.2",
     "axios": "^1.x",
     "bluebird": "^3.5.1",
@@ -106,6 +106,6 @@
     "semantic-release": "^20.0.2",
     "sinon": "^15.0.0",
     "ts-node": "^10.9.1",
-    "typescript": "^5.0.2"
+    "typescript": "~5.0.4"
   }
 }
