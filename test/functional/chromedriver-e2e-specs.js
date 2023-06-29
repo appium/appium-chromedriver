@@ -1,18 +1,17 @@
 // transpile:mocha
 
-import Chromedriver from '../../lib/chromedriver';
-import { install } from '../../lib/install';
+import {Chromedriver} from '../../lib/chromedriver';
+import {install} from '../../lib/install';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import B from 'bluebird';
-import { exec } from 'teen_process';
+import {exec} from 'teen_process';
 import _ from 'lodash';
-
 
 let should = chai.should();
 chai.use(chaiAsPromised);
 
-function nextState (cd) {
+function nextState(cd) {
   return new B((resolve) => {
     cd.on(Chromedriver.EVENT_CHANGED, (msg) => {
       resolve(msg.state);
@@ -20,15 +19,16 @@ function nextState (cd) {
   });
 }
 
-function nextError (cd) {
+function nextError(cd) {
   return new B((resolve) => {
-    cd.on(Chromedriver.EVENT_ERROR, (err) => { // eslint-disable-line promise/prefer-await-to-callbacks
+    cd.on(Chromedriver.EVENT_ERROR, (err) => {
+      // eslint-disable-line promise/prefer-await-to-callbacks
       resolve(err);
     });
   });
 }
 
-async function assertNoRunningChromedrivers () {
+async function assertNoRunningChromedrivers() {
   let {stdout} = await exec('ps', ['aux']);
   let count = 0;
   for (let line of stdout.split('\n')) {
@@ -40,11 +40,13 @@ async function assertNoRunningChromedrivers () {
   count.should.eql(0);
 }
 
-function buildReqRes (url, method, body) {
+function buildReqRes(url, method, body) {
   let req = {originalUrl: url, method, body};
   let res = {};
   res.headers = {};
-  res.set = (k, v) => { res[k] = v; };
+  res.set = (k, v) => {
+    res[k] = v;
+  };
   res.status = (code) => {
     res.sentCode = code;
     return {
@@ -53,7 +55,7 @@ function buildReqRes (url, method, body) {
           body = JSON.parse(body);
         } catch (e) {}
         res.sentBody = body;
-      }
+      },
     };
   };
   return [req, res];
@@ -189,12 +191,15 @@ describe('chromedriver with async/await', function () {
     let badCd = new Chromedriver({
       port: 1,
     });
-    await badCd.start(caps).should.eventually.be.rejectedWith('ChromeDriver crashed during startup');
+    await badCd
+      .start(caps)
+      .should.eventually.be.rejectedWith('ChromeDriver crashed during startup');
     await assertNoRunningChromedrivers();
   });
   it('should throw an error during start if session does not work', async function () {
     let badCd = new Chromedriver({});
-    await badCd.start({chromeOptions: {badCap: 'foo'}})
+    await badCd
+      .start({chromeOptions: {badCap: 'foo'}})
       .should.eventually.be.rejectedWith('cannot parse capability');
     await assertNoRunningChromedrivers();
   });

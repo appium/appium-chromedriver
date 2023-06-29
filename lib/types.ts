@@ -1,3 +1,5 @@
+import type ADB from 'appium-adb';
+
 export interface ChromedriverOpts {
   host?: string;
   port?: string;
@@ -7,7 +9,7 @@ export interface ChromedriverOpts {
   bundleId?: string;
   mappingPath?: string;
   cmdArgs?: string[];
-  adb?: AdbStub;
+  adb?: ADB;
   verbose?: boolean;
   logPath?: string;
   disableBuildCheck?: boolean;
@@ -84,18 +86,13 @@ export interface ChromedriverStorageClientOpts {
   timeout?: number;
 }
 
-/**
- * This is an instance of the `ADB` class from the `appium-adb` package.
- * Remove this definition if/when `appium-adb` gets typed properly
- * @see https://github.com/appium/appium-adb
- */
-export type AdbStub = {
-  getApiLevel: () => Promise<number>;
-  adbPort?: number;
-  executable: {
-    defaultArgs: string[];
-  };
-  getForwardList: () => Promise<string[]>;
-  removePortForward: (systemPort: string) => Promise<void>;
-  getPackageInfo: (pkg: string) => Promise<{versionName: string}>;
-};
+export interface AdditionalDriverDetails {
+  /**
+   * Chromedriver version or `null` if it cannot be found
+   */
+  version?: string | null;
+  /**
+   * The minimum browser version supported by chromedriver or `null` if it cannot be found
+   */
+  minBrowserVersion?: string | null;
+}
