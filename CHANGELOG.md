@@ -1,3 +1,20 @@
+## [5.5.0](https://github.com/appium/appium-chromedriver/compare/v5.4.4...v5.5.0) (2023-06-30)
+
+
+### Features
+
+* use named export for Chromedriver ([811eb46](https://github.com/appium/appium-chromedriver/commit/811eb466c95f3de6c4797eeb74e65b52bf045d3d))
+
+
+### Bug Fixes
+
+* remove ts-expect-error ([ef9e75e](https://github.com/appium/appium-chromedriver/commit/ef9e75eb4f6115223196b0687073ded9eb2bf828))
+
+
+### Miscellaneous Chores
+
+* **vscode:** add a default build task ([9c4e6a2](https://github.com/appium/appium-chromedriver/commit/9c4e6a213e2e8f455ade3ec08597f11c3f7390de))
+
 ## [5.4.4](https://github.com/appium/appium-chromedriver/compare/v5.4.3...v5.4.4) (2023-06-07)
 
 
