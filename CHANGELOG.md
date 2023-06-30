@@ -1,3 +1,10 @@
+## [5.5.1](https://github.com/appium/appium-chromedriver/compare/v5.5.0...v5.5.1) (2023-06-30)
+
+
+### Bug Fixes
+
+* **types:** actually export named Chromedriver ([94e79f0](https://github.com/appium/appium-chromedriver/commit/94e79f053268a90f672957d7051ebaeb645a7b89))
+
 ## [5.5.0](https://github.com/appium/appium-chromedriver/compare/v5.4.4...v5.5.0) (2023-06-30)
 
 
