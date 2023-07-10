@@ -1,3 +1,12 @@
+## [5.5.2](https://github.com/appium/appium-chromedriver/compare/v5.5.1...v5.5.2) (2023-07-10)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump @types/node from 18.16.19 to 20.4.1 ([#331](https://github.com/appium/appium-chromedriver/issues/331)) ([62988d3](https://github.com/appium/appium-chromedriver/commit/62988d34a2d6ee39523e2a4c996f502b259d82ad))
+* **deps-dev:** bump prettier from 2.8.8 to 3.0.0 ([#329](https://github.com/appium/appium-chromedriver/issues/329)) ([bcd3723](https://github.com/appium/appium-chromedriver/commit/bcd37231ee65edf577d12e372d254cf6ad09fbec))
+* **deps:** bump compare-versions from 5.0.3 to 6.0.0 ([#332](https://github.com/appium/appium-chromedriver/issues/332)) ([a87d879](https://github.com/appium/appium-chromedriver/commit/a87d8798647a362128c428f23e69d03504cb2187))
+
 ## [5.5.1](https://github.com/appium/appium-chromedriver/compare/v5.5.0...v5.5.1) (2023-06-30)
 
 
