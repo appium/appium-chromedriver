@@ -1,3 +1,10 @@
+## [5.5.3](https://github.com/appium/appium-chromedriver/compare/v5.5.2...v5.5.3) (2023-07-28)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump @appium/tsconfig from 0.2.4 to 0.3.0 ([#299](https://github.com/appium/appium-chromedriver/issues/299)) ([b51aae2](https://github.com/appium/appium-chromedriver/commit/b51aae285796b73afa6f620d12fdcf95c575ec5b))
+
 ## [5.5.2](https://github.com/appium/appium-chromedriver/compare/v5.5.1...v5.5.2) (2023-07-10)
 
 
