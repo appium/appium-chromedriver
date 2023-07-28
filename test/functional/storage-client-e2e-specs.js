@@ -41,7 +41,7 @@ describe('ChromedriverStorageClient', function () {
     });
     try {
       (await client.syncDrivers({
-        versions: ['115.0.5790.102', '114.0.5696.0'],
+        versions: ['115.0.5790.102', '116.0.5791.0'],
       })).length.should.be.greaterThan(0);
       console.log(JSON.stringify(client.mapping, null, 2));
       (await fs.readdir(tmpRoot)).length.should.be.eql(2);
