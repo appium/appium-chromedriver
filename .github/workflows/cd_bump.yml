@@ -2,6 +2,7 @@ name: ChromeDriver Version Bump
 on:
   schedule:
   - cron: "0 0 * * *"
+  workflow_dispatch:
 
 env:
   API_URL: https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions.json
