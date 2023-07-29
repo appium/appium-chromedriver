@@ -59,7 +59,7 @@ export interface OSInfo {
    * The cpu type of the host OS.
    * Can be either `intel`, `arm`. `intel` is assumed by default
    */
-  cpu: string | null;
+  cpu?: string;
 }
 
 /**
