@@ -1,3 +1,10 @@
+## [5.6.0](https://github.com/appium/appium-chromedriver/compare/v5.5.3...v5.6.0) (2023-07-29)
+
+
+### Features
+
+* Add support of the new chromedriver storage ([#333](https://github.com/appium/appium-chromedriver/issues/333)) ([10a1a5b](https://github.com/appium/appium-chromedriver/commit/10a1a5b5a9c37aa981ad123fdeb9a28165b5b2eb))
+
 ## [5.5.3](https://github.com/appium/appium-chromedriver/compare/v5.5.2...v5.5.3) (2023-07-28)
 
 
