@@ -92,6 +92,7 @@ describe('ChromedriverStorageClient', function () {
       const selectedDrivers = client.selectMatchingDrivers({
         name: 'win',
         arch: '64',
+        cpu: 'intel',
       });
       selectedDrivers.should.eql([
         '2.0/chromedriver_win32.zip',
@@ -105,6 +106,7 @@ describe('ChromedriverStorageClient', function () {
       const selectedDrivers = client.selectMatchingDrivers({
         name: 'linux',
         arch: '64',
+        cpu: 'intel',
       }, {
         versions: ['76.0.3809.12'],
       });
@@ -119,6 +121,7 @@ describe('ChromedriverStorageClient', function () {
       const selectedDrivers = client.selectMatchingDrivers({
         name: 'mac',
         arch: '64',
+        cpu: 'intel',
       }, {
         minBrowserVersion: 60,
       });
@@ -133,6 +136,7 @@ describe('ChromedriverStorageClient', function () {
       const selectedDrivers = client.selectMatchingDrivers({
         name: 'mac',
         arch: '64',
+        cpu: 'intel',
       }, {
         versions: ['76.0.3809.12'],
         minBrowserVersion: 60,
