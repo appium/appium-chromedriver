@@ -16,14 +16,14 @@ async function main () {
 
   const json = JSON.parse(await fs.readFile(jsonPath, 'utf8'));
   if (latestVersion in json) {
-    process.stdout.write(0);
+    process.stdout.write('0');
     return;
   }
 
   const pairs = _.toPairs(json);
   pairs.unshift([latestVersion, latestVersion]);
   await fs.writeFile(jsonPath, JSON.stringify(_.fromPairs(pairs), null, 2), 'utf8');
-  process.stdout.write(1);
+  process.stdout.write('1');
 }
 
 (async () => await main())();
