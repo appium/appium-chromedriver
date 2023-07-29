@@ -4,7 +4,7 @@ on:
   - cron: "0 0 * * *"
 
 env:
-  STORAGE_URL: https://chromedriver.storage.googleapis.com
+  API_URL: https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions.json
   CD_VERSIONS_MAPPING: config/mapping.json
   PYTHON_VERSION: "3.8"
 
@@ -20,11 +20,11 @@ jobs:
         python-version: ${{ env.PYTHON_VERSION }}
     - id: release_check
       run: |
-        export latest_release=$(curl -sf ${{ env.STORAGE_URL }}/LATEST_RELEASE)
+        export latest_release=$(curl -sf ${{ env.API_URL }} | jq .channels.Stable.version | tr -d '"' )
         export did_update=$(python "scripts/update_versions_mapping.py" "$latest_release" "${{ env.CD_VERSIONS_MAPPING }}")
 
-        echo "::set-output name=did_update::$did_update"
-        echo "::set-output name=cd_release::$latest_release"
+        echo "did_update=${did_update}" >> "$GITHUB_OUTPUT"
+        echo "cd_release=${latest_release}" >> "$GITHUB_OUTPUT"
     - name: pull-request
       if: steps.release_check.outputs.did_update == '1'
       uses: peter-evans/create-pull-request@v3
