@@ -46,15 +46,20 @@ export interface SyncOptions {
 export interface OSInfo {
   /**
    * The architecture of the host OS.
-   * Can be either `32` or `64`
+   * Can be either `32`, `64``
    */
   arch: string;
   /**
    *
    * The name of the host OS.
-   * Can be either `mac`, `windows` or `linux`
+   * Can be either `mac`, `win` or `linux`
    */
   name: string;
+  /**
+   * The cpu type of the host OS.
+   * Can be either `intel`, `arm`. `intel` is assumed by default
+   */
+  cpu?: string;
 }
 
 /**
@@ -68,12 +73,13 @@ export interface ChromedriverDetails {
   /**
    * CRC of driver archive
    */
-  etag: string;
+  etag: string | null;
   /**
    * Chromedriver version
    */
   version: string;
   minBrowserVersion: string | null;
+  os: OSInfo;
 }
 
 /**

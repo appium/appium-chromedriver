@@ -2,7 +2,7 @@
 
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import ChromedriverStorageClient from '../../lib/storage-client';
+import ChromedriverStorageClient from '../../lib/storage-client/storage-client';
 import _ from 'lodash';
 import { fs, tempDir } from '@appium/support';
 
@@ -19,7 +19,7 @@ describe('ChromedriverStorageClient', function () {
     _.size(mapping).should.be.greaterThan(0);
   });
 
-  it('should retrieve chromedrivers by versions', async function () {
+  it('should retrieve older chromedrivers by versions', async function () {
     const tmpRoot = await tempDir.openDir();
     const client = new ChromedriverStorageClient({
       chromedriverDir: tmpRoot,
@@ -27,6 +27,21 @@ describe('ChromedriverStorageClient', function () {
     try {
       (await client.syncDrivers({
         versions: ['2.35', '2.34'],
+      })).length.should.be.greaterThan(0);
+      (await fs.readdir(tmpRoot)).length.should.be.eql(2);
+    } finally {
+      await fs.rimraf(tmpRoot);
+    }
+  });
+
+  it('should retrieve newer chromedrivers by versions', async function () {
+    const tmpRoot = await tempDir.openDir();
+    const client = new ChromedriverStorageClient({
+      chromedriverDir: tmpRoot,
+    });
+    try {
+      (await client.syncDrivers({
+        versions: ['115.0.5790.102', '116.0.5791.0'],
       })).length.should.be.greaterThan(0);
       (await fs.readdir(tmpRoot)).length.should.be.eql(2);
     } finally {

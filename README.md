@@ -74,6 +74,20 @@ the server returns a proper list of stored drivers in response to requests havin
 `Accept: application/xml` header. An example XML could be retrieved from the original URL using
 `curl -H 'Accept: application/xml' https://chromedriver.storage.googleapis.com` command.
 
+Since version 5.6 the second environment variable has been added: `CHROMELABS_URL`. By default, it points
+to https://googlechromelabs.github.io, and is expected to contain the actual prefix of
+[Chrome for Testing availability](https://github.com/GoogleChromeLabs/chrome-for-testing#json-api-endpoints)
+JSON API. This API allows retrieval of chromedrivers whose versions are greater than 114.
+
+Similarly to the above it could be also defined in the .npmrc file:
+
+```bash
+chromelabs_url=https://googlechromelabs.github.io
+```
+
+You may also want to skip checking for older Chromedriver versions by providing an
+empty value to the `CHROMEDRIVER_CDNURL` variable.
+
 ## Usage
 
 ```js
