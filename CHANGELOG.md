@@ -1,3 +1,15 @@
+## [5.6.5](https://github.com/appium/appium-chromedriver/compare/v5.6.4...v5.6.5) (2023-08-18)
+
+
+### Bug Fixes
+
+* Remove the obsolete glob option ([#339](https://github.com/appium/appium-chromedriver/issues/339)) ([dd8d441](https://github.com/appium/appium-chromedriver/commit/dd8d4410d0eda1e3026687734363c8584595db79))
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump typescript from 5.0.4 to 5.1.6 ([#326](https://github.com/appium/appium-chromedriver/issues/326)) ([2564927](https://github.com/appium/appium-chromedriver/commit/2564927a953bc04827f9efd343b8528df6574689))
+
 ## [5.6.4](https://github.com/appium/appium-chromedriver/compare/v5.6.3...v5.6.4) (2023-08-16)
 
 
