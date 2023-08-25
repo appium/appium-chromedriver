@@ -1,3 +1,10 @@
+## [5.6.6](https://github.com/appium/appium-chromedriver/compare/v5.6.5...v5.6.6) (2023-08-25)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump semantic-release from 20.1.3 to 21.1.0 ([#341](https://github.com/appium/appium-chromedriver/issues/341)) ([cc0ac76](https://github.com/appium/appium-chromedriver/commit/cc0ac7691229c4b9fa0fa74ca8f51bbb05c146a3))
+
 ## [5.6.5](https://github.com/appium/appium-chromedriver/compare/v5.6.4...v5.6.5) (2023-08-18)
 
 
