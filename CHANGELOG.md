@@ -1,3 +1,10 @@
+## [5.6.7](https://github.com/appium/appium-chromedriver/compare/v5.6.6...v5.6.7) (2023-08-28)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump conventional-changelog-conventionalcommits from 6.1.0 to 7.0.1 ([#343](https://github.com/appium/appium-chromedriver/issues/343)) ([b19ce6b](https://github.com/appium/appium-chromedriver/commit/b19ce6bef533f7318c59c92e4111b176d1c6b40b))
+
 ## [5.6.6](https://github.com/appium/appium-chromedriver/compare/v5.6.5...v5.6.6) (2023-08-25)
 
 
