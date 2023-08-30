@@ -1,3 +1,10 @@
+## [5.6.8](https://github.com/appium/appium-chromedriver/compare/v5.6.7...v5.6.8) (2023-08-30)
+
+
+### Miscellaneous Chores
+
+* Remove the obsolete babel dependency ([06b56b9](https://github.com/appium/appium-chromedriver/commit/06b56b9cc81bf7ae51d99fc6554b1681cb6490f7))
+
 ## [5.6.7](https://github.com/appium/appium-chromedriver/compare/v5.6.6...v5.6.7) (2023-08-28)
 
 
