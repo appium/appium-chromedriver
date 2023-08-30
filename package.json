@@ -50,7 +50,6 @@
   "dependencies": {
     "@appium/base-driver": "^9.1.0",
     "@appium/support": "^4.0.0",
-    "@babel/runtime": "^7.0.0",
     "@xmldom/xmldom": "^0.x",
     "appium-adb": "^9.14.1",
     "asyncbox": "^2.0.2",
