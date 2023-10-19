@@ -1,3 +1,10 @@
+## [5.6.17](https://github.com/appium/appium-chromedriver/compare/v5.6.16...v5.6.17) (2023-10-19)
+
+
+### Miscellaneous Chores
+
+* Use latest config ([6ae316f](https://github.com/appium/appium-chromedriver/commit/6ae316f336c9d44584443a68a2ddbaf841430a5e))
+
 ## [5.6.16](https://github.com/appium/appium-chromedriver/compare/v5.6.15...v5.6.16) (2023-10-19)
 
 
