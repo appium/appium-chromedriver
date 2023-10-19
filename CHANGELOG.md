@@ -1,3 +1,11 @@
+## [5.6.18](https://github.com/appium/appium-chromedriver/compare/v5.6.17...v5.6.18) (2023-10-19)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump eslint-config-prettier from 8.10.0 to 9.0.0 ([#357](https://github.com/appium/appium-chromedriver/issues/357)) ([1150b10](https://github.com/appium/appium-chromedriver/commit/1150b10d7837c63183786a6fd8e6bfe1c9bb6498))
+* **deps-dev:** bump semantic-release from 21.1.2 to 22.0.5 ([#350](https://github.com/appium/appium-chromedriver/issues/350)) ([37c4bda](https://github.com/appium/appium-chromedriver/commit/37c4bda5e9d928efd84219fbceda2b6b077c7b0f))
+
 ## [5.6.17](https://github.com/appium/appium-chromedriver/compare/v5.6.16...v5.6.17) (2023-10-19)
 
 
