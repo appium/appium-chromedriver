@@ -78,7 +78,7 @@
   "devDependencies": {
     "@appium/eslint-config-appium": "^8.0.0",
     "@appium/test-support": "^3.0.0",
-    "@appium/tsconfig": "^0.3.0",
+    "@appium/tsconfig": "^0.x",
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/git": "^10.0.1",
     "@types/bluebird": "^3.5.38",
