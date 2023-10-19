@@ -1,3 +1,10 @@
+## [5.6.15](https://github.com/appium/appium-chromedriver/compare/v5.6.14...v5.6.15) (2023-10-19)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump lint-staged from 14.0.1 to 15.0.2 ([#355](https://github.com/appium/appium-chromedriver/issues/355)) ([5635081](https://github.com/appium/appium-chromedriver/commit/56350819f452ce507d81b7f1210182299c94f335))
+
 ## [5.6.14](https://github.com/appium/appium-chromedriver/compare/v5.6.13...v5.6.14) (2023-10-17)
 
 
