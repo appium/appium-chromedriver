@@ -1,3 +1,10 @@
+## [5.6.16](https://github.com/appium/appium-chromedriver/compare/v5.6.15...v5.6.16) (2023-10-19)
+
+
+### Miscellaneous Chores
+
+* **deps:** bump appium-adb from 10.0.0 to 11.0.1 ([#356](https://github.com/appium/appium-chromedriver/issues/356)) ([91f017f](https://github.com/appium/appium-chromedriver/commit/91f017f7b0094c102fc45c610a9021c40824dffd))
+
 ## [5.6.15](https://github.com/appium/appium-chromedriver/compare/v5.6.14...v5.6.15) (2023-10-19)
 
 
