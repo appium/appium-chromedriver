@@ -1,3 +1,10 @@
+## [5.6.22](https://github.com/appium/appium-chromedriver/compare/v5.6.21...v5.6.22) (2023-11-01)
+
+
+### Miscellaneous Chores
+
+* **deps:** bump asyncbox from 2.9.4 to 3.0.0 ([#360](https://github.com/appium/appium-chromedriver/issues/360)) ([8e1e758](https://github.com/appium/appium-chromedriver/commit/8e1e758a0d36c4a08335638ec5d9280356374f86))
+
 ## [5.6.21](https://github.com/appium/appium-chromedriver/compare/v5.6.20...v5.6.21) (2023-11-01)
 
 
