@@ -52,7 +52,7 @@
     "@appium/support": "^4.0.0",
     "@xmldom/xmldom": "^0.x",
     "appium-adb": "^11.0.1",
-    "asyncbox": "^2.0.2",
+    "asyncbox": "^3.0.0",
     "axios": "^1.x",
     "bluebird": "^3.5.1",
     "compare-versions": "^6.0.0",
