@@ -1,3 +1,10 @@
+## [5.6.23](https://github.com/appium/appium-chromedriver/compare/v5.6.22...v5.6.23) (2023-11-06)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump @types/sinon from 10.0.20 to 17.0.0 ([#361](https://github.com/appium/appium-chromedriver/issues/361)) ([b8f2ad4](https://github.com/appium/appium-chromedriver/commit/b8f2ad4ab4bf921b0d8610535b18a45b0402834a))
+
 ## [5.6.22](https://github.com/appium/appium-chromedriver/compare/v5.6.21...v5.6.22) (2023-11-01)
 
 
