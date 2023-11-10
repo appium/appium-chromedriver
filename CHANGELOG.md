@@ -1,3 +1,10 @@
+## [5.6.24](https://github.com/appium/appium-chromedriver/compare/v5.6.23...v5.6.24) (2023-11-10)
+
+
+### Bug Fixes
+
+* start session should return caps that chromedriver returns ([#362](https://github.com/appium/appium-chromedriver/issues/362)) ([499f65e](https://github.com/appium/appium-chromedriver/commit/499f65ebcd982d93b328baf8d494860cd1808257))
+
 ## [5.6.23](https://github.com/appium/appium-chromedriver/compare/v5.6.22...v5.6.23) (2023-11-06)
 
 
