@@ -1,3 +1,10 @@
+## [5.6.28](https://github.com/appium/appium-chromedriver/compare/v5.6.27...v5.6.28) (2024-01-13)
+
+
+### Miscellaneous Chores
+
+* Bump adb ([#369](https://github.com/appium/appium-chromedriver/issues/369)) ([a73e44e](https://github.com/appium/appium-chromedriver/commit/a73e44ec0126444bbc10f5a096c7275946a02bcf))
+
 ## [5.6.27](https://github.com/appium/appium-chromedriver/compare/v5.6.26...v5.6.27) (2023-12-19)
 
 
