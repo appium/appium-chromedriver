@@ -1,3 +1,159 @@
+## [5.6.27](https://github.com/appium/appium-chromedriver/compare/v5.6.26...v5.6.27) (2023-12-19)
+
+
+### Miscellaneous Chores
+
+* ChromeDriver Bump to v120.0.6099.109 ([#367](https://github.com/appium/appium-chromedriver/issues/367)) ([3dfe443](https://github.com/appium/appium-chromedriver/commit/3dfe44368c02b00b906fc11cb7b68cc4f46b9ffc))
+
+## [5.6.26](https://github.com/appium/appium-chromedriver/compare/v5.6.25...v5.6.26) (2023-12-07)
+
+
+### Miscellaneous Chores
+
+* ChromeDriver Bump to v120.0.6099.71 ([#365](https://github.com/appium/appium-chromedriver/issues/365)) ([b3aeecb](https://github.com/appium/appium-chromedriver/commit/b3aeecb5d27ac252b5fd0ed476cc40f0abe1286d))
+
+## [5.6.25](https://github.com/appium/appium-chromedriver/compare/v5.6.24...v5.6.25) (2023-12-06)
+
+
+### Miscellaneous Chores
+
+* ChromeDriver Bump to v120.0.6099.62 ([#364](https://github.com/appium/appium-chromedriver/issues/364)) ([129e4c3](https://github.com/appium/appium-chromedriver/commit/129e4c3a4de0e18308d9e3dcf11ed48ce8756829))
+
+## [5.6.24](https://github.com/appium/appium-chromedriver/compare/v5.6.23...v5.6.24) (2023-11-10)
+
+
+### Bug Fixes
+
+* start session should return caps that chromedriver returns ([#362](https://github.com/appium/appium-chromedriver/issues/362)) ([499f65e](https://github.com/appium/appium-chromedriver/commit/499f65ebcd982d93b328baf8d494860cd1808257))
+
+## [5.6.23](https://github.com/appium/appium-chromedriver/compare/v5.6.22...v5.6.23) (2023-11-06)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump @types/sinon from 10.0.20 to 17.0.0 ([#361](https://github.com/appium/appium-chromedriver/issues/361)) ([b8f2ad4](https://github.com/appium/appium-chromedriver/commit/b8f2ad4ab4bf921b0d8610535b18a45b0402834a))
+
+## [5.6.22](https://github.com/appium/appium-chromedriver/compare/v5.6.21...v5.6.22) (2023-11-01)
+
+
+### Miscellaneous Chores
+
+* **deps:** bump asyncbox from 2.9.4 to 3.0.0 ([#360](https://github.com/appium/appium-chromedriver/issues/360)) ([8e1e758](https://github.com/appium/appium-chromedriver/commit/8e1e758a0d36c4a08335638ec5d9280356374f86))
+
+## [5.6.21](https://github.com/appium/appium-chromedriver/compare/v5.6.20...v5.6.21) (2023-11-01)
+
+
+### Miscellaneous Chores
+
+* ChromeDriver Bump to v119.0.6045.105 ([#359](https://github.com/appium/appium-chromedriver/issues/359)) ([5c6b844](https://github.com/appium/appium-chromedriver/commit/5c6b8443864d9e38539fd1128e5dc3ab5e1225de))
+
+## [5.6.20](https://github.com/appium/appium-chromedriver/compare/v5.6.19...v5.6.20) (2023-10-25)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump typescript from 5.1.6 to 5.2.2 ([#342](https://github.com/appium/appium-chromedriver/issues/342)) ([49f812e](https://github.com/appium/appium-chromedriver/commit/49f812e0f4410f231b9e17960d90f21138bb6feb))
+
+## [5.6.19](https://github.com/appium/appium-chromedriver/compare/v5.6.18...v5.6.19) (2023-10-24)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump sinon from 16.1.3 to 17.0.0 ([#358](https://github.com/appium/appium-chromedriver/issues/358)) ([56c704c](https://github.com/appium/appium-chromedriver/commit/56c704cc3371e7569e8971f28467f8c605624cb2))
+
+## [5.6.18](https://github.com/appium/appium-chromedriver/compare/v5.6.17...v5.6.18) (2023-10-19)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump eslint-config-prettier from 8.10.0 to 9.0.0 ([#357](https://github.com/appium/appium-chromedriver/issues/357)) ([1150b10](https://github.com/appium/appium-chromedriver/commit/1150b10d7837c63183786a6fd8e6bfe1c9bb6498))
+* **deps-dev:** bump semantic-release from 21.1.2 to 22.0.5 ([#350](https://github.com/appium/appium-chromedriver/issues/350)) ([37c4bda](https://github.com/appium/appium-chromedriver/commit/37c4bda5e9d928efd84219fbceda2b6b077c7b0f))
+
+## [5.6.17](https://github.com/appium/appium-chromedriver/compare/v5.6.16...v5.6.17) (2023-10-19)
+
+
+### Miscellaneous Chores
+
+* Use latest config ([6ae316f](https://github.com/appium/appium-chromedriver/commit/6ae316f336c9d44584443a68a2ddbaf841430a5e))
+
+## [5.6.16](https://github.com/appium/appium-chromedriver/compare/v5.6.15...v5.6.16) (2023-10-19)
+
+
+### Miscellaneous Chores
+
+* **deps:** bump appium-adb from 10.0.0 to 11.0.1 ([#356](https://github.com/appium/appium-chromedriver/issues/356)) ([91f017f](https://github.com/appium/appium-chromedriver/commit/91f017f7b0094c102fc45c610a9021c40824dffd))
+
+## [5.6.15](https://github.com/appium/appium-chromedriver/compare/v5.6.14...v5.6.15) (2023-10-19)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump lint-staged from 14.0.1 to 15.0.2 ([#355](https://github.com/appium/appium-chromedriver/issues/355)) ([5635081](https://github.com/appium/appium-chromedriver/commit/56350819f452ce507d81b7f1210182299c94f335))
+
+## [5.6.14](https://github.com/appium/appium-chromedriver/compare/v5.6.13...v5.6.14) (2023-10-17)
+
+
+### Miscellaneous Chores
+
+* **deps:** bump appium-adb from 9.14.12 to 10.0.0 ([#354](https://github.com/appium/appium-chromedriver/issues/354)) ([4673860](https://github.com/appium/appium-chromedriver/commit/4673860481ef6b2d274b12a0b6ca6baf27747238))
+
+## [5.6.13](https://github.com/appium/appium-chromedriver/compare/v5.6.12...v5.6.13) (2023-10-11)
+
+
+### Miscellaneous Chores
+
+* ChromeDriver Bump to v118.0.5993.70 ([#352](https://github.com/appium/appium-chromedriver/issues/352)) ([b91e95b](https://github.com/appium/appium-chromedriver/commit/b91e95b0d53999a3d318c414cce1283bffe0d796))
+
+## [5.6.12](https://github.com/appium/appium-chromedriver/compare/v5.6.11...v5.6.12) (2023-10-05)
+
+
+### Miscellaneous Chores
+
+* ChromeDriver Bump to v117.0.5938.149 ([#351](https://github.com/appium/appium-chromedriver/issues/351)) ([45e30fd](https://github.com/appium/appium-chromedriver/commit/45e30fda2d6bd66866402f47571a7cd72d2acbed))
+
+## [5.6.11](https://github.com/appium/appium-chromedriver/compare/v5.6.10...v5.6.11) (2023-09-22)
+
+
+### Miscellaneous Chores
+
+* ChromeDriver Bump to v117.0.5938.92 ([#348](https://github.com/appium/appium-chromedriver/issues/348)) ([e11dc17](https://github.com/appium/appium-chromedriver/commit/e11dc17228f4c246a5621428b53a7bd5eb06c173))
+
+## [5.6.10](https://github.com/appium/appium-chromedriver/compare/v5.6.9...v5.6.10) (2023-09-17)
+
+
+### Miscellaneous Chores
+
+* ChromeDriver Bump to v117.0.5938.88 ([#346](https://github.com/appium/appium-chromedriver/issues/346)) ([6bb28e0](https://github.com/appium/appium-chromedriver/commit/6bb28e0691193cfa6dbfabf7d86a7a6317ec2bcd))
+* **deps-dev:** bump sinon from 15.2.0 to 16.0.0 ([27c1b93](https://github.com/appium/appium-chromedriver/commit/27c1b938e7567299124511ed5ccb595a2e0ed816))
+
+## [5.6.9](https://github.com/appium/appium-chromedriver/compare/v5.6.8...v5.6.9) (2023-09-13)
+
+
+### Miscellaneous Chores
+
+* ChromeDriver Bump to v117.0.5938.62 ([#344](https://github.com/appium/appium-chromedriver/issues/344)) ([8910fb1](https://github.com/appium/appium-chromedriver/commit/8910fb10ed5771c2a49b0ba294953622c783f875))
+
+## [5.6.8](https://github.com/appium/appium-chromedriver/compare/v5.6.7...v5.6.8) (2023-08-30)
+
+
+### Miscellaneous Chores
+
+* Remove the obsolete babel dependency ([06b56b9](https://github.com/appium/appium-chromedriver/commit/06b56b9cc81bf7ae51d99fc6554b1681cb6490f7))
+
+## [5.6.7](https://github.com/appium/appium-chromedriver/compare/v5.6.6...v5.6.7) (2023-08-28)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump conventional-changelog-conventionalcommits from 6.1.0 to 7.0.1 ([#343](https://github.com/appium/appium-chromedriver/issues/343)) ([b19ce6b](https://github.com/appium/appium-chromedriver/commit/b19ce6bef533f7318c59c92e4111b176d1c6b40b))
+
+## [5.6.6](https://github.com/appium/appium-chromedriver/compare/v5.6.5...v5.6.6) (2023-08-25)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump semantic-release from 20.1.3 to 21.1.0 ([#341](https://github.com/appium/appium-chromedriver/issues/341)) ([cc0ac76](https://github.com/appium/appium-chromedriver/commit/cc0ac7691229c4b9fa0fa74ca8f51bbb05c146a3))
+
 ## [5.6.5](https://github.com/appium/appium-chromedriver/compare/v5.6.4...v5.6.5) (2023-08-18)
 
 
