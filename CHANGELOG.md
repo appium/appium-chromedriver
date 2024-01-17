@@ -1,3 +1,11 @@
+## [5.6.29](https://github.com/appium/appium-chromedriver/compare/v5.6.28...v5.6.29) (2024-01-17)
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump semantic-release from 22.0.12 to 23.0.0 ([#370](https://github.com/appium/appium-chromedriver/issues/370)) ([3bafbe2](https://github.com/appium/appium-chromedriver/commit/3bafbe2123d5dc0ea3a64db782f16f6205e1e179))
+* use latest lts for the publishment ([e7843b8](https://github.com/appium/appium-chromedriver/commit/e7843b8bb837d3a0806f6b504bd53f9001973a49))
+
 ## [5.6.28](https://github.com/appium/appium-chromedriver/compare/v5.6.27...v5.6.28) (2024-01-13)
 
 
