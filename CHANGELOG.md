@@ -1,3 +1,10 @@
+## [5.6.31](https://github.com/appium/appium-chromedriver/compare/v5.6.30...v5.6.31) (2024-01-27)
+
+
+### Miscellaneous Chores
+
+* Remove pre-commit hooks ([#375](https://github.com/appium/appium-chromedriver/issues/375)) ([80fdbcb](https://github.com/appium/appium-chromedriver/commit/80fdbcb4d3bdb8de7175f435b78f3ba4d1027ad6))
+
 ## [5.6.30](https://github.com/appium/appium-chromedriver/compare/v5.6.29...v5.6.30) (2024-01-24)
 
 
