@@ -20,12 +20,6 @@
     "node": ">=14",
     "npm": ">=8"
   },
-  "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "prettier --write"
-    ]
-  },
   "prettier": {
     "bracketSpacing": false,
     "printWidth": 100,
@@ -69,9 +63,9 @@
     "dev": "npm run build -- --watch",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
-    "lint-staged": "lint-staged",
     "postinstall": "node install-npm.js",
-    "prepare": "husky install && npm run build",
+    "prepare": "npm run build",
+    "format": "prettier -w ./lib",
     "test": "mocha --exit --timeout 1m \"./test/unit/**/*-specs.js\"",
     "e2e-test": "mocha --exit --timeout 10m \"./test/functional/**/*-specs.js\""
   },
@@ -97,8 +91,6 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-mocha": "^10.1.0",
     "eslint-plugin-promise": "^6.1.1",
-    "husky": "^8.0.3",
-    "lint-staged": "^15.0.2",
     "mocha": "^10.0.0",
     "prettier": "^3.0.0",
     "rimraf": "^5.0.0",
