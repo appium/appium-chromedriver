@@ -1,3 +1,10 @@
+## [5.6.36](https://github.com/appium/appium-chromedriver/compare/v5.6.35...v5.6.36) (2024-03-07)
+
+
+### Miscellaneous Chores
+
+* bump typescript ([4c6916e](https://github.com/appium/appium-chromedriver/commit/4c6916ec7bb6c361dec260648e0ba81ed953cbb1))
+
 ## [5.6.35](https://github.com/appium/appium-chromedriver/compare/v5.6.34...v5.6.35) (2024-02-28)
 
 
