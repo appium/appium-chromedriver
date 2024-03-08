@@ -30,6 +30,15 @@ describe('chromedriver', function () {
         const binPath = await cd.getCompatibleChromedriver();
         binPath.should.eql('/path/to/chromedriver');
       });
+
+      it('should respect executableDir', async function () {
+        sandbox.stub(utils, 'getChromedriverBinaryPath');
+
+        const cd = new Chromedriver({executableDir: '/path/to/executableDir'});
+        const binPath = await cd.getCompatibleChromedriver();
+
+        getChromedriverBinaryPathSpy.called.once;
+      });
     });
 
     describe('Android', function () {
