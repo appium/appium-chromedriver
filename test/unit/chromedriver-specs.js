@@ -30,6 +30,21 @@ describe('chromedriver', function () {
         const binPath = await cd.getCompatibleChromedriver();
         binPath.should.eql('/path/to/chromedriver');
       });
+
+      it('should search specified directory if provided', async function () {
+        const cd = new Chromedriver({
+          executableDir: '/some/local/dir/for/chromedrivers',
+        });
+
+        sandbox.stub(utils, 'getChromeVersion').returns('63.0.3239.99');
+        sandbox.stub(fs, 'glob').returns(['/some/local/dir/for/chromedrivers/chromedriver']);
+        sandbox.stub(tp, 'exec').returns({
+          stdout: 'ChromeDriver 2.36.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
+        });
+
+        const binPath = await cd.getCompatibleChromedriver();
+        binPath.should.eql('/some/local/dir/for/chromedrivers/chromedriver');
+      });
     });
 
     describe('Android', function () {
