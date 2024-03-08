@@ -1,3 +1,10 @@
+## [5.6.38](https://github.com/appium/appium-chromedriver/compare/v5.6.37...v5.6.38) (2024-03-08)
+
+
+### Bug Fixes
+
+* respect executableDir even non-adb environment such as desktop ([#383](https://github.com/appium/appium-chromedriver/issues/383)) ([0a3e80e](https://github.com/appium/appium-chromedriver/commit/0a3e80ea3d1c5e1f3ff683c26fc671673de09975))
+
 ## [5.6.37](https://github.com/appium/appium-chromedriver/compare/v5.6.36...v5.6.37) (2024-03-08)
 
 
