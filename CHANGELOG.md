@@ -1,3 +1,10 @@
+## [5.6.51](https://github.com/appium/appium-chromedriver/compare/v5.6.50...v5.6.51) (2024-05-16)
+
+
+### Miscellaneous Chores
+
+* Update dev dependencies ([b8ac0e2](https://github.com/appium/appium-chromedriver/commit/b8ac0e289184011591e26aecc851dc526fb28164))
+
 ## [5.6.50](https://github.com/appium/appium-chromedriver/compare/v5.6.49...v5.6.50) (2024-05-16)
 
 
