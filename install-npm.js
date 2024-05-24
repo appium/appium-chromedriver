@@ -36,9 +36,14 @@ async function main() {
       `The Chromedriver install script cannot be found at '${BUILD_PATH}'. ` +
         `Building appium-chromedriver package`
     );
-    const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+    const isWindows = process.platform === 'win32';
+    const npmCommand = `npm${isWindows ? '.npm' : ''}`;
     try {
-      await exec(npmCommand, ['run', 'build'], {logger: log, cwd: __dirname});
+      await exec(npmCommand, ['run', 'build'], {
+        logger: log,
+        cwd: __dirname,
+        shell: isWindows,
+      });
     } catch (e) {
       throw new Error(`appium-chromedriver package cannot be built: ${util.inspect(e)}`);
     }
