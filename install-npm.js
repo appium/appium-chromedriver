@@ -37,7 +37,7 @@ async function main() {
         `Building appium-chromedriver package`
     );
     const isWindows = process.platform === 'win32';
-    const npmCommand = `npm${isWindows ? '.npm' : ''}`;
+    const npmCommand = `npm${isWindows ? '.cmd' : ''}`;
     try {
       await exec(npmCommand, ['run', 'build'], {
         logger: log,
