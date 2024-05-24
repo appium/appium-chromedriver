@@ -1,3 +1,10 @@
+## [5.6.53](https://github.com/appium/appium-chromedriver/compare/v5.6.52...v5.6.53) (2024-05-24)
+
+
+### Miscellaneous Chores
+
+* Improve the error message about download servers unavailability ([#399](https://github.com/appium/appium-chromedriver/issues/399)) ([6eba27d](https://github.com/appium/appium-chromedriver/commit/6eba27d882d4964c223e2274ddd726ec56a49039))
+
 ## [5.6.52](https://github.com/appium/appium-chromedriver/compare/v5.6.51...v5.6.52) (2024-05-22)
 
 
