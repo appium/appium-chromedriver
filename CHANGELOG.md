@@ -1,3 +1,9 @@
+## [5.6.56](https://github.com/appium/appium-chromedriver/compare/v5.6.55...v5.6.56) (2024-06-04)
+
+### Miscellaneous Chores
+
+* bump semantic-release from 23.1.1 to 24.0.0 and conventional-changelog-conventionalcommits to 8.0.0 ([#402](https://github.com/appium/appium-chromedriver/issues/402)) ([dc30918](https://github.com/appium/appium-chromedriver/commit/dc30918766af53ef501498b53eb4f694445dc691))
+
 ## [5.6.55](https://github.com/appium/appium-chromedriver/compare/v5.6.54...v5.6.55) (2024-05-31)
 
 
