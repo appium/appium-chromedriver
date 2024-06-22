@@ -2,14 +2,9 @@
 
 import {Chromedriver} from '../../lib/chromedriver';
 import {install} from '../../lib/install';
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import B from 'bluebird';
 import {exec} from 'teen_process';
 import _ from 'lodash';
-
-let should = chai.should();
-chai.use(chaiAsPromised);
 
 function nextState(cd) {
   return new B((resolve) => {
@@ -63,7 +58,15 @@ function buildReqRes(url, method, body) {
 
 describe('chromedriver binary setup', function () {
   this.timeout(20000);
+  let chai;
+
   before(async function () {
+    chai = await import('chai');
+    const chaiAsPromised = await import('chai-as-promised');
+
+    chai.should();
+    chai.use(chaiAsPromised.default);
+
     let cd = new Chromedriver({});
     try {
       await cd.initChromedriverPath();
@@ -84,9 +87,18 @@ const caps = {browserName: 'chrome'};
 const expectedCaps = {browserName: 'chrome', loggingPrefs: {browser: 'ALL'}};
 
 describe('chromedriver with EventEmitter', function () {
-  this.timeout(120000);
+  let chai;
   let cd = null;
-  before(function () {
+  let should;
+
+  this.timeout(120000);
+  before(async function () {
+    chai = await import('chai');
+    const chaiAsPromised = await import('chai-as-promised');
+
+    should = chai.should();
+    chai.use(chaiAsPromised.default);
+
     cd = new Chromedriver({});
   });
   it('should start a session', async function () {
@@ -161,9 +173,18 @@ describe('chromedriver with EventEmitter', function () {
 });
 
 describe('chromedriver with async/await', function () {
-  this.timeout(120000);
   let cd = null;
-  before(function () {
+  let chai;
+  let should;
+
+  this.timeout(120000);
+  before(async function () {
+    chai = await import('chai');
+    const chaiAsPromised = await import('chai-as-promised');
+
+    should = chai.should();
+    chai.use(chaiAsPromised.default);
+
     cd = new Chromedriver({});
   });
   it('should start a session', async function () {

@@ -1,19 +1,24 @@
 import {Chromedriver} from '../../lib/chromedriver';
 import * as utils from '../../lib/utils';
 import sinon from 'sinon';
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import {PROTOCOLS} from '@appium/base-driver';
 import {fs} from '@appium/support';
 import * as tp from 'teen_process';
 import path from 'path';
 import _ from 'lodash';
 
-chai.should();
-chai.use(chaiAsPromised);
-
 describe('chromedriver', function () {
   let sandbox;
+  let chai;
+
+  before(async function () {
+    chai = await import('chai');
+    const chaiAsPromised = await import('chai-as-promised');
+
+    chai.should();
+    chai.use(chaiAsPromised.default);
+  });
+
   beforeEach(function () {
     sandbox = sinon.createSandbox();
   });

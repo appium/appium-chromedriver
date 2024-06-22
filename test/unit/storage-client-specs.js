@@ -1,10 +1,14 @@
 import ChromedriverStorageClient from '../../lib/storage-client/storage-client';
-import chai from 'chai';
 import _ from 'lodash';
 
-chai.should();
-
 describe('ChromedriverStorageClient', function () {
+  let chai;
+
+  before(async function () {
+    chai = await import('chai');
+    chai.should();
+  });
+
   describe('selectMatchingDrivers', function () {
     const defaultMapping = {
       '2.0/chromedriver_linux32.zip': {

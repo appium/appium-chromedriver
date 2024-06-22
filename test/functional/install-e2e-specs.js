@@ -1,14 +1,7 @@
-// transpile:mocha
-
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import {fs} from '@appium/support';
 import {install} from '../../lib/install';
 import {CD_BASE_DIR, getChromedriverBinaryPath, getOsName} from '../../lib/utils';
 import {Chromedriver} from '../../lib/chromedriver';
-
-let should = chai.should();
-chai.use(chaiAsPromised);
 
 async function assertNoPreviousDirs() {
   let err;
@@ -23,9 +16,21 @@ async function assertNoPreviousDirs() {
 
 describe('install scripts', function () {
   this.timeout(2000000);
+  let chai;
+  let should;
+
+  before(async function () {
+    chai = await import('chai');
+    const chaiAsPromised = await import('chai-as-promised');
+
+    should = chai.should();
+    chai.use(chaiAsPromised.default);
+  });
+
   beforeEach(async function () {
     await fs.rimraf(CD_BASE_DIR);
   });
+
   it('should install for this platform', async function () {
     await assertNoPreviousDirs();
     await install();

@@ -1,9 +1,13 @@
 import { parseNotes } from '../../lib/storage-client/googleapis';
-import chai from 'chai';
-
-chai.should();
 
 describe('GoogleapiChromedriverStorageClient', function () {
+  let chai;
+
+  before(async function () {
+    chai = await import('chai');
+    chai.should();
+  });
+
   describe('parseNotes', function () {
     it('should parse valid notes.txt', function () {
       const info = parseNotes(`
