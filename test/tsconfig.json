@@ -1,7 +1,12 @@
 {
-  "extends": "../tsconfig.json",
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@appium/tsconfig/tsconfig.json",
   "compilerOptions": {
-    "types": ["node", "mocha"],
-    "checkJs": false
-  }
+    "outDir": "build",
+    "checkJs": true,
+    "esModuleInterop": true,
+    "types": ["node"],
+    "strict": false
+  },
+  "include": ["lib"]
 }

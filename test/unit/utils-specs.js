@@ -1,10 +1,14 @@
 import {convertToInt} from '../../lib/utils';
-import chai from 'chai';
-
-chai.should();
-const should = chai.should();
 
 describe('utils', function () {
+  let chai;
+  let should;
+
+  before(async function () {
+    chai = await import('chai');
+    should = chai.should();
+  });
+
   describe('convertToInt', function () {
     it('should parse a number', function () {
       convertToInt(0).should.eql(0);

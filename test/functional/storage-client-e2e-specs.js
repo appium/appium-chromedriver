@@ -1,17 +1,19 @@
-// transpile:mocha
-
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import ChromedriverStorageClient from '../../lib/storage-client/storage-client';
 import _ from 'lodash';
 import { fs, tempDir } from '@appium/support';
 
-
-chai.should();
-chai.use(chaiAsPromised);
-
 describe('ChromedriverStorageClient', function () {
+  let chai;
+
   this.timeout(2000000);
+
+  before(async function () {
+    chai = await import('chai');
+    const chaiAsPromised = await import('chai-as-promised');
+
+    chai.should();
+    chai.use(chaiAsPromised.default);
+  });
 
   it('should retrieve chromedrivers mapping', async function () {
     const client = new ChromedriverStorageClient();

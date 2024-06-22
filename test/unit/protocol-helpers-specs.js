@@ -1,7 +1,4 @@
 import { toW3cCapNames, getCapValue } from '../../lib/protocol-helpers';
-import chai from 'chai';
-
-chai.should();
 
 describe('Protocol Helpers', function () {
   const caps = {
@@ -15,6 +12,12 @@ describe('Protocol Helpers', function () {
       detach: true,
     },
   };
+  let chai;
+
+  before(async function () {
+    chai = await import('chai');
+    chai.should();
+  });
 
   it('should properly add w3c prefixes where needed', function () {
     const result = toW3cCapNames(caps);
