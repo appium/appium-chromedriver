@@ -1,3 +1,9 @@
+## [5.6.61](https://github.com/appium/appium-chromedriver/compare/v5.6.60...v5.6.61) (2024-06-22)
+
+### Miscellaneous Chores
+
+* Bump chai and chai-as-promised ([#407](https://github.com/appium/appium-chromedriver/issues/407)) ([af5e21c](https://github.com/appium/appium-chromedriver/commit/af5e21cc673dbcbcc454952f10f2b9a272980176))
+
 ## [5.6.60](https://github.com/appium/appium-chromedriver/compare/v5.6.59...v5.6.60) (2024-06-21)
 
 ### Miscellaneous Chores
