@@ -3,6 +3,8 @@ import {install} from '../../lib/install';
 import {CD_BASE_DIR, getChromedriverBinaryPath, getOsName} from '../../lib/utils';
 import {Chromedriver} from '../../lib/chromedriver';
 
+let should;
+
 async function assertNoPreviousDirs() {
   let err;
   try {
@@ -17,7 +19,6 @@ async function assertNoPreviousDirs() {
 describe('install scripts', function () {
   this.timeout(2000000);
   let chai;
-  let should;
 
   before(async function () {
     chai = await import('chai');
