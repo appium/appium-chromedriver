@@ -1,3 +1,10 @@
+## [5.6.63](https://github.com/appium/appium-chromedriver/compare/v5.6.62...v5.6.63) (2024-07-10)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump sinon from 17.0.2 to 18.0.0 ([#411](https://github.com/appium/appium-chromedriver/issues/411)) ([f63d99b](https://github.com/appium/appium-chromedriver/commit/f63d99bf991a1d789ec5532527e51b6f08c4a6d9))
+* **deps:** bump @appium/support from 4.5.0 to 5.1.1 ([#412](https://github.com/appium/appium-chromedriver/issues/412)) ([19c6e2b](https://github.com/appium/appium-chromedriver/commit/19c6e2ba25d18926f5178c27e5c8b4d5dcfe78f3))
+
 ## [5.6.62](https://github.com/appium/appium-chromedriver/compare/v5.6.61...v5.6.62) (2024-06-25)
 
 ### Miscellaneous Chores
