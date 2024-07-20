@@ -18,6 +18,8 @@ jobs:
     strategy:
       matrix:
         node-version: ${{ fromJSON(needs.prepare_matrix.outputs.versions) }}
+      # TODO: Remove after node 22.5.0 is fixed
+      fail-fast: false
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
