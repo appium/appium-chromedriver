@@ -1,3 +1,9 @@
+## [5.6.65](https://github.com/appium/appium-chromedriver/compare/v5.6.64...v5.6.65) (2024-07-20)
+
+### Miscellaneous Chores
+
+* Optimize process events handling ([#415](https://github.com/appium/appium-chromedriver/issues/415)) ([7eb8555](https://github.com/appium/appium-chromedriver/commit/7eb85554274c0cef0cf5aba7b4d905cf5fe70701))
+
 ## [5.6.64](https://github.com/appium/appium-chromedriver/compare/v5.6.63...v5.6.64) (2024-07-17)
 
 ### Miscellaneous Chores
