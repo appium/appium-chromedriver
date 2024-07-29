@@ -1,3 +1,9 @@
+## [5.6.67](https://github.com/appium/appium-chromedriver/compare/v5.6.66...v5.6.67) (2024-07-29)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump @types/node from 20.14.13 to 22.0.0 ([#417](https://github.com/appium/appium-chromedriver/issues/417)) ([2cc72b7](https://github.com/appium/appium-chromedriver/commit/2cc72b7817f45a1dcd87db958d331ec751d6f9b3))
+
 ## [5.6.66](https://github.com/appium/appium-chromedriver/compare/v5.6.65...v5.6.66) (2024-07-24)
 
 ### Miscellaneous Chores
