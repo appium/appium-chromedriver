@@ -20,10 +20,11 @@ B.config({
 
 const fs = require('fs/promises');
 const path = require('path');
-const log = require('fancy-log');
 const _ = require('lodash');
 const {exec} = require('teen_process');
+const {logger} = require('@appium/support');
 
+const log = logger.getLogger('CDInstaller');
 const BUILD_PATH = path.join(__dirname, 'build', 'lib', 'install.js');
 
 async function main() {
