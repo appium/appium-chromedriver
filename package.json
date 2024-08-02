@@ -50,7 +50,6 @@
     "axios": "^1.6.5",
     "bluebird": "^3.5.1",
     "compare-versions": "^6.0.0",
-    "fancy-log": "^2.0.0",
     "lodash": "^4.17.4",
     "semver": "^7.0.0",
     "source-map-support": "^0.x",
