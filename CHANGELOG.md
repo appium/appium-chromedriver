@@ -1,3 +1,9 @@
+## [5.6.69](https://github.com/appium/appium-chromedriver/compare/v5.6.68...v5.6.69) (2024-08-02)
+
+### Miscellaneous Chores
+
+* Replace fancy-log dependency with appium logger ([#419](https://github.com/appium/appium-chromedriver/issues/419)) ([7faf923](https://github.com/appium/appium-chromedriver/commit/7faf923fed5ca28f34ead0bac9cc98c48fc09208))
+
 ## [5.6.68](https://github.com/appium/appium-chromedriver/compare/v5.6.67...v5.6.68) (2024-07-31)
 
 ### Miscellaneous Chores
