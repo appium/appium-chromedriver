@@ -1,3 +1,9 @@
+## [5.6.74](https://github.com/appium/appium-chromedriver/compare/v5.6.73...v5.6.74) (2024-08-31)
+
+### Bug Fixes
+
+* Support xmldom 0.9.0+ ([#425](https://github.com/appium/appium-chromedriver/issues/425)) ([b062926](https://github.com/appium/appium-chromedriver/commit/b062926c64218894467c8ad427a2b095070889d9))
+
 ## [5.6.73](https://github.com/appium/appium-chromedriver/compare/v5.6.72...v5.6.73) (2024-08-29)
 
 ### Miscellaneous Chores
