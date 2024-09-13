@@ -1,3 +1,9 @@
+## [5.6.76](https://github.com/appium/appium-chromedriver/compare/v5.6.75...v5.6.76) (2024-09-13)
+
+### Bug Fixes
+
+* build error with type of xmldom ([#428](https://github.com/appium/appium-chromedriver/issues/428)) ([0c3838f](https://github.com/appium/appium-chromedriver/commit/0c3838f359f1fd5d46e36eb8f881dfeb76118081))
+
 ## [5.6.75](https://github.com/appium/appium-chromedriver/compare/v5.6.74...v5.6.75) (2024-09-03)
 
 ### Miscellaneous Chores
