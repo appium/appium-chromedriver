@@ -1,7 +1,7 @@
 // transpile:mocha
 
 import {Chromedriver} from '../../lib/chromedriver';
-import {install} from '../../lib/install';
+import {install} from '../helpers/install';
 import B from 'bluebird';
 import {exec} from 'teen_process';
 import _ from 'lodash';

@@ -1,11 +1,11 @@
 import _ from 'lodash';
 import { fs, mkdirp } from '@appium/support';
-import ChromedriverStorageClient from './storage-client/storage-client';
-import {parseLatestKnownGoodVersionsJson} from './storage-client/chromelabs';
+import ChromedriverStorageClient from '../../lib/storage-client/storage-client';
+import {parseLatestKnownGoodVersionsJson} from '../../lib/storage-client/chromelabs';
 import {
   CD_VER, retrieveData, getOsInfo, getChromedriverDir,
-} from './utils';
-import { USER_AGENT, STORAGE_REQ_TIMEOUT_MS, CHROMELABS_URL } from './constants';
+} from '../../lib/utils';
+import { USER_AGENT, STORAGE_REQ_TIMEOUT_MS, CHROMELABS_URL } from '../../lib/constants';
 
 const LATEST_VERSION = 'LATEST';
 
@@ -49,7 +49,7 @@ async function prepareChromedriverDir (platformName) {
   return chromedriverDir;
 }
 
-async function install () {
+export async function install () {
   const osInfo = await getOsInfo();
   const client = new ChromedriverStorageClient({
     chromedriverDir: await prepareChromedriverDir(osInfo.name),
@@ -59,9 +59,3 @@ async function install () {
     versions: [await formatCdVersion(CD_VER)],
   });
 }
-
-async function doInstall () {
-  await install();
-}
-
-export { install, doInstall };

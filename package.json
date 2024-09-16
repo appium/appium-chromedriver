@@ -31,7 +31,6 @@
   },
   "files": [
     "config",
-    "install-npm.js",
     "lib",
     "build",
     "!build/test",
@@ -62,7 +61,6 @@
     "dev": "npm run build -- --watch",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
-    "postinstall": "node install-npm.js",
     "prepare": "npm run build",
     "format": "prettier -w ./lib",
     "test": "mocha --exit --timeout 1m \"./test/unit/**/*-specs.js\"",
