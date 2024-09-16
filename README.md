@@ -24,7 +24,12 @@ more details on it.
 > This package can work with Microsoft Edge WebDriver as well, but the support is limited.
 > For example, automatic downloads do not work for Microsoft Edge WebDriver.
 
-## Skipping binary installation
+## Automatic Chromedriver download on module install
+
+Since version 6.0.0 of this module automatic download of the latest known chromedriver
+does not happen anymore. The below information is only relevant for older module versions:
+
+### Skipping binary installation
 
 By default, upon installation the package downloads the most recent known Chromedriver version from
 Chromedriver CDN server: http://chromedriver.storage.googleapis.com.
@@ -35,7 +40,7 @@ binary set the `APPIUM_SKIP_CHROMEDRIVER_INSTALL` environment variable:
 APPIUM_SKIP_CHROMEDRIVER_INSTALL=1 npm install appium-chromedriver
 ```
 
-## Custom Chromedriver version
+### Custom Chromedriver version
 
 By default, the package uses the most recent known Chromedriver version.
 The full list of known Chromedriver versions and their corresponding supported
@@ -51,19 +56,8 @@ CHROMEDRIVER_VERSION=107.0.5304.62 npm install appium-chromedriver
 ## Custom binaries url
 
 If you want Chromedriver to be downloaded from another CDN, which differs from the
-default one https://chromedriver.storage.googleapis.com, then either set the npm config property `chromedriver_cdnurl`:
-
-```bash
-npm install appium-chromedriver --chromedriver_cdnurl=http://npm.taobao.org/mirrors/chromedriver
-```
-
-The property could also be added into your [`.npmrc`](https://docs.npmjs.com/files/npmrc) file.
-
-```bash
-chromedriver_cdnurl=http://npm.taobao.org/mirrors/chromedriver
-```
-
-Or set the new URL to `CHROMEDRIVER_CDNURL` environment variable:
+default one https://chromedriver.storage.googleapis.com, then set the new URL to
+the `CHROMEDRIVER_CDNURL` environment variable:
 
 ```bash
 CHROMEDRIVER_CDNURL=http://npm.taobao.org/mirrors/chromedriver npm install appium-chromedriver
@@ -77,7 +71,7 @@ the server returns a proper list of stored drivers in response to requests havin
 Since version 5.6 the second environment variable has been added: `CHROMELABS_URL`. By default, it points
 to https://googlechromelabs.github.io, and is expected to contain the actual prefix of
 [Chrome for Testing availability](https://github.com/GoogleChromeLabs/chrome-for-testing#json-api-endpoints)
-JSON API. This API allows retrieval of chromedrivers whose versions are greater than 114.
+JSON API. This API allows retrieval of chromedrivers whose major versions are greater than `114`.
 
 Similarly to the above it could be also defined in the .npmrc file:
 
