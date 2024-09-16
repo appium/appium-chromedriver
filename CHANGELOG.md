@@ -1,3 +1,13 @@
+## [6.0.0](https://github.com/appium/appium-chromedriver/compare/v5.6.78...v6.0.0) (2024-09-16)
+
+### ⚠ BREAKING CHANGES
+
+* Latest chromedriver binary does not get downloaded automatically anymore upon module installation
+
+### Features
+
+* Remove automatic download of the latest chromedriver upon install ([#430](https://github.com/appium/appium-chromedriver/issues/430)) ([ee7940d](https://github.com/appium/appium-chromedriver/commit/ee7940d30ef23cd825584b76b8fcfb8c42b38cc8))
+
 ## [5.6.78](https://github.com/appium/appium-chromedriver/compare/v5.6.77...v5.6.78) (2024-09-14)
 
 ### Miscellaneous Chores
