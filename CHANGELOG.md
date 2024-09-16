@@ -1,3 +1,9 @@
+## [6.0.1](https://github.com/appium/appium-chromedriver/compare/v6.0.0...v6.0.1) (2024-09-16)
+
+### Bug Fixes
+
+* Import proper eslint config ([#409](https://github.com/appium/appium-chromedriver/issues/409)) ([044a5ac](https://github.com/appium/appium-chromedriver/commit/044a5ac5132e6f8506d2846d67106ad1c14bf44b))
+
 ## [6.0.0](https://github.com/appium/appium-chromedriver/compare/v5.6.78...v6.0.0) (2024-09-16)
 
 ### ⚠ BREAKING CHANGES
