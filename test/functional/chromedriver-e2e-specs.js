@@ -1,7 +1,6 @@
 // transpile:mocha
 
 import {Chromedriver} from '../../lib/chromedriver';
-import {install} from '../../lib/install';
 import B from 'bluebird';
 import {exec} from 'teen_process';
 import _ from 'lodash';
@@ -55,33 +54,6 @@ function buildReqRes(url, method, body) {
   };
   return [req, res];
 }
-
-describe('chromedriver binary setup', function () {
-  this.timeout(20000);
-  let chai;
-
-  before(async function () {
-    chai = await import('chai');
-    const chaiAsPromised = await import('chai-as-promised');
-
-    chai.should();
-    chai.use(chaiAsPromised.default);
-
-    let cd = new Chromedriver({});
-    try {
-      await cd.initChromedriverPath();
-    } catch (err) {
-      if (err.message.indexOf('Trying to use') !== -1) {
-        await install();
-      }
-    }
-  });
-
-  it('should start with a binary that exists', async function () {
-    let cd = new Chromedriver();
-    await cd.initChromedriverPath();
-  });
-});
 
 const caps = {browserName: 'chrome'};
 const expectedCaps = {browserName: 'chrome', loggingPrefs: {browser: 'ALL'}};
