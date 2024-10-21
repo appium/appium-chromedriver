@@ -23,8 +23,8 @@ export async function install () {
     chromedriverDir: await prepareChromedriverDir(osInfo.name),
   });
   const chromeDriverVersion = CD_VER === 'LATEST'
-    ? CD_VER
-    : await client.getLatestKnownGoodVersion();
+    ? await client.getLatestKnownGoodVersion()
+    : CD_VER;
   await client.syncDrivers({
     osInfo,
     versions: [chromeDriverVersion],
