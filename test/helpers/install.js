@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { fs, mkdirp } from '@appium/support';
 import ChromedriverStorageClient from '../../lib/storage-client/storage-client';
 import {
