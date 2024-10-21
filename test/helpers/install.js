@@ -4,6 +4,7 @@ import {
   CD_VER, getOsInfo, getChromedriverDir,
 } from '../../lib/utils';
 
+const LATEST_VERSION = 'LATEST';
 
 /**
  *
@@ -22,7 +23,7 @@ export async function install () {
   const client = new ChromedriverStorageClient({
     chromedriverDir: await prepareChromedriverDir(osInfo.name),
   });
-  const chromeDriverVersion = CD_VER === 'LATEST'
+  const chromeDriverVersion = CD_VER === LATEST_VERSION
     ? await client.getLatestKnownGoodVersion()
     : CD_VER;
   await client.syncDrivers({
