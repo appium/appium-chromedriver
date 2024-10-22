@@ -1,3 +1,9 @@
+## [6.1.0](https://github.com/appium/appium-chromedriver/compare/v6.0.8...v6.1.0) (2024-10-22)
+
+### Features
+
+* add get latest known good version ([#438](https://github.com/appium/appium-chromedriver/issues/438)) ([f9b64d8](https://github.com/appium/appium-chromedriver/commit/f9b64d8b7ee166a4fbf8223b098e07a4557ec269))
+
 ## [6.0.8](https://github.com/appium/appium-chromedriver/compare/v6.0.7...v6.0.8) (2024-10-16)
 
 ### Miscellaneous Chores
