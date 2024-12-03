@@ -1,3 +1,9 @@
+## [6.1.7](https://github.com/appium/appium-chromedriver/compare/v6.1.6...v6.1.7) (2024-12-03)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump mocha from 10.8.2 to 11.0.1 ([#445](https://github.com/appium/appium-chromedriver/issues/445)) ([ba8af98](https://github.com/appium/appium-chromedriver/commit/ba8af9812421235b2868e53fcb5f96260ad15d1c))
+
 ## [6.1.6](https://github.com/appium/appium-chromedriver/compare/v6.1.5...v6.1.6) (2024-11-20)
 
 ### Miscellaneous Chores
