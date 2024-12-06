@@ -1,3 +1,9 @@
+## [6.1.9](https://github.com/appium/appium-chromedriver/compare/v6.1.8...v6.1.9) (2024-12-06)
+
+### Miscellaneous Chores
+
+* **deps:** bump @appium/support from 5.1.8 to 6.0.0 ([#447](https://github.com/appium/appium-chromedriver/issues/447)) ([f52a1d8](https://github.com/appium/appium-chromedriver/commit/f52a1d8bfeba7912ab0fa6eff8afe1eccaebe82f))
+
 ## [6.1.8](https://github.com/appium/appium-chromedriver/compare/v6.1.7...v6.1.8) (2024-12-04)
 
 ### Miscellaneous Chores
