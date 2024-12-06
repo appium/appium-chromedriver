@@ -42,7 +42,7 @@
   "types": "./build/lib/index.d.ts",
   "dependencies": {
     "@appium/base-driver": "^9.1.0",
-    "@appium/support": "^5.1.1",
+    "@appium/support": "^6.0.0",
     "@xmldom/xmldom": "^0.x",
     "appium-adb": "^12.0.0",
     "asyncbox": "^3.0.0",
