@@ -1,3 +1,9 @@
+## [6.1.11](https://github.com/appium/appium-chromedriver/compare/v6.1.10...v6.1.11) (2024-12-12)
+
+### Miscellaneous Chores
+
+* Replace occurrences of the deprecated errorAndThrow API ([#449](https://github.com/appium/appium-chromedriver/issues/449)) ([010ef76](https://github.com/appium/appium-chromedriver/commit/010ef76335084fc60b45f5a71710fb140a5868c5))
+
 ## [6.1.10](https://github.com/appium/appium-chromedriver/compare/v6.1.9...v6.1.10) (2024-12-11)
 
 ### Miscellaneous Chores
