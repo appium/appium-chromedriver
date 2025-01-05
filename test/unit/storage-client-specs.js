@@ -1,4 +1,4 @@
-import ChromedriverStorageClient from '../../lib/storage-client/storage-client';
+import { ChromedriverStorageClient } from '../../lib/storage-client/storage-client';
 import _ from 'lodash';
 
 describe('ChromedriverStorageClient', function () {

@@ -1,4 +1,4 @@
-import type ADB from 'appium-adb';
+import type { ADB } from 'appium-adb';
 
 export interface ChromedriverOpts {
   host?: string;

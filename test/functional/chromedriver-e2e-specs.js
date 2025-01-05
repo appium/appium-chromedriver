@@ -17,7 +17,6 @@ function nextState(cd) {
 function nextError(cd) {
   return new B((resolve) => {
     cd.on(Chromedriver.EVENT_ERROR, (err) => {
-      // eslint-disable-line promise/prefer-await-to-callbacks
       resolve(err);
     });
   });
@@ -48,7 +47,7 @@ function buildReqRes(url, method, body) {
       send: (body) => {
         try {
           body = JSON.parse(body);
-        } catch (e) {}
+        } catch {}
         res.sentBody = body;
       },
     };

@@ -1,5 +1,5 @@
 import { fs, mkdirp } from '@appium/support';
-import ChromedriverStorageClient from '../../lib/storage-client/storage-client';
+import { ChromedriverStorageClient } from '../../lib/storage-client/storage-client';
 import {
   CD_VER, getOsInfo, getChromedriverDir,
 } from '../../lib/utils';
