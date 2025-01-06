@@ -1,3 +1,9 @@
+## [6.1.13](https://github.com/appium/appium-chromedriver/compare/v6.1.12...v6.1.13) (2025-01-06)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump @appium/eslint-config-appium-ts from 0.3.3 to 1.0.1 ([#451](https://github.com/appium/appium-chromedriver/issues/451)) ([ccbd1b9](https://github.com/appium/appium-chromedriver/commit/ccbd1b9aceb5e1732aa530e42d57856749b66f09))
+
 ## [6.1.12](https://github.com/appium/appium-chromedriver/compare/v6.1.11...v6.1.12) (2024-12-19)
 
 ### Miscellaneous Chores
