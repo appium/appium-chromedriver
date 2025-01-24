@@ -15,6 +15,8 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: lts/*
+    - run: npm install
+      name: Install dev dependencies
     - run: |
         export CHROME_VERSION=$(google-chrome --version | python -c "import sys, re; print(re.search(r'[0-9.]+', sys.stdin.read()).group(0))")
         echo "Version number of the installed Chrome browser: $CHROME_VERSION"
@@ -24,9 +26,6 @@ jobs:
           export CHROMEDRIVER_VERSION=$(grep -m 1 -n "$MAJOR_CHROME_VERSION" config/mapping.json | cut -d' ' -f4 | tr -d ',"')
           echo "Matching Chromedriver version: $CHROMEDRIVER_VERSION"
         fi
-        npm install
-      name: Install dev dependencies
-    - run: |
         sudo Xvfb -ac $DISPLAY -screen 0 1280x1024x24 > /dev/null 2>&1 &
         npm run e2e-test
       name: Run functional tests

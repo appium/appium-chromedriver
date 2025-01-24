@@ -66,14 +66,7 @@ describe('chromedriver binary setup', function () {
     chai.should();
     chai.use(chaiAsPromised.default);
 
-    let cd = new Chromedriver({});
-    try {
-      await cd.initChromedriverPath();
-    } catch (err) {
-      if (err.message.indexOf('Trying to use') !== -1) {
-        await install();
-      }
-    }
+    await install();
   });
 
   it('should start with a binary that exists', async function () {
