@@ -1,3 +1,15 @@
+## [7.0.0](https://github.com/appium/appium-chromedriver/compare/v6.1.16...v7.0.0) (2025-01-24)
+
+### ⚠ BREAKING CHANGES
+
+* The detectWebDriverProtocol method of the Chromedriver class has been removed
+* The desiredProtocol property of the Chromedriver class has been renamed to _desiredProtocol
+* The driverVersion property of the Chromedriver has been changed to a getter
+
+### Features
+
+* Determine chromedriver version from the /status API output ([#456](https://github.com/appium/appium-chromedriver/issues/456)) ([797c8cc](https://github.com/appium/appium-chromedriver/commit/797c8cc3648712c0d8d17b15c5ef2be4af8a6c99))
+
 ## [6.1.16](https://github.com/appium/appium-chromedriver/compare/v6.1.15...v6.1.16) (2025-01-23)
 
 ### Miscellaneous Chores
