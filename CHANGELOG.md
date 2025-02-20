@@ -1,3 +1,9 @@
+## [7.0.4](https://github.com/appium/appium-chromedriver/compare/v7.0.3...v7.0.4) (2025-02-20)
+
+### Miscellaneous Chores
+
+* Add semver types ([#460](https://github.com/appium/appium-chromedriver/issues/460)) ([5e1dd92](https://github.com/appium/appium-chromedriver/commit/5e1dd9271f06195ad18697d821f6fd41d7857c03))
+
 ## [7.0.3](https://github.com/appium/appium-chromedriver/compare/v7.0.2...v7.0.3) (2025-02-13)
 
 ### Miscellaneous Chores
