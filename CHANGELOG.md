@@ -1,3 +1,9 @@
+## [7.0.6](https://github.com/appium/appium-chromedriver/compare/v7.0.5...v7.0.6) (2025-02-21)
+
+### Bug Fixes
+
+* Accept reqBasePath proxy option ([#462](https://github.com/appium/appium-chromedriver/issues/462)) ([845d762](https://github.com/appium/appium-chromedriver/commit/845d762c4e8025f4b5e9214f012c94b78e57f051))
+
 ## [7.0.5](https://github.com/appium/appium-chromedriver/compare/v7.0.4...v7.0.5) (2025-02-21)
 
 ### Miscellaneous Chores
