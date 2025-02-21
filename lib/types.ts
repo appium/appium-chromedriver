@@ -18,6 +18,7 @@ export interface ChromedriverOpts {
    */
   details?: {info?: {Browser: string}};
   isAutodownloadEnabled?: boolean;
+  reqBasePath?: string;
 }
 
 export type ChromedriverVersionMapping = Record<string, string | null>;
