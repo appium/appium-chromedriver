@@ -38,8 +38,8 @@ function buildReqRes(url, method, body) {
   let req = {originalUrl: url, method, body};
   let res = {};
   res.headers = {};
-  res.set = (k, v) => {
-    res[k] = v;
+  res.setHeader = (k, v) => {
+    res.headers[k] = v;
   };
   res.status = (code) => {
     res.sentCode = code;
