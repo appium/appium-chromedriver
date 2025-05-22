@@ -1,3 +1,9 @@
+## [7.0.22](https://github.com/appium/appium-chromedriver/compare/v7.0.21...v7.0.22) (2025-05-22)
+
+### Miscellaneous Chores
+
+* ChromeDriver Bump to v136.0.7103.113 ([#479](https://github.com/appium/appium-chromedriver/issues/479)) ([0d3ae59](https://github.com/appium/appium-chromedriver/commit/0d3ae59e08b52dc761ed934dabd6d8f311decf2e))
+
 ## [7.0.21](https://github.com/appium/appium-chromedriver/compare/v7.0.20...v7.0.21) (2025-05-21)
 
 ### Miscellaneous Chores
