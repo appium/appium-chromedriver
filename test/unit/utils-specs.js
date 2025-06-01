@@ -23,7 +23,7 @@ describe('utils', function () {
       convertToInt('1.1').should.eql(1);
       convertToInt('-123').should.eql(-123);
     });
-    it('should return null if non numer string is given', function () {
+    it('should return null if non number string is given', function () {
       should.not.exist(convertToInt(''));
       should.not.exist(convertToInt('foo'));
     });
