@@ -1,3 +1,13 @@
+## [7.0.25](https://github.com/appium/appium-chromedriver/compare/v7.0.24...v7.0.25) (2025-06-10)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump @types/node from 22.15.31 to 24.0.0 ([#484](https://github.com/appium/appium-chromedriver/issues/484)) ([e2a7f0b](https://github.com/appium/appium-chromedriver/commit/e2a7f0ba74be015e5d46172f190d72967adbd7d3))
+
+### Code Refactoring
+
+* use optional chain for better readability ([#483](https://github.com/appium/appium-chromedriver/issues/483)) ([1af87e0](https://github.com/appium/appium-chromedriver/commit/1af87e048074216948ce620a883bf811cb8481fd))
+
 ## [7.0.24](https://github.com/appium/appium-chromedriver/compare/v7.0.23...v7.0.24) (2025-06-03)
 
 ### Miscellaneous Chores
