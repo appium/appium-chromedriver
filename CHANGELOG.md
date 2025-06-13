@@ -1,3 +1,9 @@
+## [7.0.27](https://github.com/appium/appium-chromedriver/compare/v7.0.26...v7.0.27) (2025-06-13)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump sinon from 20.0.0 to 21.0.0 ([#486](https://github.com/appium/appium-chromedriver/issues/486)) ([53c9889](https://github.com/appium/appium-chromedriver/commit/53c98890bd6df6210ba37d556b0723c2d9545fe0))
+
 ## [7.0.26](https://github.com/appium/appium-chromedriver/compare/v7.0.25...v7.0.26) (2025-06-11)
 
 ### Miscellaneous Chores
