@@ -44,7 +44,7 @@ function buildReqRes(url, method, body) {
   res.status = (code) => {
     res.sentCode = code;
     return {
-      send: (body) => {
+      json: (body) => {
         try {
           body = JSON.parse(body);
         } catch {}
