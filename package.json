@@ -6,7 +6,7 @@
     "chrome",
     "android"
   ],
-  "version": "5.6.62",
+  "version": "7.0.35",
   "author": "Appium Contributors",
   "license": "Apache-2.0",
   "repository": {
@@ -31,7 +31,6 @@
   },
   "files": [
     "config",
-    "install-npm.js",
     "lib",
     "build",
     "!build/test",
@@ -43,18 +42,17 @@
   "types": "./build/lib/index.d.ts",
   "dependencies": {
     "@appium/base-driver": "^9.1.0",
-    "@appium/support": "^5.1.1",
+    "@appium/support": "^6.0.0",
     "@xmldom/xmldom": "^0.x",
     "appium-adb": "^12.0.0",
     "asyncbox": "^3.0.0",
     "axios": "^1.6.5",
     "bluebird": "^3.5.1",
     "compare-versions": "^6.0.0",
-    "fancy-log": "^2.0.0",
     "lodash": "^4.17.4",
     "semver": "^7.0.0",
     "source-map-support": "^0.x",
-    "teen_process": "^2.0.0",
+    "teen_process": "^2.2.0",
     "xpath": "^0.x"
   },
   "scripts": {
@@ -63,14 +61,13 @@
     "dev": "npm run build -- --watch",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
-    "postinstall": "node install-npm.js",
     "prepare": "npm run build",
     "format": "prettier -w ./lib",
     "test": "mocha --exit --timeout 1m \"./test/unit/**/*-specs.js\"",
     "e2e-test": "mocha --exit --timeout 10m \"./test/functional/**/*-specs.js\""
   },
   "devDependencies": {
-    "@appium/eslint-config-appium": "^8.0.0",
+    "@appium/eslint-config-appium-ts": "^1.x",
     "@appium/test-support": "^3.0.0",
     "@appium/tsconfig": "^0.x",
     "@semantic-release/changelog": "^6.0.1",
@@ -78,16 +75,17 @@
     "@types/bluebird": "^3.5.38",
     "@types/lodash": "^4.14.191",
     "@types/mocha": "^10.0.1",
-    "@types/node": "^20.4.1",
+    "@types/node": "^24.0.0",
+    "@types/semver": "^7.0.0",
     "@types/teen_process": "^2.0.0",
     "chai": "^5.1.1",
     "chai-as-promised": "^8.0.0",
-    "conventional-changelog-conventionalcommits": "^8.0.0",
-    "mocha": "^10.0.0",
+    "conventional-changelog-conventionalcommits": "^9.0.0",
+    "mocha": "^11.0.1",
     "prettier": "^3.0.0",
     "rimraf": "^6.0.1",
     "semantic-release": "^24.0.0",
-    "sinon": "^18.0.0",
+    "sinon": "^21.0.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.4.2"
   }

@@ -1,7 +1,7 @@
 // transpile:mocha
 
 import {Chromedriver} from '../../lib/chromedriver';
-import {install} from '../../lib/install';
+import {install} from '../helpers/install';
 import B from 'bluebird';
 import {exec} from 'teen_process';
 import _ from 'lodash';
@@ -17,7 +17,6 @@ function nextState(cd) {
 function nextError(cd) {
   return new B((resolve) => {
     cd.on(Chromedriver.EVENT_ERROR, (err) => {
-      // eslint-disable-line promise/prefer-await-to-callbacks
       resolve(err);
     });
   });
@@ -39,8 +38,8 @@ function buildReqRes(url, method, body) {
   let req = {originalUrl: url, method, body};
   let res = {};
   res.headers = {};
-  res.set = (k, v) => {
-    res[k] = v;
+  res.setHeader = (k, v) => {
+    res.headers[k] = v;
   };
   res.status = (code) => {
     res.sentCode = code;
@@ -48,7 +47,7 @@ function buildReqRes(url, method, body) {
       send: (body) => {
         try {
           body = JSON.parse(body);
-        } catch (e) {}
+        } catch {}
         res.sentBody = body;
       },
     };
@@ -67,14 +66,7 @@ describe('chromedriver binary setup', function () {
     chai.should();
     chai.use(chaiAsPromised.default);
 
-    let cd = new Chromedriver({});
-    try {
-      await cd.initChromedriverPath();
-    } catch (err) {
-      if (err.message.indexOf('Trying to use') !== -1) {
-        await install();
-      }
-    }
+    await install();
   });
 
   it('should start with a binary that exists', async function () {

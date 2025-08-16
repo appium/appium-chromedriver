@@ -5,6 +5,7 @@
     "types": ["node"],
     "outDir": "build",
     "checkJs": true,
+    "esModuleInterop": true,
     "lib": ["es2020", "dom"]
   },
   "include": ["lib"]

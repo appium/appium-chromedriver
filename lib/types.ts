@@ -1,4 +1,4 @@
-import type ADB from 'appium-adb';
+import type {ADB} from 'appium-adb';
 
 export interface ChromedriverOpts {
   host?: string;
@@ -18,6 +18,7 @@ export interface ChromedriverOpts {
    */
   details?: {info?: {Browser: string}};
   isAutodownloadEnabled?: boolean;
+  reqBasePath?: string;
 }
 
 export type ChromedriverVersionMapping = Record<string, string | null>;
@@ -29,7 +30,7 @@ export interface SyncOptions {
    */
   versions?: string[];
   /**
-   * The minumum supported Chrome version that downloaded chromedrivers should
+   * The minimum supported Chrome version that downloaded chromedrivers should
    * support. Can match multiple drivers.
    */
   minBrowserVersion?: string | number;
