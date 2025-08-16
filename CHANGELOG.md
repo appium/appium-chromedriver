@@ -1,3 +1,14 @@
+## [8.0.0](https://github.com/appium/appium-chromedriver/compare/v7.0.35...v8.0.0) (2025-08-16)
+
+### ⚠ BREAKING CHANGES
+
+* Required Node.js version has been bumped to ^20.19.0 || ^22.12.0 || >=24.0.0
+* Required npm version has been bumped to >=10
+
+### Features
+
+* Bump Node.js version ([#496](https://github.com/appium/appium-chromedriver/issues/496)) ([4c9e717](https://github.com/appium/appium-chromedriver/commit/4c9e717914bd88b2d02452f6257340ef850d666c))
+
 ## [7.0.35](https://github.com/appium/appium-chromedriver/compare/v7.0.34...v7.0.35) (2025-08-13)
 
 ### Miscellaneous Chores
