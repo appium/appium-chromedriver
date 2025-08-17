@@ -1,3 +1,9 @@
+## [8.0.1](https://github.com/appium/appium-chromedriver/compare/v8.0.0...v8.0.1) (2025-08-17)
+
+### Miscellaneous Chores
+
+* remove no reference dev deps rimraf ([#497](https://github.com/appium/appium-chromedriver/issues/497)) ([77a6da1](https://github.com/appium/appium-chromedriver/commit/77a6da18c268d21497cd3f29e2d9713f9d838e52))
+
 ## [8.0.0](https://github.com/appium/appium-chromedriver/compare/v7.0.35...v8.0.0) (2025-08-16)
 
 ### ⚠ BREAKING CHANGES
