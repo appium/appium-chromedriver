@@ -1,3 +1,9 @@
+## [8.0.2](https://github.com/appium/appium-chromedriver/compare/v8.0.1...v8.0.2) (2025-08-18)
+
+### Bug Fixes
+
+* xmldom build errors ([#498](https://github.com/appium/appium-chromedriver/issues/498)) ([4d3e913](https://github.com/appium/appium-chromedriver/commit/4d3e9131e5a85371d595da656c03c9b663926989))
+
 ## [8.0.1](https://github.com/appium/appium-chromedriver/compare/v8.0.0...v8.0.1) (2025-08-17)
 
 ### Miscellaneous Chores
