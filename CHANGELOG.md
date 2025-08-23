@@ -1,3 +1,9 @@
+## [8.0.4](https://github.com/appium/appium-chromedriver/compare/v8.0.3...v8.0.4) (2025-08-23)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump chai from 5.3.2 to 6.0.0 ([#500](https://github.com/appium/appium-chromedriver/issues/500)) ([d0f5e31](https://github.com/appium/appium-chromedriver/commit/d0f5e31543a956bbf4524aa9b99597af2ed82290))
+
 ## [8.0.3](https://github.com/appium/appium-chromedriver/compare/v8.0.2...v8.0.3) (2025-08-20)
 
 ### Miscellaneous Chores
