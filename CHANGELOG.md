@@ -1,3 +1,9 @@
+## [8.0.14](https://github.com/appium/appium-chromedriver/compare/v8.0.13...v8.0.14) (2025-10-17)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump semantic-release from 24.2.9 to 25.0.0 ([#510](https://github.com/appium/appium-chromedriver/issues/510)) ([872f818](https://github.com/appium/appium-chromedriver/commit/872f81827d8400166a9355d87715726abaa5e836))
+
 ## [8.0.13](https://github.com/appium/appium-chromedriver/compare/v8.0.12...v8.0.13) (2025-10-15)
 
 ### Miscellaneous Chores
