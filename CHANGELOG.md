@@ -1,3 +1,9 @@
+## [8.0.16](https://github.com/appium/appium-chromedriver/compare/v8.0.15...v8.0.16) (2025-10-23)
+
+### Miscellaneous Chores
+
+* Bump adb version ([#512](https://github.com/appium/appium-chromedriver/issues/512)) ([d3f4247](https://github.com/appium/appium-chromedriver/commit/d3f42479cc2f573fdc4ef46fc1d6d79397bb14d3))
+
 ## [8.0.15](https://github.com/appium/appium-chromedriver/compare/v8.0.14...v8.0.15) (2025-10-22)
 
 ### Miscellaneous Chores
