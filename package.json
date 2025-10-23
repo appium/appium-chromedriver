@@ -44,7 +44,7 @@
     "@appium/base-driver": "^10.0.0-rc.2",
     "@appium/support": "^7.0.0-rc.1",
     "@xmldom/xmldom": "^0.x",
-    "appium-adb": "^13.0.0",
+    "appium-adb": "^14.0.0",
     "asyncbox": "^3.0.0",
     "axios": "^1.6.5",
     "bluebird": "^3.5.1",
