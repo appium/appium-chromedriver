@@ -1,3 +1,9 @@
+## [8.0.18](https://github.com/appium/appium-chromedriver/compare/v8.0.17...v8.0.18) (2025-10-30)
+
+### Miscellaneous Chores
+
+* Tune values returned by start session methods ([#514](https://github.com/appium/appium-chromedriver/issues/514)) ([a7274fa](https://github.com/appium/appium-chromedriver/commit/a7274fa48433d225d0ab12bdc0eb6b696f6599ea))
+
 ## [8.0.17](https://github.com/appium/appium-chromedriver/compare/v8.0.16...v8.0.17) (2025-10-29)
 
 ### Miscellaneous Chores
