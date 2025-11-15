@@ -1,3 +1,9 @@
+## [8.0.21](https://github.com/appium/appium-chromedriver/compare/v8.0.20...v8.0.21) (2025-11-15)
+
+### Miscellaneous Chores
+
+* publish via trusted publisher ([#518](https://github.com/appium/appium-chromedriver/issues/518)) ([a2cdc03](https://github.com/appium/appium-chromedriver/commit/a2cdc03a5138b770a324daadc023918891724d4e))
+
 ## [8.0.20](https://github.com/appium/appium-chromedriver/compare/v8.0.19...v8.0.20) (2025-11-12)
 
 ### Miscellaneous Chores
