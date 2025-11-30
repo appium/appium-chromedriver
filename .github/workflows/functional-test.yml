@@ -10,9 +10,9 @@ jobs:
       _FORCE_LOGS: 1
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v6
     - name: Use Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v6
       with:
         node-version: lts/*
     - run: npm install
@@ -35,9 +35,9 @@ jobs:
       WIN_CD_VERSION: "88.0.4324.96"
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v6
     - name: Use Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v6
       with:
         node-version: lts/*
     - run: npm install --chromedriver_version=${{ env.WIN_CD_VERSION }}
