@@ -29,7 +29,7 @@ jobs:
         echo "cd_release=${latest_release}" >> "$GITHUB_OUTPUT"
     - name: pull-request
       if: steps.release_check.outputs.did_update == '1'
-      uses: peter-evans/create-pull-request@v3
+      uses: peter-evans/create-pull-request@v7
       with:
         branch: ${{ steps.release_check.outputs.cd_release }}
         title: "chore: ChromeDriver Bump to v${{ steps.release_check.outputs.cd_release }}"
