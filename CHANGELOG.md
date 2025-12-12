@@ -1,3 +1,9 @@
+## [8.0.27](https://github.com/appium/appium-chromedriver/compare/v8.0.26...v8.0.27) (2025-12-12)
+
+### Miscellaneous Chores
+
+* **deps:** remove `source-map-support` ([#525](https://github.com/appium/appium-chromedriver/issues/525)) ([0bf5e3d](https://github.com/appium/appium-chromedriver/commit/0bf5e3d26de904142cc5b9aab2ffa870335ca4d9))
+
 ## [8.0.26](https://github.com/appium/appium-chromedriver/compare/v8.0.25...v8.0.26) (2025-12-11)
 
 ### Miscellaneous Chores
