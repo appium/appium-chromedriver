@@ -51,7 +51,6 @@
     "compare-versions": "^6.0.0",
     "lodash": "^4.17.4",
     "semver": "^7.0.0",
-    "source-map-support": "^0.x",
     "teen_process": "^3.0.0",
     "xpath": "^0.x"
   },
