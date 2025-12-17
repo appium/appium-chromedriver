@@ -1,3 +1,10 @@
+## [8.0.28](https://github.com/appium/appium-chromedriver/compare/v8.0.27...v8.0.28) (2025-12-17)
+
+### Miscellaneous Chores
+
+* ChromeDriver Bump to v143.0.7499.146 ([#527](https://github.com/appium/appium-chromedriver/issues/527)) ([c95ed10](https://github.com/appium/appium-chromedriver/commit/c95ed10e3bf0aa63cbb5c8c87ce4389338b89a0a))
+* **deps:** bump peter-evans/create-pull-request from 7 to 8 ([#526](https://github.com/appium/appium-chromedriver/issues/526)) ([d0e9e34](https://github.com/appium/appium-chromedriver/commit/d0e9e34bc96be820aecece1616aa3a54b6ce9c0b))
+
 ## [8.0.27](https://github.com/appium/appium-chromedriver/compare/v8.0.26...v8.0.27) (2025-12-12)
 
 ### Miscellaneous Chores
