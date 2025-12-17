@@ -1,14 +1,8 @@
-import { ChromedriverStorageClient } from '../../lib/storage-client/storage-client';
+import {expect} from 'chai';
+import {ChromedriverStorageClient} from '../../lib/storage-client/storage-client';
 import _ from 'lodash';
 
 describe('ChromedriverStorageClient', function () {
-  let chai;
-
-  before(async function () {
-    chai = await import('chai');
-    chai.should();
-  });
-
   describe('selectMatchingDrivers', function () {
     const defaultMapping = {
       '2.0/chromedriver_linux32.zip': {
@@ -20,7 +14,7 @@ describe('ChromedriverStorageClient', function () {
           name: 'linux',
           arch: '32',
           cpu: 'intel',
-        }
+        },
       },
       '2.0/chromedriver_linux64.zip': {
         url: 'https://chromedriver.storage.googleapis.com/2.0/chromedriver_linux64.zip',
@@ -31,7 +25,7 @@ describe('ChromedriverStorageClient', function () {
           name: 'linux',
           arch: '64',
           cpu: 'intel',
-        }
+        },
       },
       '2.0/chromedriver_mac32.zip': {
         url: 'https://chromedriver.storage.googleapis.com/2.0/chromedriver_mac32.zip',
@@ -42,7 +36,7 @@ describe('ChromedriverStorageClient', function () {
           name: 'mac',
           arch: '32',
           cpu: 'intel',
-        }
+        },
       },
       '2.0/chromedriver_win32.zip': {
         url: 'https://chromedriver.storage.googleapis.com/2.0/chromedriver_win32.zip',
@@ -53,7 +47,7 @@ describe('ChromedriverStorageClient', function () {
           name: 'win',
           arch: '32',
           cpu: 'intel',
-        }
+        },
       },
       '76.0.3809.12/chromedriver_linux64.zip': {
         url: 'https://chromedriver.storage.googleapis.com/76.0.3809.12/chromedriver_linux64.zip',
@@ -64,7 +58,7 @@ describe('ChromedriverStorageClient', function () {
           name: 'linux',
           arch: '64',
           cpu: 'intel',
-        }
+        },
       },
       '76.0.3809.12/chromedriver_mac64.zip': {
         url: 'https://chromedriver.storage.googleapis.com/76.0.3809.12/chromedriver_mac64.zip',
@@ -75,7 +69,7 @@ describe('ChromedriverStorageClient', function () {
           name: 'mac',
           arch: '64',
           cpu: 'intel',
-        }
+        },
       },
       '76.0.3809.12/chromedriver_win32.zip': {
         url: 'https://chromedriver.storage.googleapis.com/76.0.3809.12/chromedriver_win32.zip',
@@ -86,7 +80,7 @@ describe('ChromedriverStorageClient', function () {
           name: 'win',
           arch: '32',
           cpu: 'intel',
-        }
+        },
       },
     };
 
@@ -98,7 +92,7 @@ describe('ChromedriverStorageClient', function () {
         arch: '64',
         cpu: 'intel',
       });
-      selectedDrivers.should.eql([
+      expect(selectedDrivers).to.eql([
         '2.0/chromedriver_win32.zip',
         '76.0.3809.12/chromedriver_win32.zip',
       ]);
@@ -107,47 +101,51 @@ describe('ChromedriverStorageClient', function () {
     it('should select appropriate drivers if versions are set', function () {
       const client = new ChromedriverStorageClient();
       client.mapping = _.cloneDeep(defaultMapping);
-      const selectedDrivers = client.selectMatchingDrivers({
-        name: 'linux',
-        arch: '64',
-        cpu: 'intel',
-      }, {
-        versions: ['76.0.3809.12'],
-      });
-      selectedDrivers.should.eql([
-        '76.0.3809.12/chromedriver_linux64.zip',
-      ]);
+      const selectedDrivers = client.selectMatchingDrivers(
+        {
+          name: 'linux',
+          arch: '64',
+          cpu: 'intel',
+        },
+        {
+          versions: ['76.0.3809.12'],
+        }
+      );
+      expect(selectedDrivers).to.eql(['76.0.3809.12/chromedriver_linux64.zip']);
     });
 
     it('should select appropriate drivers if minBrowserVersion is set', function () {
       const client = new ChromedriverStorageClient();
       client.mapping = _.cloneDeep(defaultMapping);
-      const selectedDrivers = client.selectMatchingDrivers({
-        name: 'mac',
-        arch: '64',
-        cpu: 'intel',
-      }, {
-        minBrowserVersion: 60,
-      });
-      selectedDrivers.should.eql([
-        '76.0.3809.12/chromedriver_mac64.zip',
-      ]);
+      const selectedDrivers = client.selectMatchingDrivers(
+        {
+          name: 'mac',
+          arch: '64',
+          cpu: 'intel',
+        },
+        {
+          minBrowserVersion: 60,
+        }
+      );
+      expect(selectedDrivers).to.eql(['76.0.3809.12/chromedriver_mac64.zip']);
     });
 
     it('should select appropriate drivers if both minBrowserVersion and versions are set', function () {
       const client = new ChromedriverStorageClient();
       client.mapping = _.cloneDeep(defaultMapping);
-      const selectedDrivers = client.selectMatchingDrivers({
-        name: 'mac',
-        arch: '64',
-        cpu: 'intel',
-      }, {
-        versions: ['76.0.3809.12'],
-        minBrowserVersion: 60,
-      });
-      selectedDrivers.should.eql([
-        '76.0.3809.12/chromedriver_mac64.zip',
-      ]);
+      const selectedDrivers = client.selectMatchingDrivers(
+        {
+          name: 'mac',
+          arch: '64',
+          cpu: 'intel',
+        },
+        {
+          versions: ['76.0.3809.12'],
+          minBrowserVersion: 60,
+        }
+      );
+      expect(selectedDrivers).to.eql(['76.0.3809.12/chromedriver_mac64.zip']);
     });
   });
 });
+

@@ -62,8 +62,8 @@
     "lint:fix": "npm run lint -- --fix",
     "prepare": "npm run build",
     "format": "prettier -w ./lib",
-    "test": "mocha --exit --timeout 1m \"./test/unit/**/*-specs.js\"",
-    "e2e-test": "mocha --exit --timeout 10m \"./test/functional/**/*-specs.js\""
+    "test": "mocha --exit --timeout 1m --require ts-node/register \"./test/unit/**/*-specs.ts\"",
+    "e2e-test": "mocha --exit --timeout 10m --require ts-node/register \"./test/functional/**/*-specs.ts\""
   },
   "devDependencies": {
     "@appium/eslint-config-appium-ts": "^2.0.0-rc.1",
@@ -72,10 +72,13 @@
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/git": "^10.0.1",
     "@types/bluebird": "^3.5.38",
+    "@types/chai": "^5.2.3",
+    "@types/chai-as-promised": "^8.0.2",
     "@types/lodash": "^4.14.191",
     "@types/mocha": "^10.0.1",
     "@types/node": "^25.0.0",
     "@types/semver": "^7.0.0",
+    "@types/sinon": "^21.0.0",
     "@types/teen_process": "^2.0.0",
     "chai": "^6.0.0",
     "chai-as-promised": "^8.0.0",

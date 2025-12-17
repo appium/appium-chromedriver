@@ -1,4 +1,5 @@
-import { toW3cCapNames, getCapValue } from '../../lib/protocol-helpers';
+import {expect} from 'chai';
+import {toW3cCapNames, getCapValue} from '../../lib/protocol-helpers';
 
 describe('Protocol Helpers', function () {
   const caps = {
@@ -12,16 +13,10 @@ describe('Protocol Helpers', function () {
       detach: true,
     },
   };
-  let chai;
-
-  before(async function () {
-    chai = await import('chai');
-    chai.should();
-  });
 
   it('should properly add w3c prefixes where needed', function () {
     const result = toW3cCapNames(caps);
-    result.should.eql({
+    expect(result).to.eql({
       'goog:loggingPrefs': {
         detach: true,
       },
@@ -36,23 +31,31 @@ describe('Protocol Helpers', function () {
 
   it('should properly parse values from different caps', function () {
     const v1 = getCapValue(caps, 'loggingPrefs');
-    v1.should.eql({
+    expect(v1).to.eql({
       detach: true,
     });
 
     const v2 = getCapValue(caps, 'goog:perfLoggingPrefs');
-    v2.should.eql({
+    expect(v2).to.eql({
       enableNetwork: true,
     });
 
-    const v3 = getCapValue({
-      proxy: 'some',
-    }, 'proxy');
-    v3.should.eql('some');
+    const v3 = getCapValue(
+      {
+        proxy: 'some',
+      },
+      'proxy'
+    );
+    expect(v3).to.eql('some');
 
-    const v4 = getCapValue({
-      proxy: 'some',
-    }, 'goog:proxy', {});
-    v4.should.eql({});
+    const v4 = getCapValue(
+      {
+        proxy: 'some',
+      },
+      'goog:proxy',
+      {}
+    );
+    expect(v4).to.eql({});
   });
 });
+
