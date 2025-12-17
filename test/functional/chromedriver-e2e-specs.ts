@@ -1,5 +1,3 @@
-// transpile:mocha
-
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import {Chromedriver} from '../../lib/chromedriver';
@@ -30,7 +28,12 @@ async function assertNoRunningChromedrivers() {
   const {stdout} = await exec('ps', ['aux']);
   let count = 0;
   for (const line of stdout.split('\n')) {
-    if (line.match(/chromedriver/i)) {
+    // Match chromedriver process but exclude ps/grep commands and the command line itself
+    if (
+      line.match(/chromedriver/i) &&
+      !line.match(/ps\s+aux|grep\s+chromedriver|node.*chromedriver.*test/i) &&
+      line.match(/\d+\s+\d+/) // Has PID and other process info (actual process line)
+    ) {
       count++;
     }
   }
@@ -85,10 +88,11 @@ describe('chromedriver with EventEmitter', function () {
   it('should start a session', async function () {
     expect(cd!.state).to.eql('stopped');
     const nextStatePromise = nextState(cd!);
-    await cd!.start(caps);
+    const startPromise = cd!.start(caps);
     expect(_.size(cd!.capabilities)).to.be.at.least(_.size(expectedCaps));
     await expect(nextStatePromise).to.become(Chromedriver.STATE_STARTING);
     await expect(nextState(cd!)).to.become(Chromedriver.STATE_ONLINE);
+    await startPromise;
     expect(cd!.jwproxy.sessionId).to.exist;
     expect(cd!.sessionId()).to.exist;
   });
@@ -120,10 +124,11 @@ describe('chromedriver with EventEmitter', function () {
   });
   it('should stop a session', async function () {
     const nextStatePromise = nextState(cd!);
-    await cd!.stop();
+    const stopPromise = cd!.stop();
     await expect(nextStatePromise).to.become(Chromedriver.STATE_STOPPING);
     expect(cd!.sessionId()).to.not.exist;
     await expect(nextState(cd!)).to.become(Chromedriver.STATE_STOPPED);
+    await stopPromise;
     expect(cd!.sessionId()).to.not.exist;
     await assertNoRunningChromedrivers();
   });
@@ -132,10 +137,11 @@ describe('chromedriver with EventEmitter', function () {
     // and I can't figure out a way to safely kill only that one
     expect(cd!.state).to.eql(Chromedriver.STATE_STOPPED);
     let nextStatePromise = nextState(cd!);
-    await cd!.start(caps);
+    const startPromise = cd!.start(caps);
     expect(_.size(cd!.capabilities)).to.be.at.least(_.size(caps));
     await expect(nextStatePromise).to.become(Chromedriver.STATE_STARTING);
     await expect(nextState(cd!)).to.become(Chromedriver.STATE_ONLINE);
+    await startPromise;
     expect(cd!.jwproxy.sessionId).to.exist;
     expect(cd!.sessionId()).to.exist;
     nextStatePromise = nextState(cd!);
