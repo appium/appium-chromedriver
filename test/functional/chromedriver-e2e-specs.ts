@@ -85,7 +85,7 @@ describe('chromedriver with EventEmitter', function () {
   it('should start a session', async function () {
     expect(cd!.state).to.eql('stopped');
     const nextStatePromise = nextState(cd!);
-    cd!.start(caps);
+    await cd!.start(caps);
     expect(_.size(cd!.capabilities)).to.be.at.least(_.size(expectedCaps));
     await expect(nextStatePromise).to.become(Chromedriver.STATE_STARTING);
     await expect(nextState(cd!)).to.become(Chromedriver.STATE_ONLINE);
@@ -120,7 +120,7 @@ describe('chromedriver with EventEmitter', function () {
   });
   it('should stop a session', async function () {
     const nextStatePromise = nextState(cd!);
-    cd!.stop();
+    await cd!.stop();
     await expect(nextStatePromise).to.become(Chromedriver.STATE_STOPPING);
     expect(cd!.sessionId()).to.not.exist;
     await expect(nextState(cd!)).to.become(Chromedriver.STATE_STOPPED);
@@ -132,7 +132,7 @@ describe('chromedriver with EventEmitter', function () {
     // and I can't figure out a way to safely kill only that one
     expect(cd!.state).to.eql(Chromedriver.STATE_STOPPED);
     let nextStatePromise = nextState(cd!);
-    cd!.start(caps);
+    await cd!.start(caps);
     expect(_.size(cd!.capabilities)).to.be.at.least(_.size(caps));
     await expect(nextStatePromise).to.become(Chromedriver.STATE_STARTING);
     await expect(nextState(cd!)).to.become(Chromedriver.STATE_ONLINE);
