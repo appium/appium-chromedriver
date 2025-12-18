@@ -5,7 +5,6 @@ import sinon from 'sinon';
 import {fs} from '@appium/support';
 import * as tp from 'teen_process';
 import path from 'path';
-import _ from 'lodash';
 import * as utils from '../../lib/utils';
 
 use(chaiAsPromised);
