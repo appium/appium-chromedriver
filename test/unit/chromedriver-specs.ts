@@ -171,7 +171,7 @@ describe('chromedriver', function () {
           } as any);
 
         const chromedrivers = await cd.getChromedrivers(utils.CHROMEDRIVER_CHROME_MAPPING);
-        for (const [cd, expectedVersion] of _.zip(chromedrivers, [
+        const expectedVersions = [
           '74.0.3729.6',
           '2.36',
           '2.35',
@@ -180,9 +180,12 @@ describe('chromedriver', function () {
           '2.32',
           '2.31',
           '2.30',
-        ])) {
-          expect(cd.version).to.eql(expectedVersion);
-          expect(cd.minChromeVersion).to.not.be.null;
+        ];
+        for (let i = 0; i < chromedrivers.length; i++) {
+          const chromedriver = chromedrivers[i];
+          const expectedVersion = expectedVersions[i];
+          expect(chromedriver.version).to.eql(expectedVersion);
+          expect(chromedriver.minChromeVersion).to.not.be.null;
         }
       });
 
