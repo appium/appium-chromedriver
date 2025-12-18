@@ -1,3 +1,9 @@
+## [8.0.29](https://github.com/appium/appium-chromedriver/compare/v8.0.28...v8.0.29) (2025-12-18)
+
+### Miscellaneous Chores
+
+* **deps:** bump asyncbox from 3.0.0 to 4.0.1 ([#529](https://github.com/appium/appium-chromedriver/issues/529)) ([de0981a](https://github.com/appium/appium-chromedriver/commit/de0981afb9a15f857bbf3e874a520edea9917502))
+
 ## [8.0.28](https://github.com/appium/appium-chromedriver/compare/v8.0.27...v8.0.28) (2025-12-17)
 
 ### Miscellaneous Chores
