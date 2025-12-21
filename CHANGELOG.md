@@ -1,3 +1,9 @@
+## [8.0.31](https://github.com/appium/appium-chromedriver/compare/v8.0.30...v8.0.31) (2025-12-21)
+
+### Miscellaneous Chores
+
+* bump teen_process ([#531](https://github.com/appium/appium-chromedriver/issues/531)) ([0268eeb](https://github.com/appium/appium-chromedriver/commit/0268eeb75fe47dbd9604e24d092c6386b0e0f2c6))
+
 ## [8.0.30](https://github.com/appium/appium-chromedriver/compare/v8.0.29...v8.0.30) (2025-12-19)
 
 ### Miscellaneous Chores
