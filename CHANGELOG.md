@@ -1,3 +1,9 @@
+## [8.1.0](https://github.com/appium/appium-chromedriver/compare/v8.0.31...v8.1.0) (2025-12-22)
+
+### Features
+
+* Migrate storage client modules to typescript ([#532](https://github.com/appium/appium-chromedriver/issues/532)) ([55ef283](https://github.com/appium/appium-chromedriver/commit/55ef2833bc71dda67608eb106783645c4f89922e))
+
 ## [8.0.31](https://github.com/appium/appium-chromedriver/compare/v8.0.30...v8.0.31) (2025-12-21)
 
 ### Miscellaneous Chores
