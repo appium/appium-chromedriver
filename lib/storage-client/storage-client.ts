@@ -22,66 +22,78 @@ import {parseGoogleapiStorageXml} from './googleapis';
 import {parseKnownGoodVersionsWithDownloadsJson, parseLatestKnownGoodVersionsJson} from './chromelabs';
 import {compareVersions} from 'compare-versions';
 import * as semver from 'semver';
+import type {
+  ChromedriverStorageClientOpts,
+  SyncOptions,
+  OSInfo,
+  ChromedriverDetailsMapping,
+} from '../types';
 
 const MAX_PARALLEL_DOWNLOADS = 5;
-const STORAGE_INFOS = /** @type {readonly StorageInfo[]} */ ([{
-  url: GOOGLEAPIS_CDN,
-  accept: 'application/xml',
-}, {
-  url: `${CHROMELABS_URL}/chrome-for-testing/known-good-versions-with-downloads.json`,
-  accept: 'application/json',
-}]);
+
+interface StorageInfo {
+  url: string;
+  accept: string;
+}
+
+const STORAGE_INFOS: readonly StorageInfo[] = [
+  {
+    url: GOOGLEAPIS_CDN,
+    accept: 'application/xml',
+  },
+  {
+    url: `${CHROMELABS_URL}/chrome-for-testing/known-good-versions-with-downloads.json`,
+    accept: 'application/json',
+  },
+];
 
 const CHROME_FOR_TESTING_LAST_GOOD_VERSIONS = `${CHROMELABS_URL}/chrome-for-testing/last-known-good-versions.json`;
 
 const log = logger.getLogger('ChromedriverStorageClient');
 
-/**
- *
- * @param {string} src
- * @param {string} checksum
- * @returns {Promise<boolean>}
- */
-async function isCrcOk(src, checksum) {
+async function isCrcOk(src: string, checksum: string): Promise<boolean> {
   const md5 = await fs.hash(src, 'md5');
   return _.toLower(md5) === _.toLower(checksum);
 }
 
 export class ChromedriverStorageClient {
-  /**
-   *
-   * @param {import('../types').ChromedriverStorageClientOpts} args
-   */
-  constructor(args = {}) {
+  readonly chromedriverDir: string;
+  readonly timeout: number;
+  private mapping: ChromedriverDetailsMapping;
+
+  constructor(args: ChromedriverStorageClientOpts = {}) {
     const {chromedriverDir = getChromedriverDir(), timeout = STORAGE_REQ_TIMEOUT_MS} = args;
     this.chromedriverDir = chromedriverDir;
     this.timeout = timeout;
-    /** @type {ChromedriverDetailsMapping} */
     this.mapping = {};
   }
 
   /**
    * Retrieves chromedriver mapping from the storage
    *
-   * @param {boolean} shouldParseNotes [true] - if set to `true`
+   * @param shouldParseNotes [true] - if set to `true`
    * then additional chromedrivers info is going to be retrieved and
    * parsed from release notes
-   * @returns {Promise<ChromedriverDetailsMapping>}
+   * @returns Promise<ChromedriverDetailsMapping>
    */
-  async retrieveMapping(shouldParseNotes = true) {
-    /** @type {(si: StorageInfo) => Promise<string|undefined>} */
-    const retrieveResponseSafely = async (/** @type {StorageInfo} */ {url, accept}) => {
+  async retrieveMapping(shouldParseNotes = true): Promise<ChromedriverDetailsMapping> {
+    const retrieveResponseSafely = async ({url, accept}: StorageInfo): Promise<string | undefined> => {
       try {
-        return await retrieveData(url, {
-          'user-agent': USER_AGENT,
-          accept: `${accept}, */*`,
-        }, {timeout: this.timeout});
+        return await retrieveData(
+          url,
+          {
+            'user-agent': USER_AGENT,
+            accept: `${accept}, */*`,
+          },
+          {timeout: this.timeout}
+        );
       } catch (e) {
-        log.debug(/** @type {Error} */ (e).stack);
+        const err = e as Error;
+        log.debug(err.stack);
         log.warn(
           `Cannot retrieve Chromedrivers info from ${url}. ` +
-          `Make sure this URL is accessible from your network. ` +
-          `Original error: ${/** @type {Error} */(e).message}`
+            `Make sure this URL is accessible from your network. ` +
+            `Original error: ${err.message}`
         );
       }
     };
@@ -91,9 +103,9 @@ export class ChromedriverStorageClient {
     if (!xmlStr && !jsonStr) {
       throw new Error(
         `Cannot retrieve the information about available Chromedrivers from ` +
-        `${STORAGE_INFOS.map(({url}) => url)}. Please make sure these URLs are available ` +
-        `within your local network, check Appium server logs and/or ` +
-        `consult the driver troubleshooting guide.`
+          `${STORAGE_INFOS.map(({url}) => url)}. Please make sure these URLs are available ` +
+          `within your local network, check Appium server logs and/or ` +
+          `consult the driver troubleshooting guide.`
       );
     }
     this.mapping = xmlStr ? await parseGoogleapiStorageXml(xmlStr, shouldParseNotes) : {};
@@ -104,47 +116,102 @@ export class ChromedriverStorageClient {
   }
 
   /**
-   * Extracts downloaded chromedriver archive
-   * into the given destination
+   * Retrieves chromedrivers from the remote storage to the local file system
    *
-   * @param {string} src - The source archive path
-   * @param {string} dst - The destination chromedriver path
+   * @param opts - Synchronization options (versions, minBrowserVersion, osInfo)
+   * @throws {Error} if there was a problem while retrieving the drivers
+   * @returns The list of successfully synchronized driver keys
    */
-  async unzipDriver(src, dst) {
-    const tmpRoot = await tempDir.openDir();
-    try {
-      await zip.extractAllTo(src, tmpRoot);
-      const chromedriverPath = await fs.walkDir(
-        tmpRoot,
-        true,
-        (itemPath, isDirectory) =>
-          !isDirectory && _.toLower(path.parse(itemPath).name) === 'chromedriver'
-      );
-      if (!chromedriverPath) {
-        throw new Error(
-          'The archive was unzipped properly, but we could not find any chromedriver executable'
-        );
-      }
-      log.debug(`Moving the extracted '${path.basename(chromedriverPath)}' to '${dst}'`);
-      await fs.mv(chromedriverPath, dst, {
-        mkdirp: true,
-      });
-    } finally {
-      await fs.rimraf(tmpRoot);
+  async syncDrivers(opts: SyncOptions = {}): Promise<string[]> {
+    if (_.isEmpty(this.mapping)) {
+      await this.retrieveMapping(!!opts.minBrowserVersion);
     }
+    if (_.isEmpty(this.mapping)) {
+      throw new Error('Cannot retrieve chromedrivers mapping from Google storage');
+    }
+
+    const driversToSync = this.selectMatchingDrivers(opts.osInfo ?? (await getOsInfo()), opts);
+    if (_.isEmpty(driversToSync)) {
+      log.debug(`There are no drivers to sync. Exiting`);
+      return [];
+    }
+    log.debug(
+      `Got ${util.pluralize('driver', driversToSync.length, true)} to sync: ` +
+        JSON.stringify(driversToSync, null, 2)
+    );
+
+    const synchronizedDrivers: string[] = [];
+    const promises: Promise<void>[] = [];
+    const chunk: Promise<void>[] = [];
+    const archivesRoot = await tempDir.openDir();
+    try {
+      for (const [idx, driverKey] of driversToSync.entries()) {
+        const promise = B.resolve(
+          (async () => {
+            if (await this.retrieveDriver(idx, driverKey, archivesRoot, !_.isEmpty(opts))) {
+              synchronizedDrivers.push(driverKey);
+            }
+          })()
+        );
+        promises.push(promise);
+        chunk.push(promise);
+        if (chunk.length >= MAX_PARALLEL_DOWNLOADS) {
+          await B.any(chunk);
+        }
+        _.remove(chunk, (p) => (p as B<void>).isFulfilled());
+      }
+      await B.all(promises);
+    } finally {
+      await fs.rimraf(archivesRoot);
+    }
+    if (!_.isEmpty(synchronizedDrivers)) {
+      log.info(
+        `Successfully synchronized ` +
+          `${util.pluralize('chromedriver', synchronizedDrivers.length, true)}`
+      );
+    } else {
+      log.info(`No chromedrivers were synchronized`);
+    }
+    return synchronizedDrivers;
   }
 
   /**
-   * Filters `this.mapping` to only select matching
-   * chromedriver entries by operating system information
-   * and/or additional synchronization options (if provided)
+   * Returns the latest chromedriver version for Chrome for Testing
    *
-   * @param {OSInfo} osInfo
-   * @param {SyncOptions} opts
-   * @returns {Array<String>} The list of filtered chromedriver
-   * entry names (version/archive name)
+   * @returns The latest stable chromedriver version string
+   * @throws {Error} if the version cannot be fetched from the remote API
    */
-  selectMatchingDrivers(osInfo, opts = {}) {
+  async getLatestKnownGoodVersion(): Promise<string> {
+    let jsonStr: string;
+    try {
+      jsonStr = await retrieveData(
+        CHROME_FOR_TESTING_LAST_GOOD_VERSIONS,
+        {
+          'user-agent': USER_AGENT,
+          accept: `application/json, */*`,
+        },
+        {timeout: STORAGE_REQ_TIMEOUT_MS}
+      );
+    } catch (e) {
+      const err = e as Error;
+      throw new Error(
+        `Cannot fetch the latest Chromedriver version. ` +
+          `Make sure you can access ${CHROME_FOR_TESTING_LAST_GOOD_VERSIONS} from your machine or provide a mirror by setting ` +
+          `a custom value to CHROMELABS_URL environment variable. Original error: ${err.message}`
+      );
+    }
+    return parseLatestKnownGoodVersionsJson(jsonStr);
+  }
+
+  /**
+   * Filters `this.mapping` to only select matching chromedriver entries
+   * by operating system information and/or additional synchronization options
+   *
+   * @param osInfo - Operating system information to match against
+   * @param opts - Synchronization options (versions, minBrowserVersion)
+   * @returns The list of filtered chromedriver entry names (version/archive name)
+   */
+  private selectMatchingDrivers(osInfo: OSInfo, opts: SyncOptions = {}): string[] {
     const {minBrowserVersion, versions = []} = opts;
     let driversToSync = _.keys(this.mapping);
 
@@ -205,15 +272,23 @@ export class ChromedriverStorageClient {
       let result = driversToSync.filter((cdName) => this.doesMatchForOsInfo(cdName, osInfo));
       if (_.isEmpty(result) && arch === ARCH.X64 && cpu === CPU.INTEL) {
         // Fallback to X86 if X64 architecture is not available for this driver
-        result = driversToSync.filter((cdName) => this.doesMatchForOsInfo(cdName, {
-          name, arch: ARCH.X86, cpu
-        }));
+        result = driversToSync.filter((cdName) =>
+          this.doesMatchForOsInfo(cdName, {
+            name,
+            arch: ARCH.X86,
+            cpu,
+          })
+        );
       }
       if (_.isEmpty(result) && name === OS.MAC && cpu === CPU.ARM) {
         // Fallback to Intel/Rosetta if ARM architecture is not available for this driver
-        result = driversToSync.filter((cdName) => this.doesMatchForOsInfo(cdName, {
-          name, arch, cpu: CPU.INTEL
-        }));
+        result = driversToSync.filter((cdName) =>
+          this.doesMatchForOsInfo(cdName, {
+            name,
+            arch,
+            cpu: CPU.INTEL,
+          })
+        );
       }
       driversToSync = result;
       log.debug(`Got ${util.pluralize('item', driversToSync.length, true)}`);
@@ -221,12 +296,11 @@ export class ChromedriverStorageClient {
 
     if (!_.isEmpty(driversToSync)) {
       log.debug('Excluding older patches if present');
-      /** @type {{[key: string]: string[]}} */
-      const patchesMap = {};
+      const patchesMap: {[key: string]: string[]} = {};
       // Older chromedrivers must not be excluded as they follow a different
       // versioning pattern
       const versionWithPatchPattern = /\d+\.\d+\.\d+\.\d+/;
-      const selectedVersions = new Set();
+      const selectedVersions = new Set<string>();
       for (const cdName of driversToSync) {
         const cdVersion = this.mapping[cdName].version;
         if (!versionWithPatchPattern.test(cdVersion)) {
@@ -246,17 +320,15 @@ export class ChromedriverStorageClient {
         if (patchesMap[majorVersion].length <= 1) {
           continue;
         }
-        patchesMap[majorVersion].sort(
-          (/** @type {string} */ a, /** @type {string}} */ b) => compareVersions(b, a)
-        );
+        patchesMap[majorVersion].sort((a: string, b: string) => compareVersions(b, a));
       }
       if (!_.isEmpty(patchesMap)) {
         log.debug('Versions mapping: ' + JSON.stringify(patchesMap, null, 2));
         for (const sortedVersions of _.values(patchesMap)) {
           selectedVersions.add(sortedVersions[0]);
         }
-        driversToSync = driversToSync.filter(
-          (cdName) => selectedVersions.has(this.mapping[cdName].version)
+        driversToSync = driversToSync.filter((cdName) =>
+          selectedVersions.has(this.mapping[cdName].version)
         );
       }
     }
@@ -267,11 +339,11 @@ export class ChromedriverStorageClient {
   /**
    * Checks whether the given chromedriver matches the operating system to run on
    *
-   * @param {string} cdName
-   * @param {OSInfo} osInfo
-   * @returns {boolean}
+   * @param cdName - The chromedriver entry key in the mapping
+   * @param osInfo - Operating system information to match against
+   * @returns True if the chromedriver matches the OS info
    */
-  doesMatchForOsInfo(cdName, {name, arch, cpu}) {
+  private doesMatchForOsInfo(cdName: string, {name, arch, cpu}: OSInfo): boolean {
     const cdInfo = this.mapping[cdName];
     if (!cdInfo) {
       return false;
@@ -291,18 +363,23 @@ export class ChromedriverStorageClient {
    * Retrieves the given chromedriver from the storage
    * and unpacks it into `this.chromedriverDir` folder
    *
-   * @param {number} index - The unique driver index
-   * @param {string} driverKey - The driver key in `this.mapping`
-   * @param {string} archivesRoot - The temporary folder path to extract
+   * @param index - The unique driver index
+   * @param driverKey - The driver key in `this.mapping`
+   * @param archivesRoot - The temporary folder path to extract
    * downloaded archives to
-   * @param {boolean} isStrict [true] - Whether to throw an error (`true`)
+   * @param isStrict [true] - Whether to throw an error (`true`)
    * or return a boolean result if the driver retrieval process fails
    * @throws {Error} if there was a failure while retrieving the driver
    * and `isStrict` is set to `true`
-   * @returns {Promise<boolean>} if `true` then the chromedriver is successfully
+   * @returns if `true` then the chromedriver is successfully
    * downloaded and extracted.
    */
-  async retrieveDriver(index, driverKey, archivesRoot, isStrict = false) {
+  private async retrieveDriver(
+    index: number,
+    driverKey: string,
+    archivesRoot: string,
+    isStrict = false
+  ): Promise<boolean> {
     const {url, etag, version} = this.mapping[driverKey];
     const archivePath = path.resolve(archivesRoot, `${index}.zip`);
     log.debug(`Retrieving '${url}' to '${archivePath}'`);
@@ -312,7 +389,7 @@ export class ChromedriverStorageClient {
         timeout: STORAGE_REQ_TIMEOUT_MS,
       });
     } catch (e) {
-      const err = /** @type {Error} */ (e);
+      const err = e as Error;
       const msg = `Cannot download chromedriver archive. Original error: ${err.message}`;
       if (isStrict) {
         throw new Error(msg);
@@ -335,7 +412,7 @@ export class ChromedriverStorageClient {
       await fs.chmod(targetPath, 0o755);
       log.debug(`Permissions of the file '${targetPath}' have been changed to 755`);
     } catch (e) {
-      const err = /** @type {Error} */ (e);
+      const err = e as Error;
       if (isStrict) {
         throw err;
       }
@@ -346,105 +423,34 @@ export class ChromedriverStorageClient {
   }
 
   /**
-   * Retrieves chromedrivers from the remote storage
-   * to the local file system
+   * Extracts downloaded chromedriver archive
+   * into the given destination
    *
-   * @param {SyncOptions} opts
-   * @throws {Error} if there was a problem while retrieving
-   * the drivers
-   * @returns {Promise<string[]>} The list of successfully synchronized driver keys
+   * @param src - The source archive path
+   * @param dst - The destination chromedriver path
    */
-  async syncDrivers(opts = {}) {
-    if (_.isEmpty(this.mapping)) {
-      await this.retrieveMapping(!!opts.minBrowserVersion);
-    }
-    if (_.isEmpty(this.mapping)) {
-      throw new Error('Cannot retrieve chromedrivers mapping from Google storage');
-    }
-
-    const driversToSync = this.selectMatchingDrivers(opts.osInfo ?? (await getOsInfo()), opts);
-    if (_.isEmpty(driversToSync)) {
-      log.debug(`There are no drivers to sync. Exiting`);
-      return [];
-    }
-    log.debug(
-      `Got ${util.pluralize('driver', driversToSync.length, true)} to sync: ` +
-        JSON.stringify(driversToSync, null, 2)
-    );
-
-    /**
-     * @type {string[]}
-     */
-    const synchronizedDrivers = [];
-    const promises = [];
-    const chunk = [];
-    const archivesRoot = await tempDir.openDir();
+  private async unzipDriver(src: string, dst: string): Promise<void> {
+    const tmpRoot = await tempDir.openDir();
     try {
-      for (const [idx, driverKey] of driversToSync.entries()) {
-        const promise = B.resolve(
-          (async () => {
-            if (await this.retrieveDriver(idx, driverKey, archivesRoot, !_.isEmpty(opts))) {
-              synchronizedDrivers.push(driverKey);
-            }
-          })()
+      await zip.extractAllTo(src, tmpRoot);
+      const chromedriverPath = await fs.walkDir(
+        tmpRoot,
+        true,
+        (itemPath, isDirectory) =>
+          !isDirectory && _.toLower(path.parse(itemPath).name) === 'chromedriver'
+      );
+      if (!chromedriverPath) {
+        throw new Error(
+          'The archive was unzipped properly, but we could not find any chromedriver executable'
         );
-        promises.push(promise);
-        chunk.push(promise);
-        if (chunk.length >= MAX_PARALLEL_DOWNLOADS) {
-          await B.any(chunk);
-        }
-        _.remove(chunk, (p) => p.isFulfilled());
       }
-      await B.all(promises);
+      log.debug(`Moving the extracted '${path.basename(chromedriverPath)}' to '${dst}'`);
+      await fs.mv(chromedriverPath, dst, {
+        mkdirp: true,
+      });
     } finally {
-      await fs.rimraf(archivesRoot);
+      await fs.rimraf(tmpRoot);
     }
-    if (!_.isEmpty(synchronizedDrivers)) {
-      log.info(
-        `Successfully synchronized ` +
-        `${util.pluralize('chromedriver', synchronizedDrivers.length, true)}`
-      );
-    } else {
-      log.info(`No chromedrivers were synchronized`);
-    }
-    return synchronizedDrivers;
-  }
-
-  /**
-   * Return latest chromedriver version for Chrome for Testing.
-   * @returns {Promise<string>}
-   */
-  async getLatestKnownGoodVersion() {
-    let jsonStr;
-    try {
-      jsonStr = await retrieveData(
-        CHROME_FOR_TESTING_LAST_GOOD_VERSIONS,
-        {
-          'user-agent': USER_AGENT,
-          accept: `application/json, */*`,
-        }, {timeout: STORAGE_REQ_TIMEOUT_MS}
-      );
-    } catch (e) {
-      const err = /** @type {Error} */ (e);
-      throw new Error(`Cannot fetch the latest Chromedriver version. ` +
-        `Make sure you can access ${CHROME_FOR_TESTING_LAST_GOOD_VERSIONS} from your machine or provide a mirror by setting ` +
-        `a custom value to CHROMELABS_URL environment variable. Original error: ${err.message}`);
-    }
-    return parseLatestKnownGoodVersionsJson(jsonStr);
   }
 }
 
-export default ChromedriverStorageClient;
-
-/**
- * @typedef {import('../types').SyncOptions} SyncOptions
- * @typedef {import('../types').OSInfo} OSInfo
- * @typedef {import('../types').ChromedriverDetails} ChromedriverDetails
- * @typedef {import('../types').ChromedriverDetailsMapping} ChromedriverDetailsMapping
- */
-
-/**
- * @typedef {Object} StorageInfo
- * @property {string} url
- * @property {string} accept
- */

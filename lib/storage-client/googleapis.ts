@@ -12,18 +12,28 @@ import {
 } from '../constants';
 import {DOMParser} from '@xmldom/xmldom';
 import path from 'node:path';
+import type {
+  AdditionalDriverDetails,
+  ChromedriverDetails,
+  ChromedriverDetailsMapping,
+} from '../types';
 
 const log = logger.getLogger('ChromedriverGoogleapisStorageClient');
 const MAX_PARALLEL_DOWNLOADS = 5;
 
 /**
+ * Finds a child node in an XML node by name and/or text content
  *
- * @param {Node|Attr} parent
- * @param {string?} childName
- * @param {string?} text
- * @returns
+ * @param parent - The parent XML node to search in
+ * @param childName - Optional child node name to match
+ * @param text - Optional text content to match
+ * @returns The matching child node or null if not found
  */
-export function findChildNode(parent, childName = null, text = null) {
+export function findChildNode(
+  parent: Node | Attr,
+  childName: string | null = null,
+  text: string | null = null
+): Node | Attr | null {
   if (!childName && !text) {
     return null;
   }
@@ -32,7 +42,7 @@ export function findChildNode(parent, childName = null, text = null) {
   }
 
   for (let childNodeIdx = 0; childNodeIdx < parent.childNodes.length; childNodeIdx++) {
-    const childNode = /** @type {Element|Attr} */ (parent.childNodes[childNodeIdx]);
+    const childNode = parent.childNodes[childNodeIdx] as Element | Attr;
     if (childName && !text && childName === childNode.localName) {
       return childNode;
     }
@@ -53,25 +63,14 @@ export function findChildNode(parent, childName = null, text = null) {
 }
 
 /**
- *
- * @param {Node?} node
- * @returns
- */
-function extractNodeText(node) {
-  return !node?.firstChild || !util.hasValue(node.firstChild.nodeValue)
-    ? null
-    : node.firstChild.nodeValue;
-}
-
-/**
  * Gets additional chromedriver details from chromedriver
  * release notes
  *
- * @param {string} content - Release notes of the corresponding chromedriver
- * @returns {import('../types').AdditionalDriverDetails}
+ * @param content - Release notes of the corresponding chromedriver
+ * @returns AdditionalDriverDetails
  */
-export function parseNotes(content) {
-  const result = {};
+export function parseNotes(content: string): AdditionalDriverDetails {
+  const result: AdditionalDriverDetails = {};
   const versionMatch = /^\s*[-]+ChromeDriver[\D]+([\d.]+)/im.exec(content);
   if (versionMatch) {
     result.version = versionMatch[1];
@@ -87,27 +86,26 @@ export function parseNotes(content) {
  * Parses chromedriver storage XML and returns
  * the parsed results
  *
- * @param {string} xml - The chromedriver storage XML
- * @param {boolean} shouldParseNotes [true] - If set to `true`
+ * @param xml - The chromedriver storage XML
+ * @param shouldParseNotes [true] - If set to `true`
  * then additional drivers information is going to be parsed
  * and assigned to `this.mapping`
- * @returns {Promise<ChromedriverDetailsMapping>}
+ * @returns Promise<ChromedriverDetailsMapping>
  */
-export async function parseGoogleapiStorageXml(xml, shouldParseNotes = true) {
+export async function parseGoogleapiStorageXml(
+  xml: string,
+  shouldParseNotes = true
+): Promise<ChromedriverDetailsMapping> {
   const doc = new DOMParser().parseFromString(xml, 'text/xml');
-  const driverNodes = /** @type {Array<Node|Attr>} */ (
-    // https://github.com/xmldom/xmldom/issues/724
-    xpathSelect(`//*[local-name(.)='Contents']`, doc)
-  );
+  const driverNodes = xpathSelect(`//*[local-name(.)='Contents']`, doc) as Array<Node | Attr>;
   log.debug(`Parsed ${driverNodes.length} entries from storage XML`);
   if (_.isEmpty(driverNodes)) {
     throw new Error('Cannot retrieve any valid Chromedriver entries from the storage config');
   }
 
-  const promises = [];
-  const chunk = [];
-  /** @type {ChromedriverDetailsMapping} */
-  const mapping = {};
+  const promises: Promise<void>[] = [];
+  const chunk: Promise<void>[] = [];
+  const mapping: ChromedriverDetailsMapping = {};
   for (const driverNode of driverNodes) {
     const k = extractNodeText(findChildNode(driverNode, 'Key'));
     if (!_.includes(k, '/chromedriver_')) {
@@ -128,17 +126,16 @@ export async function parseGoogleapiStorageXml(xml, shouldParseNotes = true) {
       continue;
     }
 
-    /** @type {ChromedriverDetails} */
-    const cdInfo = {
+    const cdInfo: ChromedriverDetails = {
       url: `${GOOGLEAPIS_CDN}/${key}`,
       etag: _.trim(etag, '"'),
-      version: /** @type {string} */ (_.first(key.split('/'))),
+      version: _.first(key.split('/')) as string,
       minBrowserVersion: null,
       os: {
         name: osNameMatch[1],
         arch: filename.includes(ARCH.X64) ? ARCH.X64 : ARCH.X86,
         cpu: APPLE_ARM_SUFFIXES.some((suffix) => filename.includes(suffix)) ? CPU.ARM : CPU.INTEL,
-      }
+      },
     };
     mapping[key] = cdInfo;
 
@@ -157,13 +154,15 @@ export async function parseGoogleapiStorageXml(xml, shouldParseNotes = true) {
       continue;
     }
 
-    const promise = B.resolve(retrieveAdditionalDriverInfo(key, `${GOOGLEAPIS_CDN}/${notesPath}`, cdInfo));
+    const promise = B.resolve(
+      retrieveAdditionalDriverInfo(key, `${GOOGLEAPIS_CDN}/${notesPath}`, cdInfo)
+    );
     promises.push(promise);
     chunk.push(promise);
     if (chunk.length >= MAX_PARALLEL_DOWNLOADS) {
       await B.any(chunk);
     }
-    _.remove(chunk, (p) => p.isFulfilled());
+    _.remove(chunk, (p) => (p as B<void>).isFulfilled());
   }
   await B.all(promises);
   log.info(`The total count of entries in the mapping: ${_.size(mapping)}`);
@@ -171,17 +170,20 @@ export async function parseGoogleapiStorageXml(xml, shouldParseNotes = true) {
 }
 
 /**
- * Downloads chromedriver release notes and puts them
- * into the dictionary argument
+ * Downloads chromedriver release notes and updates the driver info dictionary
  *
- * The method call mutates by merging `AdditionalDriverDetails`
- * @param {string} driverKey - Driver version plus archive name
- * @param {string} notesUrl - The URL of chromedriver notes
- * @param {ChromedriverDetails} infoDict - The dictionary containing driver info.
- * @param {number} timeout
- * @throws {Error} if the release notes cannot be downloaded
+ * Mutates `infoDict` by setting `minBrowserVersion` if found in notes
+ * @param driverKey - Driver version plus archive name
+ * @param notesUrl - The URL of chromedriver notes
+ * @param infoDict - The dictionary containing driver info (will be mutated)
+ * @param timeout - Request timeout in milliseconds
  */
-async function retrieveAdditionalDriverInfo(driverKey, notesUrl, infoDict, timeout = STORAGE_REQ_TIMEOUT_MS) {
+async function retrieveAdditionalDriverInfo(
+  driverKey: string,
+  notesUrl: string,
+  infoDict: ChromedriverDetails,
+  timeout = STORAGE_REQ_TIMEOUT_MS
+): Promise<void> {
   const notes = await retrieveData(
     notesUrl,
     {
@@ -201,9 +203,8 @@ async function retrieveAdditionalDriverInfo(driverKey, notesUrl, infoDict, timeo
   infoDict.minBrowserVersion = minBrowserVersion;
 }
 
-/**
- * @typedef {import('../types').SyncOptions} SyncOptions
- * @typedef {import('../types').OSInfo} OSInfo
- * @typedef {import('../types').ChromedriverDetails} ChromedriverDetails
- * @typedef {import('../types').ChromedriverDetailsMapping} ChromedriverDetailsMapping
- */
+function extractNodeText(node: Node | null | undefined): string | null {
+  return !node?.firstChild || !util.hasValue(node.firstChild.nodeValue)
+    ? null
+    : node.firstChild.nodeValue;
+}
