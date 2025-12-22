@@ -3,24 +3,27 @@ import path from 'path';
 import {logger} from '@appium/support';
 import * as semver from 'semver';
 import {ARCH, CPU} from '../constants';
+import type {ChromedriverDetailsMapping} from '../types';
 
 const log = logger.getLogger('ChromedriverChromelabsStorageClient');
 
 /**
- * Parses The output of the corresponding JSON API
- * that retrieves Chromedriver versions. See
- * https://github.com/GoogleChromeLabs/chrome-for-testing#json-api-endpoints
- * for more details.
+ * Parses the output of the JSON API that retrieves Chromedriver versions
  *
- * @param {string} jsonStr
- * @returns {ChromedriverDetailsMapping}
+ * See https://github.com/GoogleChromeLabs/chrome-for-testing#json-api-endpoints for more details.
+ *
+ * @param jsonStr - The JSON string from the known-good-versions-with-downloads API
+ * @returns A mapping of chromedriver entry keys to their details
+ * @throws {Error} if the JSON cannot be parsed or has an unsupported format
  */
-export function parseKnownGoodVersionsWithDownloadsJson(jsonStr) {
-  let json;
+export function parseKnownGoodVersionsWithDownloadsJson(
+  jsonStr: string
+): ChromedriverDetailsMapping {
+  let json: KnownGoodVersionsJson;
   try {
     json = JSON.parse(jsonStr);
   } catch (e) {
-    const err = /** @type {Error} */ (e);
+    const err = e as Error;
     throw new Error(`Storage JSON cannot be parsed. Original error: ${err.message}`);
   }
   /**
@@ -60,8 +63,7 @@ export function parseKnownGoodVersionsWithDownloadsJson(jsonStr) {
    *       "version":"113.0.5672.35",
    *       ...
    */
-  /** @type {ChromedriverDetailsMapping} */
-  const mapping = {};
+  const mapping: ChromedriverDetailsMapping = {};
   if (!_.isArray(json?.versions)) {
     log.debug(jsonStr);
     throw new Error('The format of the storage JSON is not supported');
@@ -80,10 +82,13 @@ export function parseKnownGoodVersionsWithDownloadsJson(jsonStr) {
       }
       const osNameMatch = /^[a-z]+/i.exec(downloadEntry.platform);
       if (!osNameMatch) {
-        log.debug(`The entry '${downloadEntry.url}' does not contain valid platform name. Skipping it`);
+        log.debug(
+          `The entry '${downloadEntry.url}' does not contain valid platform name. Skipping it`
+        );
         continue;
       }
-      const key = `${path.basename(path.dirname(path.dirname(downloadEntry.url)))}/` +
+      const key =
+        `${path.basename(path.dirname(path.dirname(downloadEntry.url)))}/` +
         `${path.basename(downloadEntry.url)}`;
       mapping[key] = {
         url: downloadEntry.url,
@@ -94,7 +99,7 @@ export function parseKnownGoodVersionsWithDownloadsJson(jsonStr) {
           name: osNameMatch[0],
           arch: downloadEntry.platform.includes(ARCH.X64) ? ARCH.X64 : ARCH.X86,
           cpu: downloadEntry.platform.includes(CPU.ARM) ? CPU.ARM : CPU.INTEL,
-        }
+        },
       };
     }
   }
@@ -103,20 +108,20 @@ export function parseKnownGoodVersionsWithDownloadsJson(jsonStr) {
 }
 
 /**
- * Parses The output of the corresponding JSON API
- * that retrieves the most recent stable Chromedriver version. See
- * https://github.com/GoogleChromeLabs/chrome-for-testing#json-api-endpoints
- * for more details.
+ * Parses the output of the JSON API that retrieves the most recent stable Chromedriver version
  *
- * @param {string} jsonStr
- * @returns {string} The most recent available chromedriver version
+ * See https://github.com/GoogleChromeLabs/chrome-for-testing#json-api-endpoints for more details.
+ *
+ * @param jsonStr - The JSON string from the last-known-good-versions API
+ * @returns The most recent available chromedriver version string
+ * @throws {Error} if the JSON cannot be parsed or has an unsupported format
  */
-export function parseLatestKnownGoodVersionsJson(jsonStr) {
-  let json;
+export function parseLatestKnownGoodVersionsJson(jsonStr: string): string {
+  let json: LatestKnownGoodVersionsJson;
   try {
     json = JSON.parse(jsonStr);
   } catch (e) {
-    const err = /** @type {Error} */ (e);
+    const err = e as Error;
     throw new Error(`Storage JSON cannot be parsed. Original error: ${err.message}`);
   }
   /**
@@ -136,6 +141,29 @@ export function parseLatestKnownGoodVersionsJson(jsonStr) {
   return json.channels.Stable.version;
 }
 
-/**
- * @typedef {import('../types').ChromedriverDetailsMapping} ChromedriverDetailsMapping
- */
+interface VersionEntry {
+  version: string;
+  revision?: string;
+  downloads?: {
+    chromedriver?: Array<{
+      platform: string;
+      url: string;
+    }>;
+  };
+}
+
+interface KnownGoodVersionsJson {
+  timestamp?: string;
+  versions?: VersionEntry[];
+}
+
+interface LatestKnownGoodVersionsJson {
+  timestamp?: string;
+  channels?: {
+    Stable?: {
+      channel?: string;
+      version?: string;
+      revision?: string;
+    };
+  };
+}

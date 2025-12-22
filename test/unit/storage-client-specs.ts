@@ -86,8 +86,8 @@ describe('ChromedriverStorageClient', function () {
 
     it('should select appropriate drivers if no options are set', function () {
       const client = new ChromedriverStorageClient();
-      client.mapping = _.cloneDeep(defaultMapping);
-      const selectedDrivers = client.selectMatchingDrivers({
+      (client as any).mapping = _.cloneDeep(defaultMapping);
+      const selectedDrivers = (client as any).selectMatchingDrivers({
         name: 'win',
         arch: '64',
         cpu: 'intel',
@@ -100,8 +100,8 @@ describe('ChromedriverStorageClient', function () {
 
     it('should select appropriate drivers if versions are set', function () {
       const client = new ChromedriverStorageClient();
-      client.mapping = _.cloneDeep(defaultMapping);
-      const selectedDrivers = client.selectMatchingDrivers(
+      (client as any).mapping = _.cloneDeep(defaultMapping);
+      const selectedDrivers = (client as any).selectMatchingDrivers(
         {
           name: 'linux',
           arch: '64',
@@ -116,8 +116,8 @@ describe('ChromedriverStorageClient', function () {
 
     it('should select appropriate drivers if minBrowserVersion is set', function () {
       const client = new ChromedriverStorageClient();
-      client.mapping = _.cloneDeep(defaultMapping);
-      const selectedDrivers = client.selectMatchingDrivers(
+      (client as any).mapping = _.cloneDeep(defaultMapping);
+      const selectedDrivers = (client as any).selectMatchingDrivers(
         {
           name: 'mac',
           arch: '64',
@@ -132,8 +132,8 @@ describe('ChromedriverStorageClient', function () {
 
     it('should select appropriate drivers if both minBrowserVersion and versions are set', function () {
       const client = new ChromedriverStorageClient();
-      client.mapping = _.cloneDeep(defaultMapping);
-      const selectedDrivers = client.selectMatchingDrivers(
+      (client as any).mapping = _.cloneDeep(defaultMapping);
+      const selectedDrivers = (client as any).selectMatchingDrivers(
         {
           name: 'mac',
           arch: '64',
