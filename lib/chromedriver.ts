@@ -19,6 +19,8 @@ import {compareVersions} from 'compare-versions';
 import {ChromedriverStorageClient} from './storage-client/storage-client';
 import {toW3cCapNames, getCapValue, toW3cCapName} from './protocol-helpers';
 import type {ADB} from 'appium-adb';
+import type {ProxyOptions, HTTPMethod, HTTPBody} from '@appium/types';
+import type {Request, Response} from 'express';
 import type {ChromedriverOpts, ChromedriverVersionMapping} from './types';
 
 const NEW_CD_VERSION_FORMAT_MAJOR_VERSION = 73;
@@ -75,7 +77,7 @@ export class Chromedriver extends events.EventEmitter {
   private readonly disableBuildCheck: boolean;
   private readonly storageClient: ChromedriverStorageClient | null;
   private readonly details?: ChromedriverOpts['details'];
-  private capabilities: Record<string, any>;
+  private capabilities: SessionCapabilities;
   private _desiredProtocol: keyof typeof PROTOCOLS | null;
   private _driverVersion: string | null;
   private _onlineStatus: Record<string, any> | null;
@@ -103,13 +105,12 @@ export class Chromedriver extends events.EventEmitter {
     this._log = logger.getLogger(generateLogPrefix(this));
 
     this.proxyHost = host;
-    this.proxyPort = typeof port === 'string' ? parseInt(port, 10) : port;
+    this.proxyPort = parseInt(String(port), 10);
     this.adb = adb;
     this.cmdArgs = cmdArgs;
     this.proc = null;
     this.useSystemExecutable = useSystemExecutable;
     this.chromedriver = executable;
-    this.executableDir = executableDir || '';
     this.mappingPath = mappingPath;
     this.bundleId = bundleId;
     this.executableVerified = false;
@@ -118,7 +119,7 @@ export class Chromedriver extends events.EventEmitter {
     // to mock in unit test
     this._execFunc = exec;
 
-    const proxyOpts: any = {
+    const proxyOpts: ProxyOptions = {
       server: this.proxyHost,
       port: this.proxyPort,
       log: this._log,
@@ -127,12 +128,13 @@ export class Chromedriver extends events.EventEmitter {
       proxyOpts.reqBasePath = reqBasePath;
     }
     this.jwproxy = new JWProxy(proxyOpts);
-    if (this.executableDir) {
+    if (executableDir) {
       // Expects the user set the executable directory explicitly
+      this.executableDir = executableDir;
       this.isCustomExecutableDir = true;
     } else {
-      this.isCustomExecutableDir = false;
       this.executableDir = getChromedriverDir();
+      this.isCustomExecutableDir = false;
     }
 
     this.verbose = verbose;
@@ -186,20 +188,7 @@ export class Chromedriver extends events.EventEmitter {
       this.changeState(Chromedriver.STATE_STARTING);
     }
 
-    const args = [`--port=${this.proxyPort}`];
-    if (this.adb?.adbPort) {
-      args.push(`--adb-port=${this.adb.adbPort}`);
-    }
-    if (_.isArray(this.cmdArgs)) {
-      args.push(...this.cmdArgs);
-    }
-    if (this.logPath) {
-      args.push(`--log-path=${this.logPath}`);
-    }
-    if (this.disableBuildCheck) {
-      args.push('--disable-build-check');
-    }
-    args.push('--verbose');
+    const args = this.buildChromedriverArgs();
     // what are the process stdout/stderr conditions wherein we know that
     // the process has started to our satisfaction?
     const startDetector = (stdout: string) => stdout.startsWith('Starting ');
@@ -359,7 +348,7 @@ export class Chromedriver extends events.EventEmitter {
    * @param body - Optional request body for POST requests.
    * @returns A promise that resolves to the response from Chromedriver.
    */
-  async sendCommand(url: string, method: 'POST' | 'GET' | 'DELETE', body?: any): Promise<any> {
+  async sendCommand(url: string, method: HTTPMethod, body: HTTPBody = null): Promise<HTTPBody> {
     return await this.jwproxy.command(url, method, body);
   }
 
@@ -369,8 +358,8 @@ export class Chromedriver extends events.EventEmitter {
    * @param res - The outgoing HTTP response object.
    * @returns A promise that resolves when the proxying is complete.
    */
-  async proxyReq(req: any, res: any): Promise<any> {
-    return await this.jwproxy.proxyReqRes(req, res);
+  async proxyReq(req: Request, res: Response): Promise<void> {
+    await this.jwproxy.proxyReqRes(req, res);
   }
 
   /**
@@ -389,6 +378,24 @@ export class Chromedriver extends events.EventEmitter {
   }
 
   // Private methods at the tail of the class
+
+  private buildChromedriverArgs(): string[] {
+    const args = [`--port=${this.proxyPort}`];
+    if (this.adb?.adbPort) {
+      args.push(`--adb-port=${this.adb.adbPort}`);
+    }
+    if (_.isArray(this.cmdArgs)) {
+      args.push(...this.cmdArgs);
+    }
+    if (this.logPath) {
+      args.push(`--log-path=${this.logPath}`);
+    }
+    if (this.disableBuildCheck) {
+      args.push('--disable-build-check');
+    }
+    args.push('--verbose');
+    return args;
+  }
 
   private async getDriversMapping(): Promise<ChromedriverVersionMapping> {
     let mapping = _.cloneDeep(CHROMEDRIVER_CHROME_MAPPING);
