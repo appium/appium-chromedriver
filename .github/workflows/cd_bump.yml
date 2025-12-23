@@ -23,7 +23,7 @@ jobs:
     - id: release_check
       run: |
         export latest_release=$(curl -sf ${{ env.API_URL }} | jq .channels.Stable.version | tr -d '"' )
-        export did_update=$(node "scripts/update_versions_mapping.js" "$latest_release" "${{ env.CD_VERSIONS_MAPPING }}")
+        export did_update=$(node "scripts/update_versions_mapping.mjs" "$latest_release" "${{ env.CD_VERSIONS_MAPPING }}")
 
         echo "did_update=${did_update}" >> "$GITHUB_OUTPUT"
         echo "cd_release=${latest_release}" >> "$GITHUB_OUTPUT"

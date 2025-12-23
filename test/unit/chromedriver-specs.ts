@@ -24,7 +24,7 @@ describe('chromedriver', function () {
         sandbox.stub(utils, 'getChromedriverBinaryPath').resolves('/path/to/chromedriver');
 
         const cd = new Chromedriver({});
-        const binPath = await cd.getCompatibleChromedriver();
+        const binPath = await (cd as any).getCompatibleChromedriver();
         expect(binPath).to.eql('/path/to/chromedriver');
       });
 
@@ -39,7 +39,7 @@ describe('chromedriver', function () {
           stdout: 'ChromeDriver 2.36.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
         } as any);
 
-        const binPath = await cd.getCompatibleChromedriver();
+        const binPath = await (cd as any).getCompatibleChromedriver();
         expect(binPath).to.eql('/some/local/dir/for/chromedrivers/chromedriver');
       });
     });
@@ -68,7 +68,7 @@ describe('chromedriver', function () {
           stdout: 'ChromeDriver 2.36.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
         } as any);
 
-        const binPath = await cd.getCompatibleChromedriver();
+        const binPath = await (cd as any).getCompatibleChromedriver();
         expect(binPath).to.eql('/path/to/chromedriver');
       });
 
@@ -116,7 +116,7 @@ describe('chromedriver', function () {
             stdout: 'ChromeDriver 2.30.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
           } as any);
 
-        const binPath = await cd.getCompatibleChromedriver();
+        const binPath = await (cd as any).getCompatibleChromedriver();
         expect(binPath).to.eql('/path/to/chromedriver-36');
       });
 
@@ -168,7 +168,7 @@ describe('chromedriver', function () {
             stdout: 'ChromeDriver 2.30.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
           } as any);
 
-        const chromedrivers = await cd.getChromedrivers(utils.CHROMEDRIVER_CHROME_MAPPING);
+        const chromedrivers = await (cd as any).getChromedrivers(utils.CHROMEDRIVER_CHROME_MAPPING);
         const expectedVersions = [
           '74.0.3729.6',
           '2.36',
@@ -216,7 +216,7 @@ describe('chromedriver', function () {
             stdout: 'ChromeDriver 2.35.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
           } as any);
 
-        await expect(cd.getCompatibleChromedriver()).to.eventually.be.rejected;
+        await expect((cd as any).getCompatibleChromedriver()).to.eventually.be.rejected;
       });
 
       it('should search specified directory if provided', async function () {
@@ -233,7 +233,7 @@ describe('chromedriver', function () {
           stdout: 'ChromeDriver 2.36.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
         } as any);
 
-        const binPath = await cd.getCompatibleChromedriver();
+        const binPath = await (cd as any).getCompatibleChromedriver();
         expect(binPath).to.eql('/some/local/dir/for/chromedrivers/chromedriver');
       });
 
@@ -251,7 +251,7 @@ describe('chromedriver', function () {
           stdout: 'ChromeDriver 2.42.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
         } as any);
 
-        const binPath = await cd.getCompatibleChromedriver();
+        const binPath = await (cd as any).getCompatibleChromedriver();
         expect(binPath).to.eql('/path/to/chromedriver-42');
       });
 
@@ -267,7 +267,7 @@ describe('chromedriver', function () {
         sandbox.stub(cd as any, '_execFunc').resolves({
           stdout: 'ChromeDriver 2.42.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
         } as any);
-        const binPath = await cd.getCompatibleChromedriver();
+        const binPath = await (cd as any).getCompatibleChromedriver();
         expect(binPath).to.eql('/path/to/chromedriver-42');
       });
     });
