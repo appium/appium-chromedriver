@@ -1,3 +1,9 @@
+## [8.2.0](https://github.com/appium/appium-chromedriver/compare/v8.1.0...v8.2.0) (2025-12-25)
+
+### Features
+
+* Migrate the rest of files to typescript ([#533](https://github.com/appium/appium-chromedriver/issues/533)) ([fbe186f](https://github.com/appium/appium-chromedriver/commit/fbe186f80901f76cd1b4458aca5dd059dceae268))
+
 ## [8.1.0](https://github.com/appium/appium-chromedriver/compare/v8.0.31...v8.1.0) (2025-12-22)
 
 ### Features
