@@ -12,13 +12,14 @@ export const OS = {
   LINUX: 'linux',
   WINDOWS: 'win',
   MAC: 'mac',
-};
+} as const;
 export const ARCH = {
   X64: '64',
   X86: '32',
-};
+} as const;
 export const CPU = {
   INTEL: 'intel',
   ARM: 'arm',
-};
-export const APPLE_ARM_SUFFIXES = ['64_m1', '_arm64'];
+} as const;
+export const APPLE_ARM_SUFFIXES = ['64_m1', '_arm64'] as const;
+

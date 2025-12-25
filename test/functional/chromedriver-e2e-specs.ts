@@ -71,7 +71,7 @@ describe('chromedriver binary setup', function () {
 
   it('should start with a binary that exists', async function () {
     const cd = new Chromedriver();
-    await cd.initChromedriverPath();
+    await (cd as any).initChromedriverPath();
   });
 });
 
@@ -89,7 +89,7 @@ describe('chromedriver with EventEmitter', function () {
     expect(cd!.state).to.eql('stopped');
     const nextStatePromise = nextState(cd!);
     const startPromise = cd!.start(caps);
-    expect(_.size(cd!.capabilities)).to.be.at.least(_.size(expectedCaps));
+    expect(_.size((cd as any).capabilities)).to.be.at.least(_.size(expectedCaps));
     await expect(nextStatePromise).to.become(Chromedriver.STATE_STARTING);
     await expect(nextState(cd!)).to.become(Chromedriver.STATE_ONLINE);
     await startPromise;
@@ -138,14 +138,14 @@ describe('chromedriver with EventEmitter', function () {
     expect(cd!.state).to.eql(Chromedriver.STATE_STOPPED);
     let nextStatePromise = nextState(cd!);
     const startPromise = cd!.start(caps);
-    expect(_.size(cd!.capabilities)).to.be.at.least(_.size(caps));
+    expect(_.size((cd as any).capabilities)).to.be.at.least(_.size(caps));
     await expect(nextStatePromise).to.become(Chromedriver.STATE_STARTING);
     await expect(nextState(cd!)).to.become(Chromedriver.STATE_ONLINE);
     await startPromise;
     expect(cd!.jwproxy.sessionId).to.exist;
     expect(cd!.sessionId()).to.exist;
     nextStatePromise = nextState(cd!);
-    await cd!.killAll();
+    await (cd as any).killAll();
     await expect(nextStatePromise).to.become(Chromedriver.STATE_STOPPED);
   });
   it('should throw an error when chromedriver does not exist', async function () {
@@ -170,7 +170,7 @@ describe('chromedriver with async/await', function () {
     expect(cd!.state).to.eql('stopped');
     expect(cd!.sessionId()).to.not.exist;
     await cd!.start(caps);
-    expect(_.size(cd!.capabilities)).to.be.at.least(_.size(expectedCaps));
+    expect(_.size((cd as any).capabilities)).to.be.at.least(_.size(expectedCaps));
     expect(cd!.state).to.eql(Chromedriver.STATE_ONLINE);
     expect(cd!.jwproxy.sessionId).to.exist;
     expect(cd!.sessionId()).to.exist;

@@ -1,7 +1,7 @@
-const fs = require('fs/promises');
-const _ = require('lodash');
+import {readFile, writeFile} from 'fs/promises';
+import _ from 'lodash';
 
-async function main () {
+async function main() {
   const [latestVersion, jsonPath] = process.argv.slice(2);
   if (!latestVersion) {
     throw new Error(
@@ -14,7 +14,7 @@ async function main () {
     );
   }
 
-  const json = JSON.parse(await fs.readFile(jsonPath, 'utf8'));
+  const json = JSON.parse(await readFile(jsonPath, 'utf8'));
   if (latestVersion in json) {
     process.stdout.write('0');
     return;
@@ -22,8 +22,9 @@ async function main () {
 
   const pairs = _.toPairs(json);
   pairs.unshift([latestVersion, latestVersion]);
-  await fs.writeFile(jsonPath, JSON.stringify(_.fromPairs(pairs), null, 2), 'utf8');
+  await writeFile(jsonPath, JSON.stringify(_.fromPairs(pairs), null, 2), 'utf8');
   process.stdout.write('1');
 }
 
-(async () => await main())();
+await main();
+
