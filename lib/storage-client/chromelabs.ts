@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import path from 'path';
+import path from 'node:path';
 import {logger} from '@appium/support';
 import * as semver from 'semver';
 import {ARCH, CPU} from '../constants';

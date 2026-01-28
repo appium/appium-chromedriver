@@ -1,6 +1,6 @@
-import events from 'events';
+import events from 'node:events';
 import {JWProxy, PROTOCOLS} from '@appium/base-driver';
-import cp from 'child_process';
+import cp from 'node:child_process';
 import {system, fs, logger, util} from '@appium/support';
 import {retryInterval, asyncmap} from 'asyncbox';
 import {SubProcess, exec, type ExecError} from 'teen_process';
@@ -14,7 +14,7 @@ import {
 } from './utils';
 import * as semver from 'semver';
 import _ from 'lodash';
-import path from 'path';
+import path from 'node:path';
 import {compareVersions} from 'compare-versions';
 import {ChromedriverStorageClient} from './storage-client/storage-client';
 import {toW3cCapNames, getCapValue, toW3cCapName} from './protocol-helpers';
