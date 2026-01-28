@@ -1,3 +1,9 @@
+## [8.2.5](https://github.com/appium/appium-chromedriver/compare/v8.2.4...v8.2.5) (2026-01-28)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump @appium/eslint-config-appium-ts from 2.0.5 to 3.0.0 ([#540](https://github.com/appium/appium-chromedriver/issues/540)) ([d60f987](https://github.com/appium/appium-chromedriver/commit/d60f987c7b75856d6a174b1cf2665be3ac6c775d))
+
 ## [8.2.4](https://github.com/appium/appium-chromedriver/compare/v8.2.3...v8.2.4) (2026-01-28)
 
 ### Miscellaneous Chores
