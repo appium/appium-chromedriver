@@ -1,10 +1,10 @@
 import _ from 'lodash';
 import {system, fs, node} from '@appium/support';
 import {BaseDriver} from '@appium/base-driver';
-import path from 'path';
+import path from 'node:path';
 import {compareVersions} from 'compare-versions';
 import axios from 'axios';
-import os from 'os';
+import os from 'node:os';
 import {OS, CPU} from './constants';
 import type {ADB} from 'appium-adb';
 import type {ChromedriverVersionMapping, OSInfo} from './types';

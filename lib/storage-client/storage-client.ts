@@ -7,7 +7,7 @@ import {
 } from '../utils';
 import _ from 'lodash';
 import B from 'bluebird';
-import path from 'path';
+import path from 'node:path';
 import {system, fs, logger, tempDir, zip, util, net} from '@appium/support';
 import {
   STORAGE_REQ_TIMEOUT_MS,

@@ -3,7 +3,7 @@ import chaiAsPromised from 'chai-as-promised';
 import {Chromedriver} from '../../lib/chromedriver';
 import sinon from 'sinon';
 import {fs} from '@appium/support';
-import path from 'path';
+import path from 'node:path';
 import * as utils from '../../lib/utils';
 
 use(chaiAsPromised);
