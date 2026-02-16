@@ -1,3 +1,9 @@
+## [8.2.11](https://github.com/appium/appium-chromedriver/compare/v8.2.10...v8.2.11) (2026-02-16)
+
+### Bug Fixes
+
+* format ([#547](https://github.com/appium/appium-chromedriver/issues/547)) ([4fe1964](https://github.com/appium/appium-chromedriver/commit/4fe19642005bc6ff05a7385a91ad64304ce43c95))
+
 ## [8.2.10](https://github.com/appium/appium-chromedriver/compare/v8.2.9...v8.2.10) (2026-02-14)
 
 ### Miscellaneous Chores
