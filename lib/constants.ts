@@ -22,4 +22,3 @@ export const CPU = {
   ARM: 'arm',
 } as const;
 export const APPLE_ARM_SUFFIXES = ['64_m1', '_arm64'] as const;
-

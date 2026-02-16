@@ -21,9 +21,7 @@ describe('ChromedriverStorageClient', function () {
       chromedriverDir: tmpRoot,
     });
     try {
-      expect((await client.syncDrivers({versions: ['2.35', '2.34']})).length).to.be.greaterThan(
-        0
-      );
+      expect((await client.syncDrivers({versions: ['2.35', '2.34']})).length).to.be.greaterThan(0);
       expect((await fs.readdir(tmpRoot)).length).to.be.eql(2);
     } finally {
       await fs.rimraf(tmpRoot);
@@ -37,7 +35,7 @@ describe('ChromedriverStorageClient', function () {
     });
     try {
       expect(
-        (await client.syncDrivers({versions: ['115.0.5790.102', '116.0.5791.0']})).length
+        (await client.syncDrivers({versions: ['115.0.5790.102', '116.0.5791.0']})).length,
       ).to.be.greaterThan(0);
       expect((await fs.readdir(tmpRoot)).length).to.be.eql(2);
     } finally {
@@ -71,4 +69,3 @@ describe('ChromedriverStorageClient', function () {
     }
   });
 });
-

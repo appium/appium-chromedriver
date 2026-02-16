@@ -35,4 +35,3 @@ export async function install(): Promise<void> {
     versions: [chromeDriverVersion],
   });
 }
-

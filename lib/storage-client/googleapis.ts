@@ -3,13 +3,7 @@ import {select as xpathSelect} from 'xpath';
 import {util, logger} from '@appium/support';
 import {retrieveData} from '../utils';
 import B from 'bluebird';
-import {
-  STORAGE_REQ_TIMEOUT_MS,
-  GOOGLEAPIS_CDN,
-  ARCH,
-  CPU,
-  APPLE_ARM_SUFFIXES,
-} from '../constants';
+import {STORAGE_REQ_TIMEOUT_MS, GOOGLEAPIS_CDN, ARCH, CPU, APPLE_ARM_SUFFIXES} from '../constants';
 import {DOMParser} from '@xmldom/xmldom';
 import path from 'node:path';
 import type {
@@ -32,7 +26,7 @@ const MAX_PARALLEL_DOWNLOADS = 5;
 export function findChildNode(
   parent: Node | Attr,
   childName: string | null = null,
-  text: string | null = null
+  text: string | null = null,
 ): Node | Attr | null {
   if (!childName && !text) {
     return null;
@@ -94,7 +88,7 @@ export function parseNotes(content: string): AdditionalDriverDetails {
  */
 export async function parseGoogleapiStorageXml(
   xml: string,
-  shouldParseNotes = true
+  shouldParseNotes = true,
 ): Promise<ChromedriverDetailsMapping> {
   const doc = new DOMParser().parseFromString(xml, 'text/xml');
   const driverNodes = xpathSelect(`//*[local-name(.)='Contents']`, doc) as Array<Node | Attr>;
@@ -142,7 +136,7 @@ export async function parseGoogleapiStorageXml(
     const notesPath = `${cdInfo.version}/notes.txt`;
     const isNotesPresent = !!driverNodes.reduce(
       (acc, node) => Boolean(acc || findChildNode(node, 'Key', notesPath)),
-      false
+      false,
     );
     if (!isNotesPresent) {
       cdInfo.minBrowserVersion = null;
@@ -155,7 +149,7 @@ export async function parseGoogleapiStorageXml(
     }
 
     const promise = B.resolve(
-      retrieveAdditionalDriverInfo(key, `${GOOGLEAPIS_CDN}/${notesPath}`, cdInfo)
+      retrieveAdditionalDriverInfo(key, `${GOOGLEAPIS_CDN}/${notesPath}`, cdInfo),
     );
     promises.push(promise);
     chunk.push(promise);
@@ -182,7 +176,7 @@ async function retrieveAdditionalDriverInfo(
   driverKey: string,
   notesUrl: string,
   infoDict: ChromedriverDetails,
-  timeout = STORAGE_REQ_TIMEOUT_MS
+  timeout = STORAGE_REQ_TIMEOUT_MS,
 ): Promise<void> {
   const notes = await retrieveData(
     notesUrl,
@@ -190,13 +184,13 @@ async function retrieveAdditionalDriverInfo(
       'user-agent': 'appium',
       accept: '*/*',
     },
-    {timeout}
+    {timeout},
   );
   const {minBrowserVersion} = parseNotes(notes);
   if (!minBrowserVersion) {
     log.debug(
       `The driver '${driverKey}' does not contain valid release notes at ${notesUrl}. ` +
-        `Skipping it`
+        `Skipping it`,
     );
     return;
   }

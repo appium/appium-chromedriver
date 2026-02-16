@@ -109,7 +109,7 @@ describe('ChromedriverStorageClient', function () {
         },
         {
           versions: ['76.0.3809.12'],
-        }
+        },
       );
       expect(selectedDrivers).to.eql(['76.0.3809.12/chromedriver_linux64.zip']);
     });
@@ -125,7 +125,7 @@ describe('ChromedriverStorageClient', function () {
         },
         {
           minBrowserVersion: 60,
-        }
+        },
       );
       expect(selectedDrivers).to.eql(['76.0.3809.12/chromedriver_mac64.zip']);
     });
@@ -142,10 +142,9 @@ describe('ChromedriverStorageClient', function () {
         {
           versions: ['76.0.3809.12'],
           minBrowserVersion: 60,
-        }
+        },
       );
       expect(selectedDrivers).to.eql(['76.0.3809.12/chromedriver_mac64.zip']);
     });
   });
 });
-

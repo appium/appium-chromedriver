@@ -17,7 +17,7 @@ const log = logger.getLogger('ChromedriverChromelabsStorageClient');
  * @throws {Error} if the JSON cannot be parsed or has an unsupported format
  */
 export function parseKnownGoodVersionsWithDownloadsJson(
-  jsonStr: string
+  jsonStr: string,
 ): ChromedriverDetailsMapping {
   let json: KnownGoodVersionsJson;
   try {
@@ -83,7 +83,7 @@ export function parseKnownGoodVersionsWithDownloadsJson(
       const osNameMatch = /^[a-z]+/i.exec(downloadEntry.platform);
       if (!osNameMatch) {
         log.debug(
-          `The entry '${downloadEntry.url}' does not contain valid platform name. Skipping it`
+          `The entry '${downloadEntry.url}' does not contain valid platform name. Skipping it`,
         );
         continue;
       }

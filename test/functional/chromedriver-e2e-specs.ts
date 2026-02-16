@@ -192,16 +192,15 @@ describe('chromedriver with async/await', function () {
       port: '1',
     });
     await expect(badCd.start(caps)).to.eventually.be.rejectedWith(
-      'ChromeDriver crashed during startup'
+      'ChromeDriver crashed during startup',
     );
     await assertNoRunningChromedrivers();
   });
   it('should throw an error during start if session does not work', async function () {
     const badCd = new Chromedriver({});
     await expect(badCd.start({chromeOptions: {badCap: 'foo'}})).to.eventually.be.rejectedWith(
-      'cannot parse capability'
+      'cannot parse capability',
     );
     await assertNoRunningChromedrivers();
   });
 });
-

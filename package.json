@@ -61,7 +61,8 @@
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
     "prepare": "npm run build",
-    "format": "prettier -w ./lib",
+    "format": "prettier -w ./lib ./test",
+    "format:check": "prettier --check ./lib ./test",
     "test": "mocha --exit --timeout 1m \"./test/unit/**/*-specs.ts\"",
     "e2e-test": "mocha --exit --timeout 10m \"./test/functional/**/*-specs.ts\""
   },

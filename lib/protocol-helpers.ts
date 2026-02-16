@@ -9,7 +9,7 @@ const W3C_PREFIX = 'goog:';
  * @returns The W3C-formatted capability name.
  */
 export function toW3cCapName(capName: string): string {
-  return (_.isString(capName) && !capName.includes(':') && !isStandardCap(capName))
+  return _.isString(capName) && !capName.includes(':') && !isStandardCap(capName)
     ? `${W3C_PREFIX}${capName}`
     : capName;
 }
@@ -21,7 +21,11 @@ export function toW3cCapName(capName: string): string {
  * @param defaultValue - Optional default value to return if the capability is not found.
  * @returns The capability value or the default value.
  */
-export function getCapValue(allCaps: Record<string, any> = {}, rawCapName: string, defaultValue?: any): any {
+export function getCapValue(
+  allCaps: Record<string, any> = {},
+  rawCapName: string,
+  defaultValue?: any,
+): any {
   for (const [capName, capValue] of _.toPairs(allCaps)) {
     if (toW3cCapName(capName) === toW3cCapName(rawCapName)) {
       return capValue;
@@ -36,9 +40,12 @@ export function getCapValue(allCaps: Record<string, any> = {}, rawCapName: strin
  * @returns A new object with W3C-formatted capability names.
  */
 export function toW3cCapNames(originalCaps: Record<string, any> = {}): Record<string, any> {
-  return _.reduce(originalCaps, (acc, value, key) => {
-    acc[toW3cCapName(key)] = value;
-    return acc;
-  }, {} as Record<string, any>);
+  return _.reduce(
+    originalCaps,
+    (acc, value, key) => {
+      acc[toW3cCapName(key)] = value;
+      return acc;
+    },
+    {} as Record<string, any>,
+  );
 }
-

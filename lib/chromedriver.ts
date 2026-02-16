@@ -865,10 +865,16 @@ export class Chromedriver extends events.EventEmitter {
       `Starting ${this._desiredProtocol} Chromedriver session with capabilities: ` +
         JSON.stringify(sessionCaps, null, 2),
     );
-    const response = (await this.jwproxy.command('/session', 'POST', sessionCaps)) as NewSessionResponse;
+    const response = (await this.jwproxy.command(
+      '/session',
+      'POST',
+      sessionCaps,
+    )) as NewSessionResponse;
     this.log.prefix = generateLogPrefix(this, this.jwproxy.sessionId);
     this.changeState(Chromedriver.STATE_ONLINE);
-    return _.has(response, 'capabilities') && response.capabilities ? response.capabilities : (response as SessionCapabilities);
+    return _.has(response, 'capabilities') && response.capabilities
+      ? response.capabilities
+      : (response as SessionCapabilities);
   }
 
   private changeState(state: string): void {
