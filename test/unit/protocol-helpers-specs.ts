@@ -44,7 +44,7 @@ describe('Protocol Helpers', function () {
       {
         proxy: 'some',
       },
-      'proxy'
+      'proxy',
     );
     expect(v3).to.eql('some');
 
@@ -53,9 +53,8 @@ describe('Protocol Helpers', function () {
         proxy: 'some',
       },
       'goog:proxy',
-      {}
+      {},
     );
     expect(v4).to.eql({});
   });
 });
-
