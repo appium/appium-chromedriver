@@ -26,11 +26,9 @@ const getModuleRoot = _.memoize(function getModuleRoot(): string {
 });
 
 // Chromedriver version: minimum Chrome version
-export const CHROMEDRIVER_CHROME_MAPPING: ChromedriverVersionMapping = require(path.join(
-  getModuleRoot(),
-  'config',
-  'mapping.json'
-));
+export const CHROMEDRIVER_CHROME_MAPPING: ChromedriverVersionMapping = require(
+  path.join(getModuleRoot(), 'config', 'mapping.json'),
+);
 export const CD_BASE_DIR = path.join(getModuleRoot(), 'chromedriver');
 
 /**
@@ -39,7 +37,9 @@ export const CD_BASE_DIR = path.join(getModuleRoot(), 'chromedriver');
  * @returns The most recent version string.
  * @throws {Error} If the mapping is empty.
  */
-export function getMostRecentChromedriver(mapping: ChromedriverVersionMapping = CHROMEDRIVER_CHROME_MAPPING): string {
+export function getMostRecentChromedriver(
+  mapping: ChromedriverVersionMapping = CHROMEDRIVER_CHROME_MAPPING,
+): string {
   if (_.isEmpty(mapping)) {
     throw new Error('Unable to get most recent Chromedriver version from empty mapping');
   }
@@ -100,7 +100,7 @@ export async function getChromedriverBinaryPath(osName: string = getOsName()): P
 export async function retrieveData(
   url: string,
   headers?: import('axios').AxiosRequestConfig['headers'],
-  opts: Pick<import('axios').AxiosRequestConfig, 'timeout' | 'responseType'> = {}
+  opts: Pick<import('axios').AxiosRequestConfig, 'timeout' | 'responseType'> = {},
 ): Promise<any> {
   const {timeout = 5000, responseType = 'text'} = opts;
   return (
@@ -117,7 +117,7 @@ export async function retrieveData(
  * Gets the OS name for the current system.
  * @returns The OS name ('win', 'mac', or 'linux').
  */
-export const getOsName = _.memoize(function getOsName(): typeof OS[keyof typeof OS] {
+export const getOsName = _.memoize(function getOsName(): (typeof OS)[keyof typeof OS] {
   if (system.isWindows()) {
     return OS.WINDOWS;
   }
@@ -131,7 +131,7 @@ export const getOsName = _.memoize(function getOsName(): typeof OS[keyof typeof 
  * Gets the CPU type for the current system.
  * @returns The CPU type ('intel' or 'arm').
  */
-export const getCpuType = _.memoize(function getCpuType(): typeof CPU[keyof typeof CPU] {
+export const getCpuType = _.memoize(function getCpuType(): (typeof CPU)[keyof typeof CPU] {
   return _.includes(_.toLower(os.cpus()[0].model), 'apple') ? CPU.ARM : CPU.INTEL;
 });
 
@@ -161,7 +161,7 @@ const getBaseDriverInstance = _.memoize(() => new BaseDriver({}, false));
 export function generateLogPrefix(obj: any, sessionId: string | null = null): string {
   return getBaseDriverInstance().helpers.generateDriverLogPrefix(
     obj,
-    sessionId ? sessionId : undefined
+    sessionId ? sessionId : undefined,
   );
 }
 
@@ -182,4 +182,3 @@ export function convertToInt(value: any): number | null {
       return null;
   }
 }
-

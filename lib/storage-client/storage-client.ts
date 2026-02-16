@@ -1,10 +1,4 @@
-import {
-  getChromedriverDir,
-  retrieveData,
-  getOsInfo,
-  convertToInt,
-  getCpuType,
-} from '../utils';
+import {getChromedriverDir, retrieveData, getOsInfo, convertToInt, getCpuType} from '../utils';
 import _ from 'lodash';
 import B from 'bluebird';
 import path from 'node:path';
@@ -19,7 +13,10 @@ import {
   CPU,
 } from '../constants';
 import {parseGoogleapiStorageXml} from './googleapis';
-import {parseKnownGoodVersionsWithDownloadsJson, parseLatestKnownGoodVersionsJson} from './chromelabs';
+import {
+  parseKnownGoodVersionsWithDownloadsJson,
+  parseLatestKnownGoodVersionsJson,
+} from './chromelabs';
 import {compareVersions} from 'compare-versions';
 import * as semver from 'semver';
 import type {
@@ -77,7 +74,10 @@ export class ChromedriverStorageClient {
    * @returns Promise<ChromedriverDetailsMapping>
    */
   async retrieveMapping(shouldParseNotes = true): Promise<ChromedriverDetailsMapping> {
-    const retrieveResponseSafely = async ({url, accept}: StorageInfo): Promise<string | undefined> => {
+    const retrieveResponseSafely = async ({
+      url,
+      accept,
+    }: StorageInfo): Promise<string | undefined> => {
       try {
         return await retrieveData(
           url,
@@ -85,7 +85,7 @@ export class ChromedriverStorageClient {
             'user-agent': USER_AGENT,
             accept: `${accept}, */*`,
           },
-          {timeout: this.timeout}
+          {timeout: this.timeout},
         );
       } catch (e) {
         const err = e as Error;
@@ -93,7 +93,7 @@ export class ChromedriverStorageClient {
         log.warn(
           `Cannot retrieve Chromedrivers info from ${url}. ` +
             `Make sure this URL is accessible from your network. ` +
-            `Original error: ${err.message}`
+            `Original error: ${err.message}`,
         );
       }
     };
@@ -105,7 +105,7 @@ export class ChromedriverStorageClient {
         `Cannot retrieve the information about available Chromedrivers from ` +
           `${STORAGE_INFOS.map(({url}) => url)}. Please make sure these URLs are available ` +
           `within your local network, check Appium server logs and/or ` +
-          `consult the driver troubleshooting guide.`
+          `consult the driver troubleshooting guide.`,
       );
     }
     this.mapping = xmlStr ? await parseGoogleapiStorageXml(xmlStr, shouldParseNotes) : {};
@@ -137,7 +137,7 @@ export class ChromedriverStorageClient {
     }
     log.debug(
       `Got ${util.pluralize('driver', driversToSync.length, true)} to sync: ` +
-        JSON.stringify(driversToSync, null, 2)
+        JSON.stringify(driversToSync, null, 2),
     );
 
     const synchronizedDrivers: string[] = [];
@@ -151,7 +151,7 @@ export class ChromedriverStorageClient {
             if (await this.retrieveDriver(idx, driverKey, archivesRoot, !_.isEmpty(opts))) {
               synchronizedDrivers.push(driverKey);
             }
-          })()
+          })(),
         );
         promises.push(promise);
         chunk.push(promise);
@@ -167,7 +167,7 @@ export class ChromedriverStorageClient {
     if (!_.isEmpty(synchronizedDrivers)) {
       log.info(
         `Successfully synchronized ` +
-          `${util.pluralize('chromedriver', synchronizedDrivers.length, true)}`
+          `${util.pluralize('chromedriver', synchronizedDrivers.length, true)}`,
       );
     } else {
       log.info(`No chromedrivers were synchronized`);
@@ -190,14 +190,14 @@ export class ChromedriverStorageClient {
           'user-agent': USER_AGENT,
           accept: `application/json, */*`,
         },
-        {timeout: STORAGE_REQ_TIMEOUT_MS}
+        {timeout: STORAGE_REQ_TIMEOUT_MS},
       );
     } catch (e) {
       const err = e as Error;
       throw new Error(
         `Cannot fetch the latest Chromedriver version. ` +
           `Make sure you can access ${CHROME_FOR_TESTING_LAST_GOOD_VERSIONS} from your machine or provide a mirror by setting ` +
-          `a custom value to CHROMELABS_URL environment variable. Original error: ${err.message}`
+          `a custom value to CHROMELABS_URL environment variable. Original error: ${err.message}`,
       );
     }
     return parseLatestKnownGoodVersionsJson(jsonStr);
@@ -219,7 +219,7 @@ export class ChromedriverStorageClient {
       // Handle only selected versions if requested
       log.debug(`Selecting chromedrivers whose versions match to ${versions}`);
       driversToSync = driversToSync.filter((cdName) =>
-        versions.includes(`${this.mapping[cdName].version}`)
+        versions.includes(`${this.mapping[cdName].version}`),
       );
 
       log.debug(`Got ${util.pluralize('item', driversToSync.length, true)}`);
@@ -232,14 +232,14 @@ export class ChromedriverStorageClient {
     if (minBrowserVersionInt !== null) {
       // Only select drivers that support the current browser whose major version number equals to `minBrowserVersion`
       log.debug(
-        `Selecting chromedrivers whose minimum supported browser version matches to ${minBrowserVersionInt}`
+        `Selecting chromedrivers whose minimum supported browser version matches to ${minBrowserVersionInt}`,
       );
       let closestMatchedVersionNumber = 0;
       // Select the newest available and compatible chromedriver
       for (const cdName of driversToSync) {
         const currentMinBrowserVersion = parseInt(
           String(this.mapping[cdName].minBrowserVersion),
-          10
+          10,
         );
         if (
           !Number.isNaN(currentMinBrowserVersion) &&
@@ -252,7 +252,7 @@ export class ChromedriverStorageClient {
       driversToSync = driversToSync.filter(
         (cdName) =>
           `${this.mapping[cdName].minBrowserVersion}` ===
-          `${closestMatchedVersionNumber > 0 ? closestMatchedVersionNumber : minBrowserVersionInt}`
+          `${closestMatchedVersionNumber > 0 ? closestMatchedVersionNumber : minBrowserVersionInt}`,
       );
 
       log.debug(`Got ${util.pluralize('item', driversToSync.length, true)}`);
@@ -261,7 +261,7 @@ export class ChromedriverStorageClient {
       }
       log.debug(
         `Will select candidate ${util.pluralize('driver', driversToSync.length)} ` +
-          `versioned as '${_.uniq(driversToSync.map((cdName) => this.mapping[cdName].version))}'`
+          `versioned as '${_.uniq(driversToSync.map((cdName) => this.mapping[cdName].version))}'`,
       );
     }
 
@@ -277,7 +277,7 @@ export class ChromedriverStorageClient {
             name,
             arch: ARCH.X86,
             cpu,
-          })
+          }),
         );
       }
       if (_.isEmpty(result) && name === OS.MAC && cpu === CPU.ARM) {
@@ -287,7 +287,7 @@ export class ChromedriverStorageClient {
             name,
             arch,
             cpu: CPU.INTEL,
-          })
+          }),
         );
       }
       driversToSync = result;
@@ -328,7 +328,7 @@ export class ChromedriverStorageClient {
           selectedVersions.add(sortedVersions[0]);
         }
         driversToSync = driversToSync.filter((cdName) =>
-          selectedVersions.has(this.mapping[cdName].version)
+          selectedVersions.has(this.mapping[cdName].version),
         );
       }
     }
@@ -378,7 +378,7 @@ export class ChromedriverStorageClient {
     index: number,
     driverKey: string,
     archivesRoot: string,
-    isStrict = false
+    isStrict = false,
   ): Promise<boolean> {
     const {url, etag, version} = this.mapping[driverKey];
     const archivePath = path.resolve(archivesRoot, `${index}.zip`);
@@ -437,11 +437,11 @@ export class ChromedriverStorageClient {
         tmpRoot,
         true,
         (itemPath, isDirectory) =>
-          !isDirectory && _.toLower(path.parse(itemPath).name) === 'chromedriver'
+          !isDirectory && _.toLower(path.parse(itemPath).name) === 'chromedriver',
       );
       if (!chromedriverPath) {
         throw new Error(
-          'The archive was unzipped properly, but we could not find any chromedriver executable'
+          'The archive was unzipped properly, but we could not find any chromedriver executable',
         );
       }
       log.debug(`Moving the extracted '${path.basename(chromedriverPath)}' to '${dst}'`);
@@ -453,4 +453,3 @@ export class ChromedriverStorageClient {
     }
   }
 }
-
