@@ -1,3 +1,9 @@
+## [8.2.22](https://github.com/appium/appium-chromedriver/compare/v8.2.21...v8.2.22) (2026-04-02)
+
+### Bug Fixes
+
+* Typescript build ([#559](https://github.com/appium/appium-chromedriver/issues/559)) ([5814a02](https://github.com/appium/appium-chromedriver/commit/5814a0260d8f4474a559b9949f0aa740d928cd8a))
+
 ## [8.2.21](https://github.com/appium/appium-chromedriver/compare/v8.2.20...v8.2.21) (2026-03-26)
 
 ### Miscellaneous Chores
