@@ -91,7 +91,10 @@ export async function parseGoogleapiStorageXml(
   shouldParseNotes = true,
 ): Promise<ChromedriverDetailsMapping> {
   const doc = new DOMParser().parseFromString(xml, 'text/xml');
-  const driverNodes = xpathSelect(`//*[local-name(.)='Contents']`, doc) as Array<Node | Attr>;
+  const driverNodes = xpathSelect(
+    `//*[local-name(.)='Contents']`,
+    doc as unknown as Node,
+  ) as Array<Node | Attr>;
   log.debug(`Parsed ${driverNodes.length} entries from storage XML`);
   if (_.isEmpty(driverNodes)) {
     throw new Error('Cannot retrieve any valid Chromedriver entries from the storage config');
