@@ -4,6 +4,7 @@ import _ from 'lodash';
 
 describe('ChromedriverStorageClient', function () {
   describe('selectMatchingDrivers', function () {
+    type AnyObj = {[key: string]: any};
     const defaultMapping = {
       '2.0/chromedriver_linux32.zip': {
         url: 'https://chromedriver.storage.googleapis.com/2.0/chromedriver_linux32.zip',
@@ -84,10 +85,20 @@ describe('ChromedriverStorageClient', function () {
       },
     };
 
-    it('should select appropriate drivers if no options are set', function () {
+    const createClient = (mappingOverride?: AnyObj) => {
       const client = new ChromedriverStorageClient();
-      (client as any).mapping = _.cloneDeep(defaultMapping);
-      const selectedDrivers = (client as any).selectMatchingDrivers({
+      (client as any).mapping = mappingOverride
+        ? _.merge(_.cloneDeep(defaultMapping), mappingOverride)
+        : _.cloneDeep(defaultMapping);
+      return client;
+    };
+
+    const selectDrivers = (client: ChromedriverStorageClient, osInfo: AnyObj, opts: AnyObj = {}) =>
+      (client as any).selectMatchingDrivers(osInfo, opts);
+
+    it('should select appropriate drivers if no options are set', function () {
+      const client = createClient();
+      const selectedDrivers = selectDrivers(client, {
         name: 'win',
         arch: '64',
         cpu: 'intel',
@@ -99,9 +110,9 @@ describe('ChromedriverStorageClient', function () {
     });
 
     it('should select appropriate drivers if versions are set', function () {
-      const client = new ChromedriverStorageClient();
-      (client as any).mapping = _.cloneDeep(defaultMapping);
-      const selectedDrivers = (client as any).selectMatchingDrivers(
+      const client = createClient();
+      const selectedDrivers = selectDrivers(
+        client,
         {
           name: 'linux',
           arch: '64',
@@ -115,9 +126,9 @@ describe('ChromedriverStorageClient', function () {
     });
 
     it('should select appropriate drivers if minBrowserVersion is set', function () {
-      const client = new ChromedriverStorageClient();
-      (client as any).mapping = _.cloneDeep(defaultMapping);
-      const selectedDrivers = (client as any).selectMatchingDrivers(
+      const client = createClient();
+      const selectedDrivers = selectDrivers(
+        client,
         {
           name: 'mac',
           arch: '64',
@@ -131,9 +142,9 @@ describe('ChromedriverStorageClient', function () {
     });
 
     it('should select appropriate drivers if both minBrowserVersion and versions are set', function () {
-      const client = new ChromedriverStorageClient();
-      (client as any).mapping = _.cloneDeep(defaultMapping);
-      const selectedDrivers = (client as any).selectMatchingDrivers(
+      const client = createClient();
+      const selectedDrivers = selectDrivers(
+        client,
         {
           name: 'mac',
           arch: '64',
@@ -145,6 +156,42 @@ describe('ChromedriverStorageClient', function () {
         },
       );
       expect(selectedDrivers).to.eql(['76.0.3809.12/chromedriver_mac64.zip']);
+    });
+
+    it('should fallback to Intel drivers for Windows ARM', function () {
+      const client = createClient({
+        '2.0/chromedriver_win64.zip': {
+          url: 'https://chromedriver.storage.googleapis.com/2.0/chromedriver_win64.zip',
+          etag: 'bbf8fd0fe525a06dda162619cac2b201',
+          version: '2.0',
+          minBrowserVersion: '20',
+          os: {
+            name: 'win',
+            arch: '64',
+            cpu: 'intel',
+          },
+        },
+        '76.0.3809.12/chromedriver_win64.zip': {
+          url: 'https://chromedriver.storage.googleapis.com/76.0.3809.12/chromedriver_win64.zip',
+          etag: 'b8d1935aa3f3480c4ceed221af0be9d5',
+          version: '76.0.3809.12',
+          minBrowserVersion: '60',
+          os: {
+            name: 'win',
+            arch: '64',
+            cpu: 'intel',
+          },
+        },
+      });
+      const selectedDrivers = selectDrivers(client, {
+        name: 'win',
+        arch: '64',
+        cpu: 'arm',
+      });
+      expect(selectedDrivers).to.eql([
+        '2.0/chromedriver_win64.zip',
+        '76.0.3809.12/chromedriver_win64.zip',
+      ]);
     });
   });
 });
