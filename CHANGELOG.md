@@ -1,3 +1,9 @@
+## [8.2.25](https://github.com/appium/appium-chromedriver/compare/v8.2.24...v8.2.25) (2026-04-09)
+
+### Bug Fixes
+
+* Fix chromedrivers filtering for Windows running inside a VM ([#563](https://github.com/appium/appium-chromedriver/issues/563)) ([6b1d948](https://github.com/appium/appium-chromedriver/commit/6b1d948cdf47d653ac687407e7551ce4b67dc83d))
+
 ## [8.2.24](https://github.com/appium/appium-chromedriver/compare/v8.2.23...v8.2.24) (2026-04-08)
 
 ### Miscellaneous Chores
