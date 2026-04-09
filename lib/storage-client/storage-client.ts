@@ -280,8 +280,9 @@ export class ChromedriverStorageClient {
           }),
         );
       }
-      if (_.isEmpty(result) && name === OS.MAC && cpu === CPU.ARM) {
-        // Fallback to Intel/Rosetta if ARM architecture is not available for this driver
+      if (_.isEmpty(result) && (name === OS.MAC || name === OS.WINDOWS) && cpu === CPU.ARM) {
+        // Fallback to Intel (Rosetta on macOS, x64 emulation on Windows ARM):
+        // https://github.com/appium/appium-chromedriver/issues/562
         result = driversToSync.filter((cdName) =>
           this.doesMatchForOsInfo(cdName, {
             name,
