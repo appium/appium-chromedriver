@@ -32,12 +32,8 @@
   "files": [
     "config",
     "lib",
-    "build",
-    "!build/test",
-    "!build/tsconfig.tsbuildinfo",
-    "config/mapping.json",
-    "CHANGELOG.md",
-    "tsconfig.json"
+    "build/lib",
+    "CHANGELOG.md"
   ],
   "types": "./build/lib/index.d.ts",
   "dependencies": {
@@ -88,6 +84,6 @@
     "semantic-release": "^25.0.2",
     "sinon": "^21.0.0",
     "ts-node": "^10.9.1",
-    "typescript": "^5.4.2"
+    "typescript": "^6.0.2"
   }
 }
