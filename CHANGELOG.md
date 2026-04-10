@@ -1,3 +1,9 @@
+## [8.2.26](https://github.com/appium/appium-chromedriver/compare/v8.2.25...v8.2.26) (2026-04-10)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump typescript from 5.9.3 to 6.0.2 ([#557](https://github.com/appium/appium-chromedriver/issues/557)) ([0df16bc](https://github.com/appium/appium-chromedriver/commit/0df16bcdb924aa113917bc63bcaabd9909084ef8))
+
 ## [8.2.25](https://github.com/appium/appium-chromedriver/compare/v8.2.24...v8.2.25) (2026-04-09)
 
 ### Bug Fixes
