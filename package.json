@@ -32,12 +32,8 @@
   "files": [
     "config",
     "lib",
-    "build",
-    "!build/test",
-    "!build/tsconfig.tsbuildinfo",
-    "config/mapping.json",
-    "CHANGELOG.md",
-    "tsconfig.json"
+    "build/lib",
+    "CHANGELOG.md"
   ],
   "types": "./build/lib/index.d.ts",
   "dependencies": {

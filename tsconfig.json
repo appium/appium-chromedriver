@@ -1,12 +1,16 @@
 {
   "extends": "@appium/tsconfig/tsconfig.json",
   "compilerOptions": {
-    "strict": true,
     "types": ["node", "mocha"],
     "outDir": "build",
     "checkJs": true,
     "esModuleInterop": true,
-    "lib": ["es2020", "dom"]
+  },
+  "ts-node": {
+    "transpileOnly": true,
+    "compilerOptions": {
+      "rootDir": "."
+    }
   },
   "include": ["lib", "test"]
 }
