@@ -1,3 +1,33 @@
+## [8.2.25](https://github.com/appium/appium-chromedriver/compare/v8.2.24...v8.2.25) (2026-04-09)
+
+### Bug Fixes
+
+* Fix chromedrivers filtering for Windows running inside a VM ([#563](https://github.com/appium/appium-chromedriver/issues/563)) ([6b1d948](https://github.com/appium/appium-chromedriver/commit/6b1d948cdf47d653ac687407e7551ce4b67dc83d))
+
+## [8.2.24](https://github.com/appium/appium-chromedriver/compare/v8.2.23...v8.2.24) (2026-04-08)
+
+### Miscellaneous Chores
+
+* ChromeDriver Bump to v147.0.7727.56 ([#561](https://github.com/appium/appium-chromedriver/issues/561)) ([a5da496](https://github.com/appium/appium-chromedriver/commit/a5da49673d9a3ba01705fd26d55045ef391516fb))
+
+## [8.2.23](https://github.com/appium/appium-chromedriver/compare/v8.2.22...v8.2.23) (2026-04-03)
+
+### Miscellaneous Chores
+
+* ChromeDriver Bump to v147.0.7727.50 ([#560](https://github.com/appium/appium-chromedriver/issues/560)) ([16cb814](https://github.com/appium/appium-chromedriver/commit/16cb8143203c208de732b286a56dc30376d24b8d))
+
+## [8.2.22](https://github.com/appium/appium-chromedriver/compare/v8.2.21...v8.2.22) (2026-04-02)
+
+### Bug Fixes
+
+* Typescript build ([#559](https://github.com/appium/appium-chromedriver/issues/559)) ([5814a02](https://github.com/appium/appium-chromedriver/commit/5814a0260d8f4474a559b9949f0aa740d928cd8a))
+
+## [8.2.21](https://github.com/appium/appium-chromedriver/compare/v8.2.20...v8.2.21) (2026-03-26)
+
+### Miscellaneous Chores
+
+* ChromeDriver Bump to v147.0.7727.24 ([#558](https://github.com/appium/appium-chromedriver/issues/558)) ([c2422d8](https://github.com/appium/appium-chromedriver/commit/c2422d833db72ba8d7fb830abe2a40071b506891))
+
 ## [8.2.20](https://github.com/appium/appium-chromedriver/compare/v8.2.19...v8.2.20) (2026-03-24)
 
 ### Miscellaneous Chores
