@@ -7,6 +7,9 @@ const WEBVIEW_SHELL_BUNDLE_ID = 'org.chromium.webview_shell';
 const WEBVIEW_BUNDLE_IDS = ['com.google.android.webview', 'com.android.webview'] as const;
 const VERSION_PATTERN = /([\d.]+)/;
 
+/**
+ * Detects Chrome/WebView version to drive Chromedriver compatibility matching.
+ */
 export async function getChromeVersionForAutodetection(
   this: ChromedriverCommandContext,
 ): Promise<semver.SemVer | null> {

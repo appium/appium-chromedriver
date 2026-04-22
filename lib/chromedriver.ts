@@ -6,7 +6,6 @@ import {getChromedriverDir, generateLogPrefix} from './utils';
 import _ from 'lodash';
 import {ChromedriverStorageClient} from './storage-client/storage-client';
 import {CHROMEDRIVER_EVENTS, CHROMEDRIVER_STATES} from './constants';
-import {getCapValue} from './protocol-helpers';
 import {
   getDriversMapping,
   getChromedrivers,
@@ -16,7 +15,7 @@ import {
 } from './commands/binary';
 import {getChromeVersionForAutodetection} from './commands/version';
 import {buildChromedriverArgs, waitForOnline, getStatus, killAll} from './commands/process';
-import {syncProtocol, startSession} from './commands/session';
+import {syncProtocol, startSession, changeState, getCapValue} from './commands/session';
 import type {ADB} from 'appium-adb';
 import type {ProxyOptions, HTTPMethod, HTTPBody} from '@appium/types';
 import type {Request, Response} from 'express';
@@ -25,8 +24,13 @@ import type {ChromedriverOpts} from './types';
 const DEFAULT_HOST = '127.0.0.1';
 const DEFAULT_PORT = 9515;
 type SessionCapabilities = Record<string, any>;
+type ChromedriverState = (typeof CHROMEDRIVER_STATES)[keyof typeof CHROMEDRIVER_STATES];
+type ChromedriverEventMap = {
+  [CHROMEDRIVER_EVENTS.ERROR]: [Error];
+  [CHROMEDRIVER_EVENTS.CHANGED]: [{state: ChromedriverState}];
+};
 
-export class Chromedriver extends events.EventEmitter {
+export class Chromedriver extends events.EventEmitter<ChromedriverEventMap> {
   static readonly EVENT_ERROR = CHROMEDRIVER_EVENTS.ERROR;
   static readonly EVENT_CHANGED = CHROMEDRIVER_EVENTS.CHANGED;
   static readonly STATE_STOPPED = CHROMEDRIVER_STATES.STOPPED;
@@ -127,6 +131,13 @@ export class Chromedriver extends events.EventEmitter {
     return this._driverVersion;
   }
 
+  /**
+   * Starts a new Chromedriver session with the given capabilities.
+   *
+   * @param caps - Capabilities passed to Chromedriver session creation.
+   * @param emitStartingState - Whether to emit the `starting` state transition.
+   * @returns Session capabilities returned by Chromedriver.
+   */
   async start(caps: SessionCapabilities, emitStartingState = true): Promise<SessionCapabilities> {
     this.capabilities = _.cloneDeep(caps);
     // set the logging preferences to ALL browser console logs by default
@@ -220,10 +231,20 @@ export class Chromedriver extends events.EventEmitter {
     }
   }
 
+  /**
+   * Gets active Chromedriver session id if the driver is online.
+   *
+   * @returns The session id or `null` when driver is not online.
+   */
   sessionId(): string | null {
     return this.state === Chromedriver.STATE_ONLINE ? this.jwproxy.sessionId : null;
   }
 
+  /**
+   * Restarts current Chromedriver session with previously stored capabilities.
+   *
+   * @returns Session capabilities returned by the restarted session.
+   */
   async restart(): Promise<SessionCapabilities> {
     this.log.info('Restarting chromedriver');
     if (this.state !== Chromedriver.STATE_ONLINE) {
@@ -234,6 +255,11 @@ export class Chromedriver extends events.EventEmitter {
     return await this.start(this.capabilities, false);
   }
 
+  /**
+   * Stops the current Chromedriver session and underlying subprocess.
+   *
+   * @param emitStates - Whether to emit stopping/stopped state transitions.
+   */
   async stop(emitStates = true): Promise<void> {
     if (emitStates) {
       this.changeState(Chromedriver.STATE_STOPPING);
@@ -259,14 +285,33 @@ export class Chromedriver extends events.EventEmitter {
     }
   }
 
+  /**
+   * Sends a direct command to Chromedriver through the JSONWP/W3C proxy.
+   *
+   * @param url - Chromedriver endpoint path.
+   * @param method - HTTP method used for the command.
+   * @param body - Optional request payload.
+   * @returns Command response payload.
+   */
   async sendCommand(url: string, method: HTTPMethod, body: HTTPBody = null): Promise<HTTPBody> {
     return await this.jwproxy.command(url, method, body);
   }
 
+  /**
+   * Proxies an incoming Express request/response pair to Chromedriver.
+   *
+   * @param req - Incoming request object.
+   * @param res - Outgoing response object.
+   */
   async proxyReq(req: Request, res: Response): Promise<void> {
     await this.jwproxy.proxyReqRes(req, res);
   }
 
+  /**
+   * Checks whether the active webview connection is currently responsive.
+   *
+   * @returns `true` if `/url` command succeeds, otherwise `false`.
+   */
   async hasWorkingWebview(): Promise<boolean> {
     try {
       await this.jwproxy.command('/url', 'GET');
@@ -288,10 +333,5 @@ export class Chromedriver extends events.EventEmitter {
   private getStatus = getStatus;
   private killAll = killAll;
   private startSession = startSession as () => Promise<SessionCapabilities>;
-
-  private changeState(state: string): void {
-    this.state = state;
-    this.log.debug(`Changed state to '${state}'`);
-    this.emit(Chromedriver.EVENT_CHANGED, {state});
-  }
+  private changeState = changeState;
 }

@@ -8,7 +8,6 @@ import * as semver from 'semver';
 import {CHROMEDRIVER_CHROME_MAPPING, getChromedriverBinaryPath} from '../utils';
 import type {ChromedriverVersionMapping} from '../types';
 import type {ChromedriverCommandContext} from './types';
-import {getChromeVersionForAutodetection} from './version';
 
 const NEW_CD_VERSION_FORMAT_MAJOR_VERSION = 73;
 const CD_VERSION_TIMEOUT = 5000;
@@ -19,6 +18,9 @@ export interface ChromedriverInfo {
   minChromeVersion: string | null;
 }
 
+/**
+ * Loads and normalizes Chromedriver-to-Chrome version mapping.
+ */
 export async function getDriversMapping(
   this: ChromedriverCommandContext,
 ): Promise<ChromedriverVersionMapping> {
@@ -52,6 +54,9 @@ export async function getDriversMapping(
   return mapping;
 }
 
+/**
+ * Discovers available Chromedriver binaries and parses their versions.
+ */
 export async function getChromedrivers(
   this: ChromedriverCommandContext,
   mapping: ChromedriverVersionMapping,
@@ -143,6 +148,9 @@ export async function getChromedrivers(
   return cds;
 }
 
+/**
+ * Persists updated version mapping to disk or falls back to in-memory update.
+ */
 export async function updateDriversMapping(
   this: ChromedriverCommandContext,
   newMapping: ChromedriverVersionMapping,
@@ -169,13 +177,22 @@ export async function updateDriversMapping(
   }
 }
 
+/**
+ * Selects the most suitable Chromedriver binary for current environment.
+ */
 export async function getCompatibleChromedriver(this: ChromedriverCommandContext): Promise<string> {
+  const self = this as ChromedriverCommandContext & {
+    getDriversMapping: () => Promise<ChromedriverVersionMapping>;
+    getChromedrivers: (mapping: ChromedriverVersionMapping) => Promise<ChromedriverInfo[]>;
+    updateDriversMapping: (mapping: ChromedriverVersionMapping) => Promise<void>;
+    getChromeVersion: () => Promise<semver.SemVer | null>;
+  };
   if (!this.adb && !this.isCustomExecutableDir) {
     // desktop default path shortcut when no device-specific matching is needed
     return await getChromedriverBinaryPath();
   }
 
-  const mapping = await getDriversMapping.call(this);
+  const mapping = await self.getDriversMapping();
   if (!_.isEmpty(mapping)) {
     this.log.debug(`The most recent known Chrome version: ${_.values(mapping)[0]}`);
   }
@@ -203,13 +220,13 @@ export async function getCompatibleChromedriver(this: ChromedriverCommandContext
       return acc;
     }, {} as ChromedriverVersionMapping);
     Object.assign(mapping, synchronizedDriversMapping);
-    await updateDriversMapping.call(this, mapping);
+    await self.updateDriversMapping(mapping);
     return true;
   };
 
   while (true) {
     // retry loop may run twice if first pass triggers auto-download sync
-    const cds = await getChromedrivers.call(this, mapping);
+    const cds = await self.getChromedrivers(mapping);
     const missingVersions: ChromedriverVersionMapping = {};
     for (const {version, minChromeVersion} of cds) {
       if (!minChromeVersion || mapping[version]) {
@@ -227,7 +244,7 @@ export async function getCompatibleChromedriver(this: ChromedriverCommandContext
           `which ${_.size(missingVersions) === 1 ? 'is' : 'are'} missing in the list of known versions: ` +
           JSON.stringify(missingVersions),
       );
-      await updateDriversMapping.call(this, Object.assign(mapping, missingVersions));
+      await self.updateDriversMapping(Object.assign(mapping, missingVersions));
     }
 
     if (this.disableBuildCheck) {
@@ -245,7 +262,7 @@ export async function getCompatibleChromedriver(this: ChromedriverCommandContext
       return executable;
     }
 
-    const chromeVersion = await getChromeVersionForAutodetection.call(this);
+    const chromeVersion = await self.getChromeVersion();
     if (!chromeVersion) {
       if (_.isEmpty(cds)) {
         throw this.log.errorWithException(
@@ -301,7 +318,13 @@ export async function getCompatibleChromedriver(this: ChromedriverCommandContext
   }
 }
 
+/**
+ * Resolves and verifies the effective Chromedriver executable path.
+ */
 export async function initChromedriverPath(this: ChromedriverCommandContext): Promise<string> {
+  const self = this as ChromedriverCommandContext & {
+    getCompatibleChromedriver: () => Promise<string>;
+  };
   if (this.executableVerified && this.chromedriver) {
     return this.chromedriver;
   }
@@ -309,7 +332,7 @@ export async function initChromedriverPath(this: ChromedriverCommandContext): Pr
   if (!chromedriver) {
     chromedriver = this.chromedriver = this.useSystemExecutable
       ? await getChromedriverBinaryPath()
-      : await getCompatibleChromedriver.call(this);
+      : await self.getCompatibleChromedriver();
   }
   if (!chromedriver) {
     throw new Error('Cannot determine a valid Chromedriver executable path');

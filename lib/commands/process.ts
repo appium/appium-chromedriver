@@ -1,13 +1,15 @@
-import cp from 'node:child_process';
 import {system} from '@appium/support';
 import {retryInterval} from 'asyncbox';
-import B from 'bluebird';
+import {exec} from 'teen_process';
 import _ from 'lodash';
 import {CHROMEDRIVER_STATES} from '../constants';
 import type {ChromedriverCommandContext} from './types';
 
 const VERSION_PATTERN = /([\d.]+)/;
 
+/**
+ * Builds command-line arguments for the Chromedriver subprocess.
+ */
 export function buildChromedriverArgs(this: ChromedriverCommandContext): string[] {
   const args = [`--port=${this.proxyPort}`];
   if (this.adb?.adbPort) {
@@ -26,18 +28,27 @@ export function buildChromedriverArgs(this: ChromedriverCommandContext): string[
   return args;
 }
 
+/**
+ * Retrieves Chromedriver `/status` payload through the active proxy.
+ */
 export async function getStatus(this: ChromedriverCommandContext): Promise<any> {
   return await this.jwproxy.command('/status', 'GET');
 }
 
+/**
+ * Polls Chromedriver until it reports ready and captures runtime metadata.
+ */
 export async function waitForOnline(this: ChromedriverCommandContext): Promise<void> {
+  const self = this as ChromedriverCommandContext & {
+    getStatus: () => Promise<any>;
+  };
   let chromedriverStopped = false;
   await retryInterval(20, 200, async () => {
     if (this.state === CHROMEDRIVER_STATES.STOPPED) {
       chromedriverStopped = true;
       return;
     }
-    const status: any = await getStatus.call(this);
+    const status: any = await self.getStatus();
     if (!_.isPlainObject(status) || !status.ready) {
       throw new Error(`The response to the /status API is not valid: ${JSON.stringify(status)}`);
     }
@@ -55,16 +66,20 @@ export async function waitForOnline(this: ChromedriverCommandContext): Promise<v
   }
 }
 
+/**
+ * Cleans up stale Chromedriver processes and leftover adb forwarded ports.
+ */
 export async function killAll(this: ChromedriverCommandContext): Promise<void> {
-  const cmd = system.isWindows()
-    ? `wmic process where "commandline like '%chromedriver.exe%--port=${this.proxyPort}%'" delete`
-    : `pkill -15 -f "${this.chromedriver}.*--port=${this.proxyPort}"`;
-  this.log.debug(`Killing any old chromedrivers, running: ${cmd}`);
+  const cmd = system.isWindows() ? 'wmic' : 'pkill';
+  const args = system.isWindows()
+    ? ['process', 'where', `commandline like '%chromedriver.exe%--port=${this.proxyPort}%'`, 'delete']
+    : ['-15', '-f', `${this.chromedriver}.*--port=${this.proxyPort}`];
+  this.log.debug(`Killing any old chromedrivers, running: ${cmd} ${args.join(' ')}`);
   try {
-    await B.promisify(cp.exec)(cmd);
+    await exec(cmd, args);
     this.log.debug('Successfully cleaned up old chromedrivers');
   } catch {
-    this.log.warn('No old chromedrivers seem to exist');
+    this.log.info('No old chromedrivers seem to exist');
   }
 
   if (this.adb) {

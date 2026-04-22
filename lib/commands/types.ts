@@ -1,9 +1,11 @@
-import type {PROTOCOLS} from '@appium/base-driver';
+import type {PROTOCOLS, JWProxy} from '@appium/base-driver';
 import type {ADB} from 'appium-adb';
-import type {HTTPMethod, HTTPBody} from '@appium/types';
+import type {AppiumLogger} from '@appium/types';
 import type {ChromedriverOpts} from '../types';
+import type {ChromedriverStorageClient} from '../storage-client/storage-client';
+import type { EventEmitter } from 'node:events';
 
-export interface ChromedriverCommandContext {
+export interface ChromedriverCommandContext extends EventEmitter {
   state: string;
   proxyPort: number;
   adb?: ADB;
@@ -18,26 +20,13 @@ export interface ChromedriverCommandContext {
   executableVerified: boolean;
   bundleId?: string;
   details?: ChromedriverOpts['details'];
-  storageClient: {
-    retrieveMapping: () => Promise<Record<string, {version: string; minBrowserVersion: string | null}>>;
-    syncDrivers: (opts: {minBrowserVersion: number}) => Promise<string[]>;
-  } | null;
+  storageClient: ChromedriverStorageClient | null;
   _execFunc: typeof import('teen_process').exec;
   _driverVersion: string | null;
   _onlineStatus: Record<string, any> | null;
   _desiredProtocol: keyof typeof PROTOCOLS | null;
   capabilities: Record<string, any>;
-  jwproxy: {
-    command: (url: string, method: HTTPMethod, body?: HTTPBody) => Promise<any>;
-    sessionId: string | null;
-  };
-  log: {
-    debug: (msg: string) => void;
-    info: (msg: string) => void;
-    warn: (msg: string) => void;
-    error: (msg: string) => void;
-    prefix: string;
-    errorWithException: (msg: string) => Error;
-  };
+  jwproxy: JWProxy;
+  log: AppiumLogger;
   driverVersion: string | null;
 }
