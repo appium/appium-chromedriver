@@ -35,7 +35,7 @@ describe('chromedriver', function () {
 
         sandbox.stub(utils, 'getChromeVersion').resolves('63.0.3239.99');
         sandbox.stub(fs, 'glob').resolves(['/some/local/dir/for/chromedrivers/chromedriver']);
-        sandbox.stub(cd as any, '_execFunc').resolves({
+        sandbox.stub(cd, '_execFunc').resolves({
           stdout: 'ChromeDriver 2.36.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
         } as any);
 
@@ -64,7 +64,7 @@ describe('chromedriver', function () {
       it('should find a compatible binary if only one binary exists', async function () {
         sandbox.stub(utils, 'getChromeVersion').resolves('63.0.3239.99');
         sandbox.stub(fs, 'glob').resolves(['/path/to/chromedriver']);
-        sandbox.stub(cd as any, '_execFunc').resolves({
+        sandbox.stub(cd, '_execFunc').resolves({
           stdout: 'ChromeDriver 2.36.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
         } as any);
 
@@ -85,7 +85,7 @@ describe('chromedriver', function () {
             '/path/to/chromedriver-31',
             '/path/to/chromedriver-30',
           ]);
-        const execStub = sandbox.stub(cd as any, '_execFunc');
+        const execStub = sandbox.stub(cd, '_execFunc');
         execStub
           .onCall(0)
           .resolves({
@@ -133,7 +133,7 @@ describe('chromedriver', function () {
             '/path/to/chromedriver-31',
             '/path/to/chromedriver-30',
           ]);
-        const execStub = sandbox.stub(cd as any, '_execFunc');
+        const execStub = sandbox.stub(cd, '_execFunc');
         execStub
           .onCall(0)
           .resolves({
@@ -197,7 +197,7 @@ describe('chromedriver', function () {
             '/path/to/chromedriver-36',
             '/path/to/chromedriver-35',
           ]);
-        const execStub = sandbox.stub(cd as any, '_execFunc');
+        const execStub = sandbox.stub(cd, '_execFunc');
         execStub
           .onCall(0)
           .resolves({
@@ -229,7 +229,7 @@ describe('chromedriver', function () {
 
         sandbox.stub(utils, 'getChromeVersion').resolves('63.0.3239.99');
         sandbox.stub(fs, 'glob').resolves(['/some/local/dir/for/chromedrivers/chromedriver']);
-        sandbox.stub(cd as any, '_execFunc').resolves({
+        sandbox.stub(cd, '_execFunc').resolves({
           stdout: 'ChromeDriver 2.36.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
         } as any);
 
@@ -247,7 +247,7 @@ describe('chromedriver', function () {
 
         sandbox.stub(utils, 'getChromeVersion').resolves('63.0.3239.99');
         sandbox.stub(fs, 'glob').resolves(['/path/to/chromedriver-42']);
-        sandbox.stub(cd as any, '_execFunc').resolves({
+        sandbox.stub(cd, '_execFunc').resolves({
           stdout: 'ChromeDriver 2.42.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
         } as any);
 
@@ -264,7 +264,7 @@ describe('chromedriver', function () {
         });
         sandbox.stub(utils, 'getChromeVersion').resolves('63.0.3239.99');
         sandbox.stub(fs, 'glob').resolves(['/path/to/chromedriver-42']);
-        sandbox.stub(cd as any, '_execFunc').resolves({
+        sandbox.stub(cd, '_execFunc').resolves({
           stdout: 'ChromeDriver 2.42.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
         } as any);
         const binPath = await (cd as any).getCompatibleChromedriver();
