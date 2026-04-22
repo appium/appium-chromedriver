@@ -333,6 +333,9 @@ export class Chromedriver extends events.EventEmitter<ChromedriverEventMap> {
   private waitForOnline = waitForOnline;
   private getStatus = getStatus;
   private killAll = killAll;
-  private startSession = startSession as () => Promise<SessionCapabilities>;
   private changeState = changeState;
+
+  private async startSession(): Promise<SessionCapabilities> {
+    return await startSession.call(this);
+  }
 }
