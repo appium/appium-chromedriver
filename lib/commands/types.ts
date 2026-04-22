@@ -3,7 +3,7 @@ import type {ADB} from 'appium-adb';
 import type {AppiumLogger} from '@appium/types';
 import type {ChromedriverOpts} from '../types';
 import type {ChromedriverStorageClient} from '../storage-client/storage-client';
-import type { EventEmitter } from 'node:events';
+import type {EventEmitter} from 'node:events';
 
 export interface ChromedriverCommandContext extends EventEmitter {
   state: string;

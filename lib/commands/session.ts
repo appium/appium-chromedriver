@@ -63,10 +63,15 @@ export async function startSession(this: SessionCommandContext): Promise<Record<
     `Starting ${this._desiredProtocol} Chromedriver session with capabilities: ` +
       JSON.stringify(sessionCaps, null, 2),
   );
-  const response = (await this.jwproxy.command('/session', 'POST', sessionCaps)) as Record<string, any>;
+  const response = (await this.jwproxy.command('/session', 'POST', sessionCaps)) as Record<
+    string,
+    any
+  >;
   this.log.prefix = generateLogPrefix(this, this.jwproxy.sessionId);
   this.changeState(CHROMEDRIVER_STATES.ONLINE);
-  return _.has(response, 'capabilities') && response.capabilities ? response.capabilities : response;
+  return _.has(response, 'capabilities') && response.capabilities
+    ? response.capabilities
+    : response;
 }
 
 /**

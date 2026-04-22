@@ -68,7 +68,8 @@ export async function getChromedrivers(
     absolute: true,
   });
   this.log.debug(
-    `Found ${util.pluralize('executable', executables.length, true)} ` + `in '${this.executableDir}'`,
+    `Found ${util.pluralize('executable', executables.length, true)} ` +
+      `in '${this.executableDir}'`,
   );
   const cds = (
     await asyncmap(executables, async (executable: string) => {
@@ -271,7 +272,9 @@ export async function getCompatibleChromedriver(this: ChromedriverCommandContext
         );
       }
       const {version, executable} = cds[0];
-      this.log.warn(`Unable to discover Chrome version. Using Chromedriver ${version} at '${executable}'`);
+      this.log.warn(
+        `Unable to discover Chrome version. Using Chromedriver ${version} at '${executable}'`,
+      );
       return executable;
     }
     this.log.debug(`Found Chrome bundle '${this.bundleId}' version '${chromeVersion}'`);
@@ -294,7 +297,9 @@ export async function getCompatibleChromedriver(this: ChromedriverCommandContext
           }
         } catch (e) {
           const err = e as Error;
-          this.log.warn(`Cannot synchronize local chromedrivers with the remote storage: ${err.message}`);
+          this.log.warn(
+            `Cannot synchronize local chromedrivers with the remote storage: ${err.message}`,
+          );
           this.log.debug(err.stack ?? '');
         }
       }

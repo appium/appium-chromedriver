@@ -220,7 +220,8 @@ export class Chromedriver extends events.EventEmitter<ChromedriverEventMap> {
         if (webviewVersion) {
           message += `Chrome version on the device: ${webviewVersion}\n`;
         }
-        const versionsSupportedByDriver = /Chrome version must be (.+)/.exec(err.message)?.[1] || '';
+        const versionsSupportedByDriver =
+          /Chrome version must be (.+)/.exec(err.message)?.[1] || '';
         if (versionsSupportedByDriver) {
           message += `Chromedriver supports Chrome version(s): ${versionsSupportedByDriver}\n`;
         }

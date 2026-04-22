@@ -72,7 +72,12 @@ export async function waitForOnline(this: ChromedriverCommandContext): Promise<v
 export async function killAll(this: ChromedriverCommandContext): Promise<void> {
   const cmd = system.isWindows() ? 'wmic' : 'pkill';
   const args = system.isWindows()
-    ? ['process', 'where', `commandline like '%chromedriver.exe%--port=${this.proxyPort}%'`, 'delete']
+    ? [
+        'process',
+        'where',
+        `commandline like '%chromedriver.exe%--port=${this.proxyPort}%'`,
+        'delete',
+      ]
     : ['-15', '-f', `${this.chromedriver}.*--port=${this.proxyPort}`];
   this.log.debug(`Killing any old chromedrivers, running: ${cmd} ${args.join(' ')}`);
   try {
