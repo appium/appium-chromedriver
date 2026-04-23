@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {toW3cCapNames, getCapValue} from '../../lib/protocol-helpers';
+import {toW3cCapNames, getCapValue} from '../../lib/commands/session';
 
 describe('Protocol Helpers', function () {
   const caps = {

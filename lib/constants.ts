@@ -22,3 +22,16 @@ export const CPU = {
   ARM: 'arm',
 } as const;
 export const APPLE_ARM_SUFFIXES = ['64_m1', '_arm64'] as const;
+
+export const CHROMEDRIVER_EVENTS = {
+  ERROR: 'chromedriver_error',
+  CHANGED: 'stateChanged',
+} as const;
+
+export const CHROMEDRIVER_STATES = {
+  STOPPED: 'stopped',
+  STARTING: 'starting',
+  ONLINE: 'online',
+  STOPPING: 'stopping',
+  RESTARTING: 'restarting',
+} as const;
