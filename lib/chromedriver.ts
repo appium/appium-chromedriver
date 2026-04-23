@@ -47,8 +47,6 @@ export class Chromedriver extends events.EventEmitter<ChromedriverEventMap> {
   static readonly STATE_STOPPING = CHROMEDRIVER_STATES.STOPPING;
   static readonly STATE_RESTARTING = CHROMEDRIVER_STATES.RESTARTING;
 
-  private readonly _log: any;
-  private readonly proxyHost: string;
   readonly proxyPort: number;
   readonly adb?: ADB;
   readonly cmdArgs?: string[];
@@ -72,6 +70,23 @@ export class Chromedriver extends events.EventEmitter<ChromedriverEventMap> {
   _desiredProtocol: keyof typeof PROTOCOLS | null;
   _driverVersion: string | null;
   _onlineStatus: Record<string, any> | null;
+
+  private readonly _log: any;
+  private readonly proxyHost: string;
+
+  private buildChromedriverArgs = buildChromedriverArgs;
+  private getDriversMapping = getDriversMapping;
+  private getChromedrivers = getChromedrivers;
+  private updateDriversMapping = updateDriversMapping;
+  private getCompatibleChromedriver = getCompatibleChromedriver;
+  private initChromedriverPath = initChromedriverPath;
+  private getChromeVersion = getChromeVersionForAutodetection;
+  private syncProtocol = syncProtocol;
+  private waitForOnline = waitForOnline;
+  private getStatus = getStatus;
+  private killAll = killAll;
+  private changeState = changeState;
+  private startSession = startSession;
 
   constructor(args: ChromedriverOpts = {}) {
     super();
@@ -207,8 +222,8 @@ export class Chromedriver extends events.EventEmitter<ChromedriverEventMap> {
       }
     };
     await runSafeStep(() => this.jwproxy.command('', 'DELETE'));
-    await runSafeStep(() => {
-      this.proc?.stop('SIGTERM', 20000);
+    await runSafeStep(async () => {
+      await this.proc?.stop('SIGTERM', 20000);
       this.proc?.removeAllListeners();
       this.proc = null;
     });
@@ -357,18 +372,4 @@ export class Chromedriver extends events.EventEmitter<ChromedriverEventMap> {
     const message = this.formatChromeVersionMismatchHint(err, webviewVersion) + err.message;
     throw new Error(message);
   }
-
-  private buildChromedriverArgs = buildChromedriverArgs;
-  private getDriversMapping = getDriversMapping;
-  private getChromedrivers = getChromedrivers;
-  private updateDriversMapping = updateDriversMapping;
-  private getCompatibleChromedriver = getCompatibleChromedriver;
-  private initChromedriverPath = initChromedriverPath;
-  private getChromeVersion = getChromeVersionForAutodetection;
-  private syncProtocol = syncProtocol;
-  private waitForOnline = waitForOnline;
-  private getStatus = getStatus;
-  private killAll = killAll;
-  private changeState = changeState;
-  private startSession = startSession;
 }

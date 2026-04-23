@@ -158,7 +158,7 @@ export async function parseGoogleapiStorageXml(
     if (chunk.length >= MAX_PARALLEL_DOWNLOADS) {
       await B.any(chunk);
     }
-    _.remove(chunk, (p) => (p as B<void>).isFulfilled());
+    void _.remove(chunk, (p) => (p as B<void>).isFulfilled());
   }
   await B.all(promises);
   log.info(`The total count of entries in the mapping: ${_.size(mapping)}`);
