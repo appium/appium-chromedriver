@@ -15,7 +15,13 @@ import {
 } from './commands/binary';
 import {getChromeVersionForAutodetection} from './commands/version';
 import {buildChromedriverArgs, waitForOnline, getStatus, killAll} from './commands/process';
-import {syncProtocol, startSession, changeState, getCapValue} from './commands/session';
+import {
+  syncProtocol,
+  startSession,
+  changeState,
+  getCapValue,
+  type SessionCapabilities,
+} from './commands/session';
 import type {ADB} from 'appium-adb';
 import type {ProxyOptions, HTTPMethod, HTTPBody} from '@appium/types';
 import type {Request, Response} from 'express';
@@ -23,12 +29,14 @@ import type {ChromedriverOpts} from './types';
 
 const DEFAULT_HOST = '127.0.0.1';
 const DEFAULT_PORT = 9515;
-type SessionCapabilities = Record<string, any>;
+// consider chromedriver ready once startup banner appears
+const chromedriverStdoutStartDetector = (stdout: string): boolean => stdout.startsWith('Starting ');
 type ChromedriverState = (typeof CHROMEDRIVER_STATES)[keyof typeof CHROMEDRIVER_STATES];
 type ChromedriverEventMap = {
   [CHROMEDRIVER_EVENTS.ERROR]: [Error];
   [CHROMEDRIVER_EVENTS.CHANGED]: [{state: ChromedriverState}];
 };
+type WebviewVersionCapture = {version?: string};
 
 export class Chromedriver extends events.EventEmitter<ChromedriverEventMap> {
   static readonly EVENT_ERROR = CHROMEDRIVER_EVENTS.ERROR;
@@ -139,96 +147,20 @@ export class Chromedriver extends events.EventEmitter<ChromedriverEventMap> {
    * @returns Session capabilities returned by Chromedriver.
    */
   async start(caps: SessionCapabilities, emitStartingState = true): Promise<SessionCapabilities> {
-    this.capabilities = _.cloneDeep(caps);
-    // set the logging preferences to ALL browser console logs by default
-    this.capabilities.loggingPrefs = _.cloneDeep(getCapValue(caps, 'loggingPrefs', {}));
-    if (_.isEmpty(this.capabilities.loggingPrefs.browser)) {
-      this.capabilities.loggingPrefs.browser = 'ALL';
-    }
+    this.capabilities = this.prepareCapabilitiesForSessionStart(caps);
     if (emitStartingState) {
       this.changeState(Chromedriver.STATE_STARTING);
     }
 
     const args = this.buildChromedriverArgs();
-    // consider chromedriver ready once startup banner appears
-    const startDetector = (stdout: string) => stdout.startsWith('Starting ');
-    let processIsAlive = false;
-    let webviewVersion: string | undefined;
+    const webviewVersionHolder: WebviewVersionCapture = {};
+
     try {
-      const chromedriverPath = await this.initChromedriverPath();
-      // remove stale chromedriver/adb-forward leftovers before launching
-      await this.killAll();
-      this.proc = new SubProcess(chromedriverPath, args);
-      processIsAlive = true;
-
-      for (const streamName of ['stderr', 'stdout'] as const) {
-        this.proc.on(`line-${streamName}`, (line: string) => {
-          // if chromedriver does not print explicit Chrome version support,
-          // infer webview version from DevTools banner for better errors
-          if (!webviewVersion) {
-            const match = /"Browser": "([^"]+)"/.exec(line);
-            if (match) {
-              webviewVersion = match[1];
-              this.log.debug(`Webview version: '${webviewVersion}'`);
-            }
-          }
-          if (this.verbose) {
-            this.log.debug(`[${streamName.toUpperCase()}] ${line}`);
-          }
-        });
-      }
-
-      this.proc.once('exit', (code: number | null, signal: string | null) => {
-        this._driverVersion = null;
-        this._desiredProtocol = null;
-        this._onlineStatus = null;
-        processIsAlive = false;
-        if (
-          this.state !== Chromedriver.STATE_STOPPED &&
-          this.state !== Chromedriver.STATE_STOPPING &&
-          this.state !== Chromedriver.STATE_RESTARTING
-        ) {
-          this.log.error(`Chromedriver exited unexpectedly with code ${code}, signal ${signal}`);
-          this.changeState(Chromedriver.STATE_STOPPED);
-        }
-        this.proc?.removeAllListeners();
-        this.proc = null;
-      });
-
-      this.log.info(`Spawning Chromedriver with: ${this.chromedriver} ${args.join(' ')}`);
-      await this.proc.start(startDetector);
-      // wait until /status says ready, then negotiate protocol and start session
-      await this.waitForOnline();
+      await this.launchChromedriverProcess(args, webviewVersionHolder);
       this.syncProtocol();
       return await this.startSession();
     } catch (e) {
-      const err = e as Error;
-      this.log.debug(err);
-      this.emit(Chromedriver.EVENT_ERROR, err);
-      // an error does not always mean subprocess has already exited
-      if (processIsAlive) {
-        await this.proc?.stop();
-      }
-      this.proc?.removeAllListeners();
-      this.proc = null;
-
-      let message = '';
-      // enrich the common version-mismatch error with actionable context
-      if (err.message.includes('Chrome version must be')) {
-        message +=
-          'Unable to automate Chrome version because it is not supported by this version of Chromedriver.\n';
-        if (webviewVersion) {
-          message += `Chrome version on the device: ${webviewVersion}\n`;
-        }
-        const versionsSupportedByDriver =
-          /Chrome version must be (.+)/.exec(err.message)?.[1] || '';
-        if (versionsSupportedByDriver) {
-          message += `Chromedriver supports Chrome version(s): ${versionsSupportedByDriver}\n`;
-        }
-        message += 'Check the driver tutorial for troubleshooting.\n';
-      }
-      message += err.message;
-      throw this.log.errorWithException(message);
+      return await this.handleChromedriverStartFailure(e as Error, webviewVersionHolder.version);
     }
   }
 
@@ -322,6 +254,107 @@ export class Chromedriver extends events.EventEmitter<ChromedriverEventMap> {
     }
   }
 
+  private prepareCapabilitiesForSessionStart(caps: SessionCapabilities): SessionCapabilities {
+    const capabilities = _.cloneDeep(caps);
+    // set the logging preferences to ALL browser console logs by default
+    capabilities.loggingPrefs = _.cloneDeep(getCapValue(caps, 'loggingPrefs', {}));
+    if (_.isEmpty(capabilities.loggingPrefs.browser)) {
+      capabilities.loggingPrefs.browser = 'ALL';
+    }
+    return capabilities;
+  }
+
+  private attachChromedriverProcessListeners(webviewVersionHolder: WebviewVersionCapture): void {
+    const proc = this.proc;
+    if (!proc) {
+      throw new Error('Chromedriver subprocess must be assigned before attaching listeners');
+    }
+    for (const streamName of ['stderr', 'stdout'] as const) {
+      proc.on(`line-${streamName}`, (line: string) => {
+        // if chromedriver does not print explicit Chrome version support,
+        // infer webview version from DevTools banner for better errors
+        if (!webviewVersionHolder.version) {
+          const match = /"Browser": "([^"]+)"/.exec(line);
+          if (match) {
+            webviewVersionHolder.version = match[1];
+            this.log.debug(`Webview version: '${webviewVersionHolder.version}'`);
+          }
+        }
+        if (this.verbose) {
+          this.log.debug(`[${streamName.toUpperCase()}] ${line}`);
+        }
+      });
+    }
+
+    proc.once('exit', (code: number | null, signal: string | null) => {
+      this._driverVersion = null;
+      this._desiredProtocol = null;
+      this._onlineStatus = null;
+      if (
+        this.state !== Chromedriver.STATE_STOPPED &&
+        this.state !== Chromedriver.STATE_STOPPING &&
+        this.state !== Chromedriver.STATE_RESTARTING
+      ) {
+        this.log.error(`Chromedriver exited unexpectedly with code ${code}, signal ${signal}`);
+        this.changeState(Chromedriver.STATE_STOPPED);
+      }
+      this.proc?.removeAllListeners();
+      this.proc = null;
+    });
+  }
+
+  private async launchChromedriverProcess(
+    args: string[],
+    webviewVersionHolder: WebviewVersionCapture,
+  ): Promise<void> {
+    const chromedriverPath = await this.initChromedriverPath();
+    // remove stale chromedriver/adb-forward leftovers before launching
+    await this.killAll();
+    this.proc = new SubProcess(chromedriverPath, args);
+    this.attachChromedriverProcessListeners(webviewVersionHolder);
+
+    this.log.info(`Spawning Chromedriver with: ${this.chromedriver} ${args.join(' ')}`);
+    await this.proc.start(chromedriverStdoutStartDetector);
+    // wait until /status says ready, then negotiate protocol and start session
+    await this.waitForOnline();
+  }
+
+  private formatChromeVersionMismatchHint(err: Error, webviewVersion?: string): string {
+    if (!err.message.includes('Chrome version must be')) {
+      return '';
+    }
+    // enrich the common version-mismatch error with actionable context
+    let message =
+      'Unable to automate Chrome version because it is not supported by this version of Chromedriver.\n';
+    if (webviewVersion) {
+      message += `Chrome version on the device: ${webviewVersion}\n`;
+    }
+    const versionsSupportedByDriver = /Chrome version must be (.+)/.exec(err.message)?.[1] || '';
+    if (versionsSupportedByDriver) {
+      message += `Chromedriver supports Chrome version(s): ${versionsSupportedByDriver}\n`;
+    }
+    message += 'Check the driver tutorial for troubleshooting.\n';
+    return message;
+  }
+
+  private async handleChromedriverStartFailure(err: Error, webviewVersion?: string): Promise<never> {
+    this.log.debug(err);
+    this.emit(Chromedriver.EVENT_ERROR, err);
+    // an error does not always mean subprocess has already exited
+    if (this.proc) {
+      try {
+        await this.proc.stop();
+      } catch (e) {
+        this.log.debug(e.message);
+      }
+    }
+    this.proc?.removeAllListeners();
+    this.proc = null;
+
+    const message = this.formatChromeVersionMismatchHint(err, webviewVersion) + err.message;
+    throw new Error(message);
+  }
+
   private buildChromedriverArgs = buildChromedriverArgs;
   private getDriversMapping = getDriversMapping;
   private getChromedrivers = getChromedrivers;
@@ -334,8 +367,5 @@ export class Chromedriver extends events.EventEmitter<ChromedriverEventMap> {
   private getStatus = getStatus;
   private killAll = killAll;
   private changeState = changeState;
-
-  private async startSession(): Promise<SessionCapabilities> {
-    return await startSession.call(this);
-  }
+  private startSession = startSession;
 }
