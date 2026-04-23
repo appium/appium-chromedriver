@@ -337,7 +337,10 @@ export class Chromedriver extends events.EventEmitter<ChromedriverEventMap> {
     return message;
   }
 
-  private async handleChromedriverStartFailure(err: Error, webviewVersion?: string): Promise<never> {
+  private async handleChromedriverStartFailure(
+    err: Error,
+    webviewVersion?: string,
+  ): Promise<never> {
     this.log.debug(err);
     this.emit(Chromedriver.EVENT_ERROR, err);
     // an error does not always mean subprocess has already exited
