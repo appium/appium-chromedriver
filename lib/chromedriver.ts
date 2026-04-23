@@ -362,9 +362,7 @@ export class Chromedriver extends events.EventEmitter<ChromedriverEventMap> {
     if (this.proc) {
       try {
         await this.proc.stop();
-      } catch (e) {
-        this.log.debug(e.message);
-      }
+      } catch {}
     }
     this.proc?.removeAllListeners();
     this.proc = null;
