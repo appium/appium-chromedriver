@@ -48,11 +48,6 @@ const CHROME_FOR_TESTING_LAST_GOOD_VERSIONS = `${CHROMELABS_URL}/chrome-for-test
 
 const log = logger.getLogger('ChromedriverStorageClient');
 
-async function isCrcOk(src: string, checksum: string): Promise<boolean> {
-  const md5 = await fs.hash(src, 'md5');
-  return _.toLower(md5) === _.toLower(checksum);
-}
-
 export class ChromedriverStorageClient {
   readonly chromedriverDir: string;
   readonly timeout: number;
@@ -158,7 +153,7 @@ export class ChromedriverStorageClient {
         if (chunk.length >= MAX_PARALLEL_DOWNLOADS) {
           await B.any(chunk);
         }
-        _.remove(chunk, (p) => (p as B<void>).isFulfilled());
+        void _.remove(chunk, (p) => (p as B<void>).isFulfilled());
       }
       await B.all(promises);
     } finally {
@@ -453,4 +448,9 @@ export class ChromedriverStorageClient {
       await fs.rimraf(tmpRoot);
     }
   }
+}
+
+async function isCrcOk(src: string, checksum: string): Promise<boolean> {
+  const md5 = await fs.hash(src, 'md5');
+  return _.toLower(md5) === _.toLower(checksum);
 }

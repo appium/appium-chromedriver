@@ -8,9 +8,7 @@ import type {ChromedriverCommandContext} from './types';
 const MIN_CD_VERSION_WITH_W3C_SUPPORT = 75;
 const W3C_PREFIX = 'goog:';
 
-type SessionCommandContext = ChromedriverCommandContext & {
-  changeState: (state: string) => void;
-};
+export type SessionCapabilities = Record<string, any>;
 
 /**
  * Converts a capability name to W3C format by adding the 'goog:' prefix if needed.
@@ -54,7 +52,7 @@ export function toW3cCapNames(originalCaps: Record<string, any> = {}): Record<st
 /**
  * Creates a new Chromedriver session using the negotiated downstream protocol.
  */
-export async function startSession(this: SessionCommandContext): Promise<Record<string, any>> {
+export async function startSession(this: ChromedriverCommandContext): Promise<SessionCapabilities> {
   const sessionCaps =
     this._desiredProtocol === PROTOCOLS.W3C
       ? {capabilities: {alwaysMatch: toW3cCapNames(this.capabilities)}}
@@ -68,7 +66,7 @@ export async function startSession(this: SessionCommandContext): Promise<Record<
     any
   >;
   this.log.prefix = generateLogPrefix(this, this.jwproxy.sessionId);
-  this.changeState(CHROMEDRIVER_STATES.ONLINE);
+  changeState.call(this, CHROMEDRIVER_STATES.ONLINE);
   return _.has(response, 'capabilities') && response.capabilities
     ? response.capabilities
     : response;

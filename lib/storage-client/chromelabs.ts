@@ -5,6 +5,33 @@ import * as semver from 'semver';
 import {ARCH, CPU} from '../constants';
 import type {ChromedriverDetailsMapping} from '../types';
 
+interface VersionEntry {
+  version: string;
+  revision?: string;
+  downloads?: {
+    chromedriver?: Array<{
+      platform: string;
+      url: string;
+    }>;
+  };
+}
+
+interface KnownGoodVersionsJson {
+  timestamp?: string;
+  versions?: VersionEntry[];
+}
+
+interface LatestKnownGoodVersionsJson {
+  timestamp?: string;
+  channels?: {
+    Stable?: {
+      channel?: string;
+      version?: string;
+      revision?: string;
+    };
+  };
+}
+
 const log = logger.getLogger('ChromedriverChromelabsStorageClient');
 
 /**
@@ -139,31 +166,4 @@ export function parseLatestKnownGoodVersionsJson(jsonStr: string): string {
     throw new Error('The format of the storage JSON is not supported');
   }
   return json.channels.Stable.version;
-}
-
-interface VersionEntry {
-  version: string;
-  revision?: string;
-  downloads?: {
-    chromedriver?: Array<{
-      platform: string;
-      url: string;
-    }>;
-  };
-}
-
-interface KnownGoodVersionsJson {
-  timestamp?: string;
-  versions?: VersionEntry[];
-}
-
-interface LatestKnownGoodVersionsJson {
-  timestamp?: string;
-  channels?: {
-    Stable?: {
-      channel?: string;
-      version?: string;
-      revision?: string;
-    };
-  };
 }
