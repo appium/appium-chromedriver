@@ -1,3 +1,13 @@
+## [8.2.29](https://github.com/appium/appium-chromedriver/compare/v8.2.28...v8.2.29) (2026-04-24)
+
+### Miscellaneous Chores
+
+* ChromeDriver Bump to v148.0.7778.56 ([#568](https://github.com/appium/appium-chromedriver/issues/568)) ([84b1bb0](https://github.com/appium/appium-chromedriver/commit/84b1bb012ad16c99d40c8d3c2a971298b0fec9e8))
+
+### Code Refactoring
+
+* Decompose Chromedriver internals ([#565](https://github.com/appium/appium-chromedriver/issues/565)) ([209efa8](https://github.com/appium/appium-chromedriver/commit/209efa82b03d697fd1e81cc4e80238dde7f1de00))
+
 ## [8.2.28](https://github.com/appium/appium-chromedriver/compare/v8.2.27...v8.2.28) (2026-04-23)
 
 ### Miscellaneous Chores
