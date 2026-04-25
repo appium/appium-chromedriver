@@ -11,12 +11,21 @@ import type {ChromedriverCommandContext} from './types';
 
 const NEW_CD_VERSION_FORMAT_MAJOR_VERSION = 73;
 const CD_VERSION_TIMEOUT = 5000;
+const GET_COMPATIBLE_CHROMEDRIVER_MAX_ITERATIONS = 10;
 
 export interface ChromedriverInfo {
   executable: string;
   version: string;
   minChromeVersion: string | null;
 }
+
+type ChromedriverSelectionSelf = ChromedriverCommandContext & {
+  getDriversMapping: () => Promise<ChromedriverVersionMapping>;
+  getChromedrivers: (mapping: ChromedriverVersionMapping) => Promise<ChromedriverInfo[]>;
+  updateDriversMapping: (mapping: ChromedriverVersionMapping) => Promise<void>;
+  getChromeVersion: () => Promise<semver.SemVer | null>;
+  getCompatibleChromedriver: () => Promise<string>;
+};
 
 /**
  * Loads and normalizes Chromedriver-to-Chrome version mapping.
@@ -182,154 +191,65 @@ export async function updateDriversMapping(
  * Selects the most suitable Chromedriver binary for current environment.
  */
 export async function getCompatibleChromedriver(this: ChromedriverCommandContext): Promise<string> {
-  const self = this as ChromedriverCommandContext & {
-    getDriversMapping: () => Promise<ChromedriverVersionMapping>;
-    getChromedrivers: (mapping: ChromedriverVersionMapping) => Promise<ChromedriverInfo[]>;
-    updateDriversMapping: (mapping: ChromedriverVersionMapping) => Promise<void>;
-    getChromeVersion: () => Promise<semver.SemVer | null>;
-  };
-  if (!this.adb && !this.isCustomExecutableDir) {
-    // desktop default path shortcut when no device-specific matching is needed
+  if (usesDesktopChromedriverDefault(this)) {
     return await getChromedriverBinaryPath();
   }
 
-  const mapping = await self.getDriversMapping();
+  const ctx = this as ChromedriverSelectionSelf;
+  const mapping = await ctx.getDriversMapping();
   if (!_.isEmpty(mapping)) {
-    this.log.debug(`The most recent known Chrome version: ${_.values(mapping)[0]}`);
+    ctx.log.debug(`The most recent known Chrome version: ${_.values(mapping)[0]}`);
   }
 
-  let didStorageSync = false;
-  const syncChromedrivers = async (chromeVersion: semver.SemVer): Promise<boolean> => {
-    didStorageSync = true;
-    if (!this.storageClient) {
-      return false;
-    }
-    const retrievedMapping = await this.storageClient.retrieveMapping();
-    this.log.debug(
-      'Got chromedrivers mapping from the storage: ' +
-        _.truncate(JSON.stringify(retrievedMapping, null, 2), {length: 500}),
-    );
-    const driverKeys = await this.storageClient.syncDrivers({
-      minBrowserVersion: chromeVersion.major,
-    });
-    if (_.isEmpty(driverKeys)) {
-      return false;
-    }
-    const synchronizedDriversMapping = driverKeys.reduce((acc, x) => {
-      const {version, minBrowserVersion} = retrievedMapping[x];
-      acc[version] = minBrowserVersion;
-      return acc;
-    }, {} as ChromedriverVersionMapping);
-    Object.assign(mapping, synchronizedDriversMapping);
-    await self.updateDriversMapping(mapping);
-    return true;
-  };
+  const syncState = {didStorageSync: false};
 
-  while (true) {
-    // retry loop may run twice if first pass triggers auto-download sync
-    const cds = await self.getChromedrivers(mapping);
-    const missingVersions: ChromedriverVersionMapping = {};
-    for (const {version, minChromeVersion} of cds) {
-      if (!minChromeVersion || mapping[version]) {
-        continue;
-      }
-      const coercedVer = semver.coerce(version);
-      if (!coercedVer || coercedVer.major < NEW_CD_VERSION_FORMAT_MAJOR_VERSION) {
-        continue;
-      }
-      missingVersions[version] = minChromeVersion;
-    }
-    if (!_.isEmpty(missingVersions)) {
-      this.log.info(
-        `Found ${util.pluralize('Chromedriver', _.size(missingVersions), true)}, ` +
-          `which ${_.size(missingVersions) === 1 ? 'is' : 'are'} missing in the list of known versions: ` +
-          JSON.stringify(missingVersions),
-      );
-      await self.updateDriversMapping(Object.assign(mapping, missingVersions));
+  for (let iteration = 0; iteration < GET_COMPATIBLE_CHROMEDRIVER_MAX_ITERATIONS; iteration++) {
+    const cds = await ctx.getChromedrivers(mapping);
+    await mergeDiscoveredMappingGaps(ctx, cds, mapping);
+
+    if (ctx.disableBuildCheck) {
+      return pickChromedriverWithBuildCheckDisabled(ctx, cds);
     }
 
-    if (this.disableBuildCheck) {
-      if (_.isEmpty(cds)) {
-        throw this.log.errorWithException(
-          `There must be at least one Chromedriver executable available for use if ` +
-            `'chromedriverDisableBuildCheck' capability is set to 'true'`,
-        );
-      }
-      const {version, executable} = cds[0];
-      this.log.warn(
-        `Chrome build check disabled. Using most recent Chromedriver version (${version}, at '${executable}')`,
-      );
-      this.log.warn(`If this is wrong, set 'chromedriverDisableBuildCheck' capability to 'false'`);
-      return executable;
-    }
-
-    const chromeVersion = await self.getChromeVersion();
+    const chromeVersion = await ctx.getChromeVersion();
     if (!chromeVersion) {
-      if (_.isEmpty(cds)) {
-        throw this.log.errorWithException(
-          `There must be at least one Chromedriver executable available for use if ` +
-            `the current Chrome version cannot be determined`,
-        );
-      }
-      const {version, executable} = cds[0];
-      this.log.warn(
-        `Unable to discover Chrome version. Using Chromedriver ${version} at '${executable}'`,
-      );
-      return executable;
+      return pickChromedriverWhenChromeUnknown(ctx, cds);
     }
-    this.log.debug(`Found Chrome bundle '${this.bundleId}' version '${chromeVersion}'`);
+    ctx.log.debug(`Found Chrome bundle '${ctx.bundleId}' version '${chromeVersion}'`);
 
-    const matchingDrivers = cds.filter(({minChromeVersion}) => {
-      const minChromeVersionS = minChromeVersion && semver.coerce(minChromeVersion);
-      if (!minChromeVersionS) {
-        return false;
-      }
-      return chromeVersion.major > NEW_CD_VERSION_FORMAT_MAJOR_VERSION
-        ? minChromeVersionS.major === chromeVersion.major
-        : semver.gte(chromeVersion, minChromeVersionS);
-    });
+    const matchingDrivers = filterChromedriversMatchingChrome(cds, chromeVersion);
     if (_.isEmpty(matchingDrivers)) {
-      if (this.storageClient && !didStorageSync) {
+      if (ctx.storageClient && !syncState.didStorageSync) {
         try {
-          if (await syncChromedrivers(chromeVersion)) {
-            // mapping changed after sync; recompute with refreshed local binaries
+          if (await attemptChromedriverStorageSync(ctx, mapping, chromeVersion, syncState)) {
             continue;
           }
         } catch (e) {
           const err = e as Error;
-          this.log.warn(
+          ctx.log.warn(
             `Cannot synchronize local chromedrivers with the remote storage: ${err.message}`,
           );
-          this.log.debug(err.stack ?? '');
+          if (err.stack) {
+            ctx.log.debug(err.stack);
+          }
         }
       }
-      const autodownloadSuggestion =
-        'You could also try to enable automated chromedrivers download as a possible workaround.';
-      throw new Error(
-        `No Chromedriver found that can automate Chrome '${chromeVersion}'.` +
-          (this.storageClient ? '' : ` ${autodownloadSuggestion}`),
-      );
+      throw makeNoMatchingChromedriverError(ctx, chromeVersion);
     }
 
-    const binPath = matchingDrivers[0].executable;
-    this.log.debug(
-      `Found ${util.pluralize('executable', matchingDrivers.length, true)} ` +
-        `capable of automating Chrome '${chromeVersion}'.\nChoosing the most recent, '${binPath}'.`,
-    );
-    this.log.debug(
-      `If a specific version is required, specify it with the 'chromedriverExecutable' capability.`,
-    );
-    return binPath;
+    return logChosenMatchingChromedriver(ctx, matchingDrivers, chromeVersion);
   }
+
+  throw new Error(
+    `Exceeded ${GET_COMPATIBLE_CHROMEDRIVER_MAX_ITERATIONS} iterations while selecting a ` +
+      `compatible Chromedriver.`,
+  );
 }
 
 /**
  * Resolves and verifies the effective Chromedriver executable path.
  */
 export async function initChromedriverPath(this: ChromedriverCommandContext): Promise<string> {
-  const self = this as ChromedriverCommandContext & {
-    getCompatibleChromedriver: () => Promise<string>;
-  };
   if (this.executableVerified && this.chromedriver) {
     return this.chromedriver;
   }
@@ -337,7 +257,7 @@ export async function initChromedriverPath(this: ChromedriverCommandContext): Pr
   if (!chromedriver) {
     chromedriver = this.chromedriver = this.useSystemExecutable
       ? await getChromedriverBinaryPath()
-      : await self.getCompatibleChromedriver();
+      : await (this as ChromedriverSelectionSelf).getCompatibleChromedriver();
   }
   if (!chromedriver) {
     throw new Error('Cannot determine a valid Chromedriver executable path');
@@ -350,4 +270,148 @@ export async function initChromedriverPath(this: ChromedriverCommandContext): Pr
   this.executableVerified = true;
   this.log.info(`Set chromedriver binary as: ${chromedriver}`);
   return chromedriver;
+}
+
+function usesDesktopChromedriverDefault(ctx: ChromedriverCommandContext): boolean {
+  return !ctx.adb && !ctx.isCustomExecutableDir;
+}
+
+async function mergeDiscoveredMappingGaps(
+  ctx: ChromedriverSelectionSelf,
+  cds: ChromedriverInfo[],
+  mapping: ChromedriverVersionMapping,
+): Promise<void> {
+  const missingVersions: ChromedriverVersionMapping = {};
+  for (const {version, minChromeVersion} of cds) {
+    if (!minChromeVersion || mapping[version]) {
+      continue;
+    }
+    const coercedVer = semver.coerce(version);
+    if (!coercedVer || coercedVer.major < NEW_CD_VERSION_FORMAT_MAJOR_VERSION) {
+      continue;
+    }
+    missingVersions[version] = minChromeVersion;
+  }
+  if (_.isEmpty(missingVersions)) {
+    return;
+  }
+  ctx.log.info(
+    `Found ${util.pluralize('Chromedriver', _.size(missingVersions), true)}, ` +
+      `which ${_.size(missingVersions) === 1 ? 'is' : 'are'} missing in the list of known versions: ` +
+      JSON.stringify(missingVersions),
+  );
+  await ctx.updateDriversMapping(Object.assign(mapping, missingVersions));
+}
+
+function pickChromedriverWithBuildCheckDisabled(
+  ctx: ChromedriverSelectionSelf,
+  cds: ChromedriverInfo[],
+): string {
+  if (_.isEmpty(cds)) {
+    throw ctx.log.errorWithException(
+      `There must be at least one Chromedriver executable available for use if ` +
+        `'chromedriverDisableBuildCheck' capability is set to 'true'`,
+    );
+  }
+  const {version, executable} = cds[0];
+  ctx.log.warn(
+    `Chrome build check disabled. Using most recent Chromedriver version (${version}, at '${executable}')`,
+  );
+  ctx.log.warn(`If this is wrong, set 'chromedriverDisableBuildCheck' capability to 'false'`);
+  return executable;
+}
+
+function pickChromedriverWhenChromeUnknown(
+  ctx: ChromedriverSelectionSelf,
+  cds: ChromedriverInfo[],
+): string {
+  if (_.isEmpty(cds)) {
+    throw ctx.log.errorWithException(
+      `There must be at least one Chromedriver executable available for use if ` +
+        `the current Chrome version cannot be determined`,
+    );
+  }
+  const {version, executable} = cds[0];
+  ctx.log.warn(
+    `Unable to discover Chrome version. Using Chromedriver ${version} at '${executable}'`,
+  );
+  return executable;
+}
+
+function filterChromedriversMatchingChrome(
+  cds: ChromedriverInfo[],
+  chromeVersion: semver.SemVer,
+): ChromedriverInfo[] {
+  return cds.filter(({minChromeVersion}) => {
+    const minChromeVersionS = minChromeVersion && semver.coerce(minChromeVersion);
+    if (!minChromeVersionS) {
+      return false;
+    }
+    return chromeVersion.major > NEW_CD_VERSION_FORMAT_MAJOR_VERSION
+      ? minChromeVersionS.major === chromeVersion.major
+      : semver.gte(chromeVersion, minChromeVersionS);
+  });
+}
+
+/**
+ * Syncs drivers from remote storage into `mapping` and persists when possible.
+ * Sets `syncState.didStorageSync` before any early return so a second sync is not attempted.
+ */
+async function attemptChromedriverStorageSync(
+  ctx: ChromedriverSelectionSelf,
+  mapping: ChromedriverVersionMapping,
+  chromeVersion: semver.SemVer,
+  syncState: {didStorageSync: boolean},
+): Promise<boolean> {
+  syncState.didStorageSync = true;
+  if (!ctx.storageClient) {
+    return false;
+  }
+  const retrievedMapping = await ctx.storageClient.retrieveMapping();
+  ctx.log.debug(
+    'Got chromedrivers mapping from the storage: ' +
+      _.truncate(JSON.stringify(retrievedMapping, null, 2), {length: 500}),
+  );
+  const driverKeys = await ctx.storageClient.syncDrivers({
+    minBrowserVersion: chromeVersion.major,
+  });
+  if (_.isEmpty(driverKeys)) {
+    return false;
+  }
+  const synchronizedDriversMapping = driverKeys.reduce((acc, x) => {
+    const {version, minBrowserVersion} = retrievedMapping[x];
+    acc[version] = minBrowserVersion;
+    return acc;
+  }, {} as ChromedriverVersionMapping);
+  Object.assign(mapping, synchronizedDriversMapping);
+  await ctx.updateDriversMapping(mapping);
+  return true;
+}
+
+function makeNoMatchingChromedriverError(
+  ctx: ChromedriverSelectionSelf,
+  chromeVersion: semver.SemVer,
+): Error {
+  const autodownloadSuggestion =
+    'You could also try to enable automated chromedrivers download as a possible workaround.';
+  return new Error(
+    `No Chromedriver found that can automate Chrome '${chromeVersion}'.` +
+      (ctx.storageClient ? '' : ` ${autodownloadSuggestion}`),
+  );
+}
+
+function logChosenMatchingChromedriver(
+  ctx: ChromedriverSelectionSelf,
+  matchingDrivers: ChromedriverInfo[],
+  chromeVersion: semver.SemVer,
+): string {
+  const binPath = matchingDrivers[0].executable;
+  ctx.log.debug(
+    `Found ${util.pluralize('executable', matchingDrivers.length, true)} ` +
+      `capable of automating Chrome '${chromeVersion}'.\nChoosing the most recent, '${binPath}'.`,
+  );
+  ctx.log.debug(
+    `If a specific version is required, specify it with the 'chromedriverExecutable' capability.`,
+  );
+  return binPath;
 }
