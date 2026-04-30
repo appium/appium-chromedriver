@@ -1,3 +1,14 @@
+## [8.2.30](https://github.com/appium/appium-chromedriver/compare/v8.2.29...v8.2.30) (2026-04-30)
+
+### Miscellaneous Chores
+
+* ChromeDriver Bump to v148.0.7778.97 ([#570](https://github.com/appium/appium-chromedriver/issues/570)) ([fc5dd88](https://github.com/appium/appium-chromedriver/commit/fc5dd8867e82830bb88e48b1ca12a568193a6998))
+
+### Code Refactoring
+
+* Make the `start` method more readable ([#567](https://github.com/appium/appium-chromedriver/issues/567)) ([1f619c6](https://github.com/appium/appium-chromedriver/commit/1f619c65f3b70c16178ce0e62d7c07f382526b6f))
+* simplify getCompatibleChromedriver and getChromeVersionForAutodetection methods ([#569](https://github.com/appium/appium-chromedriver/issues/569)) ([2f12709](https://github.com/appium/appium-chromedriver/commit/2f127096b363741b13eda0a06eba1ca36b839828))
+
 ## [8.2.29](https://github.com/appium/appium-chromedriver/compare/v8.2.28...v8.2.29) (2026-04-24)
 
 ### Miscellaneous Chores
