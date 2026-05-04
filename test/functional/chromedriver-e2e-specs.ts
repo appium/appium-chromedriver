@@ -2,14 +2,13 @@ import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import {Chromedriver} from '../../lib/chromedriver';
 import {install} from '../helpers/install';
-import B from 'bluebird';
 import {exec} from 'teen_process';
 import _ from 'lodash';
 
 use(chaiAsPromised);
 
 function nextState(cd: Chromedriver) {
-  return new B((resolve) => {
+  return new Promise((resolve) => {
     cd.on(Chromedriver.EVENT_CHANGED, (msg) => {
       resolve(msg.state);
     });
@@ -17,7 +16,7 @@ function nextState(cd: Chromedriver) {
 }
 
 function nextError(cd: Chromedriver) {
-  return new B((resolve) => {
+  return new Promise((resolve) => {
     cd.on(Chromedriver.EVENT_ERROR, (err) => {
       resolve(err);
     });

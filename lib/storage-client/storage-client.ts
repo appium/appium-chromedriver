@@ -1,7 +1,7 @@
 import {getChromedriverDir, retrieveData, getOsInfo, convertToInt, getCpuType} from '../utils';
 import _ from 'lodash';
-import B from 'bluebird';
 import path from 'node:path';
+import {asyncmap} from 'asyncbox';
 import {system, fs, logger, tempDir, zip, util, net} from '@appium/support';
 import {
   STORAGE_REQ_TIMEOUT_MS,
@@ -92,7 +92,7 @@ export class ChromedriverStorageClient {
         );
       }
     };
-    const [xmlStr, jsonStr] = await B.all(STORAGE_INFOS.map(retrieveResponseSafely));
+    const [xmlStr, jsonStr] = await Promise.all(STORAGE_INFOS.map(retrieveResponseSafely));
     // Apply the best effort approach and fetch the mapping from at least one server if possible.
     // We'll fail later anyway if the target chromedriver version is not there.
     if (!xmlStr && !jsonStr) {
@@ -136,26 +136,17 @@ export class ChromedriverStorageClient {
     );
 
     const synchronizedDrivers: string[] = [];
-    const promises: Promise<void>[] = [];
-    const chunk: Promise<void>[] = [];
     const archivesRoot = await tempDir.openDir();
     try {
-      for (const [idx, driverKey] of driversToSync.entries()) {
-        const promise = B.resolve(
-          (async () => {
-            if (await this.retrieveDriver(idx, driverKey, archivesRoot, !_.isEmpty(opts))) {
-              synchronizedDrivers.push(driverKey);
-            }
-          })(),
-        );
-        promises.push(promise);
-        chunk.push(promise);
-        if (chunk.length >= MAX_PARALLEL_DOWNLOADS) {
-          await B.any(chunk);
-        }
-        void _.remove(chunk, (p) => (p as B<void>).isFulfilled());
-      }
-      await B.all(promises);
+      await asyncmap(
+        [...driversToSync.entries()],
+        async ([idx, driverKey]) => {
+          if (await this.retrieveDriver(idx, driverKey, archivesRoot, !_.isEmpty(opts))) {
+            synchronizedDrivers.push(driverKey);
+          }
+        },
+        {concurrency: MAX_PARALLEL_DOWNLOADS},
+      );
     } finally {
       await fs.rimraf(archivesRoot);
     }
