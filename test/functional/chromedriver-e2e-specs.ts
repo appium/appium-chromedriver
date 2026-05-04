@@ -2,29 +2,31 @@ import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import {Chromedriver} from '../../lib/chromedriver';
 import {install} from '../helpers/install';
-import B from 'bluebird';
 import {exec} from 'teen_process';
 import _ from 'lodash';
+import {CHROMEDRIVER_STATES} from '../../lib/constants';
 
 use(chaiAsPromised);
 
-function nextState(cd: Chromedriver) {
-  return new B((resolve) => {
-    cd.on(Chromedriver.EVENT_CHANGED, (msg) => {
+function nextState(
+  cd: Chromedriver,
+): Promise<(typeof CHROMEDRIVER_STATES)[keyof typeof CHROMEDRIVER_STATES]> {
+  return new Promise((resolve) => {
+    cd.once(Chromedriver.EVENT_CHANGED, (msg) => {
       resolve(msg.state);
     });
   });
 }
 
-function nextError(cd: Chromedriver) {
-  return new B((resolve) => {
-    cd.on(Chromedriver.EVENT_ERROR, (err) => {
+function nextError(cd: Chromedriver): Promise<Error> {
+  return new Promise((resolve) => {
+    cd.once(Chromedriver.EVENT_ERROR, (err) => {
       resolve(err);
     });
   });
 }
 
-async function assertNoRunningChromedrivers() {
+async function assertNoRunningChromedrivers(): Promise<void> {
   const {stdout} = await exec('ps', ['aux']);
   let count = 0;
   for (const line of stdout.split('\n')) {
@@ -41,7 +43,7 @@ async function assertNoRunningChromedrivers() {
   expect(count).to.eql(0);
 }
 
-function buildReqRes(url: string, method: string, body: any) {
+function buildReqRes(url: string, method: string, body: any): [any, any] {
   const req = {originalUrl: url, method, body};
   const res: any = {};
   res.headers = {};

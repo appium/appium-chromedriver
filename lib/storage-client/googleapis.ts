@@ -2,7 +2,7 @@ import _ from 'lodash';
 import {select as xpathSelect} from 'xpath';
 import {util, logger} from '@appium/support';
 import {retrieveData} from '../utils';
-import B from 'bluebird';
+import {asyncmap} from 'asyncbox';
 import {STORAGE_REQ_TIMEOUT_MS, GOOGLEAPIS_CDN, ARCH, CPU, APPLE_ARM_SUFFIXES} from '../constants';
 import {DOMParser} from '@xmldom/xmldom';
 import path from 'node:path';
@@ -99,8 +99,7 @@ export async function parseGoogleapiStorageXml(
     throw new Error('Cannot retrieve any valid Chromedriver entries from the storage config');
   }
 
-  const promises: Promise<void>[] = [];
-  const chunk: Promise<void>[] = [];
+  const infoParsers: Array<() => Promise<void>> = [];
   const mapping: ChromedriverDetailsMapping = {};
   for (const driverNode of driverNodes) {
     const k = extractNodeText(findChildNode(driverNode, 'Key'));
@@ -150,17 +149,17 @@ export async function parseGoogleapiStorageXml(
       continue;
     }
 
-    const promise = B.resolve(
-      retrieveAdditionalDriverInfo(key, `${GOOGLEAPIS_CDN}/${notesPath}`, cdInfo),
-    );
-    promises.push(promise);
-    chunk.push(promise);
-    if (chunk.length >= MAX_PARALLEL_DOWNLOADS) {
-      await B.any(chunk);
-    }
-    void _.remove(chunk, (p) => (p as B<void>).isFulfilled());
+    infoParsers.push(async () => {
+      await retrieveAdditionalDriverInfo(key, `${GOOGLEAPIS_CDN}/${notesPath}`, cdInfo);
+    });
   }
-  await B.all(promises);
+  await asyncmap(
+    infoParsers,
+    async (parseInfo) => {
+      await parseInfo();
+    },
+    {concurrency: MAX_PARALLEL_DOWNLOADS},
+  );
   log.info(`The total count of entries in the mapping: ${_.size(mapping)}`);
   return mapping;
 }
