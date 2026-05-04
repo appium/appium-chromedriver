@@ -1,3 +1,9 @@
+## [8.3.0](https://github.com/appium/appium-chromedriver/compare/v8.2.30...v8.3.0) (2026-05-04)
+
+### Features
+
+* Ditch bluebird ([#571](https://github.com/appium/appium-chromedriver/issues/571)) ([3b1c857](https://github.com/appium/appium-chromedriver/commit/3b1c8572484f4a511d7c07c0cc892fed192bd204))
+
 ## [8.2.30](https://github.com/appium/appium-chromedriver/compare/v8.2.29...v8.2.30) (2026-04-30)
 
 ### Miscellaneous Chores
