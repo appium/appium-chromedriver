@@ -1,3 +1,9 @@
+## [8.3.1](https://github.com/appium/appium-chromedriver/compare/v8.3.0...v8.3.1) (2026-05-06)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump sinon from 21.1.2 to 22.0.0 ([#572](https://github.com/appium/appium-chromedriver/issues/572)) ([410ca8f](https://github.com/appium/appium-chromedriver/commit/410ca8fee0c3d80809b90b91e7556efe20ffe671))
+
 ## [8.3.0](https://github.com/appium/appium-chromedriver/compare/v8.2.30...v8.3.0) (2026-05-04)
 
 ### Features
