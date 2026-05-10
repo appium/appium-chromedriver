@@ -3,6 +3,7 @@ import {BaseDriver} from '@appium/base-driver';
 import path from 'node:path';
 import {compareVersions} from 'compare-versions';
 import axios from 'axios';
+import type {AxiosRequestConfig} from 'axios';
 import os from 'node:os';
 import {OS, CPU} from './constants';
 import type {ADB} from 'appium-adb';
@@ -97,8 +98,8 @@ export async function getChromedriverBinaryPath(osName: string = getOsName()): P
  */
 export async function retrieveData(
   url: string,
-  headers?: import('axios').AxiosRequestConfig['headers'],
-  opts: Pick<import('axios').AxiosRequestConfig, 'timeout' | 'responseType'> = {},
+  headers?: AxiosRequestConfig['headers'],
+  opts: Pick<AxiosRequestConfig, 'timeout' | 'responseType'> = {},
 ): Promise<any> {
   const {timeout = 5000, responseType = 'text'} = opts;
   return (

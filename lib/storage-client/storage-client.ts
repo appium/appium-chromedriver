@@ -178,11 +178,12 @@ export class ChromedriverStorageClient {
         {timeout: STORAGE_REQ_TIMEOUT_MS},
       );
     } catch (e) {
-      const err = e as Error;
+      const detail = e instanceof Error ? e.message : String(e);
       throw new Error(
         `Cannot fetch the latest Chromedriver version. ` +
           `Make sure you can access ${CHROME_FOR_TESTING_LAST_GOOD_VERSIONS} from your machine or provide a mirror by setting ` +
-          `a custom value to CHROMELABS_URL environment variable. Original error: ${err.message}`,
+          `a custom value to CHROMELABS_URL environment variable. Original error: ${detail}`,
+        {cause: e},
       );
     }
     return parseLatestKnownGoodVersionsJson(jsonStr);
@@ -378,7 +379,7 @@ export class ChromedriverStorageClient {
       const err = e as Error;
       const msg = `Cannot download chromedriver archive. Original error: ${err.message}`;
       if (isStrict) {
-        throw new Error(msg);
+        throw new Error(msg, {cause: e});
       }
       log.error(msg);
       return false;

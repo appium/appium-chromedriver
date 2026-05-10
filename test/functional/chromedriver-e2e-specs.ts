@@ -1,15 +1,12 @@
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import {Chromedriver} from '../../lib/chromedriver';
+import {Chromedriver, type ChromedriverState} from '../../lib/chromedriver';
 import {install} from '../helpers/install';
 import {exec} from 'teen_process';
-import {CHROMEDRIVER_STATES} from '../../lib/constants';
 
 use(chaiAsPromised);
 
-function nextState(
-  cd: Chromedriver,
-): Promise<(typeof CHROMEDRIVER_STATES)[keyof typeof CHROMEDRIVER_STATES]> {
+function nextState(cd: Chromedriver): Promise<ChromedriverState> {
   return new Promise((resolve) => {
     cd.once(Chromedriver.EVENT_CHANGED, (msg) => {
       resolve(msg.state);

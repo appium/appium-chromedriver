@@ -1,4 +1,6 @@
 import events from 'node:events';
+// `typeof PROTOCOLS` in property types needs the value export; a type-only import is not a valid operand of `typeof`.
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports -- see above
 import {JWProxy, PROTOCOLS} from '@appium/base-driver';
 import {logger, util} from '@appium/support';
 import {SubProcess, exec} from 'teen_process';
@@ -26,11 +28,13 @@ import type {ProxyOptions, HTTPMethod, HTTPBody} from '@appium/types';
 import type {Request, Response} from 'express';
 import type {ChromedriverOpts} from './types';
 
+export type ChromedriverState =
+  (typeof CHROMEDRIVER_STATES)[keyof typeof CHROMEDRIVER_STATES];
+
 const DEFAULT_HOST = '127.0.0.1';
 const DEFAULT_PORT = 9515;
 // consider chromedriver ready once startup banner appears
 const chromedriverStdoutStartDetector = (stdout: string): boolean => stdout.startsWith('Starting ');
-type ChromedriverState = (typeof CHROMEDRIVER_STATES)[keyof typeof CHROMEDRIVER_STATES];
 type ChromedriverEventMap = {
   [CHROMEDRIVER_EVENTS.ERROR]: [Error];
   [CHROMEDRIVER_EVENTS.CHANGED]: [{state: ChromedriverState}];

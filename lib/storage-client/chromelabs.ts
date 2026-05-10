@@ -49,8 +49,10 @@ export function parseKnownGoodVersionsWithDownloadsJson(
   try {
     json = JSON.parse(jsonStr);
   } catch (e) {
-    const err = e as Error;
-    throw new Error(`Storage JSON cannot be parsed. Original error: ${err.message}`);
+    throw new Error(
+      `Storage JSON cannot be parsed. Original error: ${e instanceof Error ? e.message : String(e)}`,
+      {cause: e},
+    );
   }
   /**
    * Example output:
@@ -147,8 +149,10 @@ export function parseLatestKnownGoodVersionsJson(jsonStr: string): string {
   try {
     json = JSON.parse(jsonStr);
   } catch (e) {
-    const err = e as Error;
-    throw new Error(`Storage JSON cannot be parsed. Original error: ${err.message}`);
+    throw new Error(
+      `Storage JSON cannot be parsed. Original error: ${e instanceof Error ? e.message : String(e)}`,
+      {cause: e},
+    );
   }
   /**
    * Example output:
