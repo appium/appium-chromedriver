@@ -28,8 +28,7 @@ import type {ProxyOptions, HTTPMethod, HTTPBody} from '@appium/types';
 import type {Request, Response} from 'express';
 import type {ChromedriverOpts} from './types';
 
-export type ChromedriverState =
-  (typeof CHROMEDRIVER_STATES)[keyof typeof CHROMEDRIVER_STATES];
+export type ChromedriverState = (typeof CHROMEDRIVER_STATES)[keyof typeof CHROMEDRIVER_STATES];
 
 const DEFAULT_HOST = '127.0.0.1';
 const DEFAULT_PORT = 9515;
