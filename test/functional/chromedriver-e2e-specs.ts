@@ -3,7 +3,6 @@ import chaiAsPromised from 'chai-as-promised';
 import {Chromedriver} from '../../lib/chromedriver';
 import {install} from '../helpers/install';
 import {exec} from 'teen_process';
-import _ from 'lodash';
 import {CHROMEDRIVER_STATES} from '../../lib/constants';
 
 use(chaiAsPromised);
@@ -91,7 +90,9 @@ describe('chromedriver with EventEmitter', function () {
     expect(cd!.state).to.eql('stopped');
     const nextStatePromise = nextState(cd!);
     const startPromise = cd!.start(caps);
-    expect(_.size((cd as any).capabilities)).to.be.at.least(_.size(expectedCaps));
+    expect(Object.keys((cd as any).capabilities).length).to.be.at.least(
+      Object.keys(expectedCaps).length,
+    );
     await expect(nextStatePromise).to.become(Chromedriver.STATE_STARTING);
     await expect(nextState(cd!)).to.become(Chromedriver.STATE_ONLINE);
     await startPromise;
@@ -140,7 +141,7 @@ describe('chromedriver with EventEmitter', function () {
     expect(cd!.state).to.eql(Chromedriver.STATE_STOPPED);
     let nextStatePromise = nextState(cd!);
     const startPromise = cd!.start(caps);
-    expect(_.size((cd as any).capabilities)).to.be.at.least(_.size(caps));
+    expect(Object.keys((cd as any).capabilities).length).to.be.at.least(Object.keys(caps).length);
     await expect(nextStatePromise).to.become(Chromedriver.STATE_STARTING);
     await expect(nextState(cd!)).to.become(Chromedriver.STATE_ONLINE);
     await startPromise;
@@ -172,7 +173,9 @@ describe('chromedriver with async/await', function () {
     expect(cd!.state).to.eql('stopped');
     expect(cd!.sessionId()).to.not.exist;
     await cd!.start(caps);
-    expect(_.size((cd as any).capabilities)).to.be.at.least(_.size(expectedCaps));
+    expect(Object.keys((cd as any).capabilities).length).to.be.at.least(
+      Object.keys(expectedCaps).length,
+    );
     expect(cd!.state).to.eql(Chromedriver.STATE_ONLINE);
     expect(cd!.jwproxy.sessionId).to.exist;
     expect(cd!.sessionId()).to.exist;

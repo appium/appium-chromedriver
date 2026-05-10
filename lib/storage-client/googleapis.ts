@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {select as xpathSelect} from 'xpath';
 import {util, logger} from '@appium/support';
 import {retrieveData} from '../utils';
@@ -95,7 +94,7 @@ export async function parseGoogleapiStorageXml(
     Node | Attr
   >;
   log.debug(`Parsed ${driverNodes.length} entries from storage XML`);
-  if (_.isEmpty(driverNodes)) {
+  if (driverNodes.length === 0) {
     throw new Error('Cannot retrieve any valid Chromedriver entries from the storage config');
   }
 
@@ -103,10 +102,14 @@ export async function parseGoogleapiStorageXml(
   const mapping: ChromedriverDetailsMapping = {};
   for (const driverNode of driverNodes) {
     const k = extractNodeText(findChildNode(driverNode, 'Key'));
-    if (!_.includes(k, '/chromedriver_')) {
+    if (!String(k).includes('/chromedriver_')) {
       continue;
     }
     const key = String(k);
+    const versionSegment = key.split('/')[0];
+    if (!versionSegment) {
+      continue;
+    }
 
     const etag = extractNodeText(findChildNode(driverNode, 'ETag'));
     if (!etag) {
@@ -123,8 +126,8 @@ export async function parseGoogleapiStorageXml(
 
     const cdInfo: ChromedriverDetails = {
       url: `${GOOGLEAPIS_CDN}/${key}`,
-      etag: _.trim(etag, '"'),
-      version: _.first(key.split('/')) as string,
+      etag: etag.replace(/^"+|"+$/g, ''),
+      version: versionSegment,
       minBrowserVersion: null,
       os: {
         name: osNameMatch[1],
@@ -160,7 +163,7 @@ export async function parseGoogleapiStorageXml(
     },
     {concurrency: MAX_PARALLEL_DOWNLOADS},
   );
-  log.info(`The total count of entries in the mapping: ${_.size(mapping)}`);
+  log.info(`The total count of entries in the mapping: ${Object.keys(mapping).length}`);
   return mapping;
 }
 

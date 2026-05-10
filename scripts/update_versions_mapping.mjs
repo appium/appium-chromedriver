@@ -1,5 +1,4 @@
 import {readFile, writeFile} from 'node:fs/promises';
-import _ from 'lodash';
 
 async function main() {
   const [latestVersion, jsonPath] = process.argv.slice(2);
@@ -20,9 +19,9 @@ async function main() {
     return;
   }
 
-  const pairs = _.toPairs(json);
+  const pairs = Object.entries(json);
   pairs.unshift([latestVersion, latestVersion]);
-  await writeFile(jsonPath, JSON.stringify(_.fromPairs(pairs), null, 2), 'utf8');
+  await writeFile(jsonPath, JSON.stringify(Object.fromEntries(pairs), null, 2), 'utf8');
   process.stdout.write('1');
 }
 

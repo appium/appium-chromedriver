@@ -1,7 +1,6 @@
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import {ChromedriverStorageClient} from '../../lib/storage-client/storage-client';
-import _ from 'lodash';
 import {fs, tempDir} from '@appium/support';
 
 use(chaiAsPromised);
@@ -12,7 +11,7 @@ describe('ChromedriverStorageClient', function () {
   it('should retrieve chromedrivers mapping', async function () {
     const client = new ChromedriverStorageClient();
     const mapping = await client.retrieveMapping();
-    expect(_.size(mapping)).to.be.greaterThan(0);
+    expect(Object.keys(mapping).length).to.be.greaterThan(0);
   });
 
   it('should retrieve older chromedrivers by versions', async function () {

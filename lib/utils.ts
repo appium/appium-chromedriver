@@ -1,5 +1,4 @@
-import _ from 'lodash';
-import {system, fs, node} from '@appium/support';
+import {system, fs, node, util} from '@appium/support';
 import {BaseDriver} from '@appium/base-driver';
 import path from 'node:path';
 import {compareVersions} from 'compare-versions';
@@ -17,7 +16,7 @@ const MODULE_NAME = 'appium-chromedriver';
  * @returns The full path to module root
  * @throws {Error} If the current module root folder cannot be determined
  */
-const getModuleRoot = _.memoize(function getModuleRoot(): string {
+const getModuleRoot = util.memoize(function getModuleRoot(): string {
   const root = node.getModuleRootSync(MODULE_NAME, __filename);
   if (!root) {
     throw new Error(`Cannot find the root folder of the ${MODULE_NAME} Node.js module`);
@@ -40,10 +39,11 @@ export const CD_BASE_DIR = path.join(getModuleRoot(), 'chromedriver');
 export function getMostRecentChromedriver(
   mapping: ChromedriverVersionMapping = CHROMEDRIVER_CHROME_MAPPING,
 ): string {
-  if (_.isEmpty(mapping)) {
+  if (util.isEmpty(mapping)) {
     throw new Error('Unable to get most recent Chromedriver version from empty mapping');
   }
-  return _.last(_.keys(mapping).sort(compareVersions)) as string;
+  const sorted = Object.keys(mapping).sort(compareVersions);
+  return sorted.at(-1) as string;
 }
 
 export const CD_VER: string =
@@ -85,9 +85,7 @@ export async function getChromedriverBinaryPath(osName: string = getOsName()): P
     nocase: true,
     nodir: true,
   });
-  return _.isEmpty(paths)
-    ? path.resolve(rootDir, `${CD_EXECUTABLE_PREFIX}${pathSuffix}`)
-    : (_.first(paths) as string);
+  return paths[0] ?? path.resolve(rootDir, `${CD_EXECUTABLE_PREFIX}${pathSuffix}`);
 }
 
 /**
@@ -117,7 +115,7 @@ export async function retrieveData(
  * Gets the OS name for the current system.
  * @returns The OS name ('win', 'mac', or 'linux').
  */
-export const getOsName = _.memoize(function getOsName(): (typeof OS)[keyof typeof OS] {
+export const getOsName = util.memoize(function getOsName(): (typeof OS)[keyof typeof OS] {
   if (system.isWindows()) {
     return OS.WINDOWS;
   }
@@ -131,15 +129,15 @@ export const getOsName = _.memoize(function getOsName(): (typeof OS)[keyof typeo
  * Gets the CPU type for the current system.
  * @returns The CPU type ('intel' or 'arm').
  */
-export const getCpuType = _.memoize(function getCpuType(): (typeof CPU)[keyof typeof CPU] {
-  return _.includes(_.toLower(os.cpus()[0].model), 'apple') ? CPU.ARM : CPU.INTEL;
+export const getCpuType = util.memoize(function getCpuType(): (typeof CPU)[keyof typeof CPU] {
+  return os.cpus()[0]?.model.toLowerCase().includes('apple') ? CPU.ARM : CPU.INTEL;
 });
 
 /**
  * Gets OS information including name, architecture, and CPU type.
  * @returns A promise that resolves to OS information.
  */
-export const getOsInfo = _.memoize(async function getOsInfo(): Promise<OSInfo> {
+export const getOsInfo = util.memoize(async function getOsInfo(): Promise<OSInfo> {
   return {
     name: getOsName(),
     arch: String(await system.arch()),
@@ -150,7 +148,7 @@ export const getOsInfo = _.memoize(async function getOsInfo(): Promise<OSInfo> {
 // @ts-expect-error to avoid error
 // TS2345: Argument of type '{}' is not assignable to parameter of type 'DriverOpts<Readonly<Record<string, Constraint>>>'
 // Type '{}' is missing the following properties from type 'ServerArgs': address, allowCors, allowInsecure, basePath, and 26 more.
-const getBaseDriverInstance = _.memoize(() => new BaseDriver({}, false));
+const getBaseDriverInstance = util.memoize(() => new BaseDriver({}, false));
 
 /**
  * Generates log prefix string.

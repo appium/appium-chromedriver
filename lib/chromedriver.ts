@@ -1,9 +1,8 @@
 import events from 'node:events';
 import {JWProxy, PROTOCOLS} from '@appium/base-driver';
-import {logger} from '@appium/support';
+import {logger, util} from '@appium/support';
 import {SubProcess, exec} from 'teen_process';
 import {getChromedriverDir, generateLogPrefix} from './utils';
-import _ from 'lodash';
 import {ChromedriverStorageClient} from './storage-client/storage-client';
 import {CHROMEDRIVER_EVENTS, CHROMEDRIVER_STATES} from './constants';
 import {
@@ -270,10 +269,10 @@ export class Chromedriver extends events.EventEmitter<ChromedriverEventMap> {
   }
 
   private prepareCapabilitiesForSessionStart(caps: SessionCapabilities): SessionCapabilities {
-    const capabilities = _.cloneDeep(caps);
+    const capabilities = structuredClone(caps);
     // set the logging preferences to ALL browser console logs by default
-    capabilities.loggingPrefs = _.cloneDeep(getCapValue(caps, 'loggingPrefs', {}));
-    if (_.isEmpty(capabilities.loggingPrefs.browser)) {
+    capabilities.loggingPrefs = structuredClone(getCapValue(caps, 'loggingPrefs', {}));
+    if (util.isEmpty(capabilities.loggingPrefs.browser)) {
       capabilities.loggingPrefs.browser = 'ALL';
     }
     return capabilities;
