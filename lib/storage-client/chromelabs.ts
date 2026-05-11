@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import path from 'node:path';
 import {logger} from '@appium/support';
 import * as semver from 'semver';
@@ -50,8 +49,10 @@ export function parseKnownGoodVersionsWithDownloadsJson(
   try {
     json = JSON.parse(jsonStr);
   } catch (e) {
-    const err = e as Error;
-    throw new Error(`Storage JSON cannot be parsed. Original error: ${err.message}`);
+    throw new Error(
+      `Storage JSON cannot be parsed. Original error: ${e instanceof Error ? e.message : String(e)}`,
+      {cause: e},
+    );
   }
   /**
    * Example output:
@@ -91,12 +92,12 @@ export function parseKnownGoodVersionsWithDownloadsJson(
    *       ...
    */
   const mapping: ChromedriverDetailsMapping = {};
-  if (!_.isArray(json?.versions)) {
+  if (!Array.isArray(json?.versions)) {
     log.debug(jsonStr);
     throw new Error('The format of the storage JSON is not supported');
   }
   for (const {version, downloads} of json.versions) {
-    if (!_.isArray(downloads?.chromedriver)) {
+    if (!Array.isArray(downloads?.chromedriver)) {
       continue;
     }
     const versionObj = semver.parse(version, {loose: true});
@@ -130,7 +131,7 @@ export function parseKnownGoodVersionsWithDownloadsJson(
       };
     }
   }
-  log.info(`The total count of entries in the mapping: ${_.size(mapping)}`);
+  log.info(`The total count of entries in the mapping: ${Object.keys(mapping).length}`);
   return mapping;
 }
 
@@ -148,8 +149,10 @@ export function parseLatestKnownGoodVersionsJson(jsonStr: string): string {
   try {
     json = JSON.parse(jsonStr);
   } catch (e) {
-    const err = e as Error;
-    throw new Error(`Storage JSON cannot be parsed. Original error: ${err.message}`);
+    throw new Error(
+      `Storage JSON cannot be parsed. Original error: ${e instanceof Error ? e.message : String(e)}`,
+      {cause: e},
+    );
   }
   /**
    * Example output:

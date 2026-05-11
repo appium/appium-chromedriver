@@ -5,6 +5,7 @@
     "outDir": "build",
     "checkJs": true,
     "esModuleInterop": true,
+    "strict": true
   },
   "ts-node": {
     "transpileOnly": true,

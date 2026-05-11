@@ -1,5 +1,4 @@
 import {getChromedriverDir, retrieveData, getOsInfo, convertToInt, getCpuType} from '../utils';
-import _ from 'lodash';
 import path from 'node:path';
 import {asyncmap} from 'asyncbox';
 import {system, fs, logger, tempDir, zip, util, net} from '@appium/support';
@@ -118,15 +117,15 @@ export class ChromedriverStorageClient {
    * @returns The list of successfully synchronized driver keys
    */
   async syncDrivers(opts: SyncOptions = {}): Promise<string[]> {
-    if (_.isEmpty(this.mapping)) {
+    if (util.isEmpty(this.mapping)) {
       await this.retrieveMapping(!!opts.minBrowserVersion);
     }
-    if (_.isEmpty(this.mapping)) {
+    if (util.isEmpty(this.mapping)) {
       throw new Error('Cannot retrieve chromedrivers mapping from Google storage');
     }
 
     const driversToSync = this.selectMatchingDrivers(opts.osInfo ?? (await getOsInfo()), opts);
-    if (_.isEmpty(driversToSync)) {
+    if (util.isEmpty(driversToSync)) {
       log.debug(`There are no drivers to sync. Exiting`);
       return [];
     }
@@ -141,7 +140,7 @@ export class ChromedriverStorageClient {
       await asyncmap(
         [...driversToSync.entries()],
         async ([idx, driverKey]) => {
-          if (await this.retrieveDriver(idx, driverKey, archivesRoot, !_.isEmpty(opts))) {
+          if (await this.retrieveDriver(idx, driverKey, archivesRoot, !util.isEmpty(opts))) {
             synchronizedDrivers.push(driverKey);
           }
         },
@@ -150,7 +149,7 @@ export class ChromedriverStorageClient {
     } finally {
       await fs.rimraf(archivesRoot);
     }
-    if (!_.isEmpty(synchronizedDrivers)) {
+    if (!util.isEmpty(synchronizedDrivers)) {
       log.info(
         `Successfully synchronized ` +
           `${util.pluralize('chromedriver', synchronizedDrivers.length, true)}`,
@@ -179,11 +178,12 @@ export class ChromedriverStorageClient {
         {timeout: STORAGE_REQ_TIMEOUT_MS},
       );
     } catch (e) {
-      const err = e as Error;
+      const detail = e instanceof Error ? e.message : String(e);
       throw new Error(
         `Cannot fetch the latest Chromedriver version. ` +
           `Make sure you can access ${CHROME_FOR_TESTING_LAST_GOOD_VERSIONS} from your machine or provide a mirror by setting ` +
-          `a custom value to CHROMELABS_URL environment variable. Original error: ${err.message}`,
+          `a custom value to CHROMELABS_URL environment variable. Original error: ${detail}`,
+        {cause: e},
       );
     }
     return parseLatestKnownGoodVersionsJson(jsonStr);
@@ -199,9 +199,9 @@ export class ChromedriverStorageClient {
    */
   private selectMatchingDrivers(osInfo: OSInfo, opts: SyncOptions = {}): string[] {
     const {minBrowserVersion, versions = []} = opts;
-    let driversToSync = _.keys(this.mapping);
+    let driversToSync = Object.keys(this.mapping);
 
-    if (!_.isEmpty(versions)) {
+    if (!util.isEmpty(versions)) {
       // Handle only selected versions if requested
       log.debug(`Selecting chromedrivers whose versions match to ${versions}`);
       driversToSync = driversToSync.filter((cdName) =>
@@ -209,7 +209,7 @@ export class ChromedriverStorageClient {
       );
 
       log.debug(`Got ${util.pluralize('item', driversToSync.length, true)}`);
-      if (_.isEmpty(driversToSync)) {
+      if (util.isEmpty(driversToSync)) {
         return [];
       }
     }
@@ -242,21 +242,21 @@ export class ChromedriverStorageClient {
       );
 
       log.debug(`Got ${util.pluralize('item', driversToSync.length, true)}`);
-      if (_.isEmpty(driversToSync)) {
+      if (util.isEmpty(driversToSync)) {
         return [];
       }
       log.debug(
         `Will select candidate ${util.pluralize('driver', driversToSync.length)} ` +
-          `versioned as '${_.uniq(driversToSync.map((cdName) => this.mapping[cdName].version))}'`,
+          `versioned as '${util.uniq(driversToSync.map((cdName) => this.mapping[cdName].version))}'`,
       );
     }
 
-    if (!_.isEmpty(osInfo)) {
+    if (!util.isEmpty(osInfo)) {
       // Filter out drivers for unsupported system architectures
       const {name, arch, cpu = getCpuType()} = osInfo;
       log.debug(`Selecting chromedrivers whose platform matches to ${name}:${cpu}${arch}`);
       let result = driversToSync.filter((cdName) => this.doesMatchForOsInfo(cdName, osInfo));
-      if (_.isEmpty(result) && arch === ARCH.X64 && cpu === CPU.INTEL) {
+      if (util.isEmpty(result) && arch === ARCH.X64 && cpu === CPU.INTEL) {
         // Fallback to X86 if X64 architecture is not available for this driver
         result = driversToSync.filter((cdName) =>
           this.doesMatchForOsInfo(cdName, {
@@ -266,7 +266,7 @@ export class ChromedriverStorageClient {
           }),
         );
       }
-      if (_.isEmpty(result) && (name === OS.MAC || name === OS.WINDOWS) && cpu === CPU.ARM) {
+      if (util.isEmpty(result) && (name === OS.MAC || name === OS.WINDOWS) && cpu === CPU.ARM) {
         // Fallback to Intel (Rosetta on macOS, x64 emulation on Windows ARM):
         // https://github.com/appium/appium-chromedriver/issues/562
         result = driversToSync.filter((cdName) =>
@@ -281,7 +281,7 @@ export class ChromedriverStorageClient {
       log.debug(`Got ${util.pluralize('item', driversToSync.length, true)}`);
     }
 
-    if (!_.isEmpty(driversToSync)) {
+    if (!util.isEmpty(driversToSync)) {
       log.debug('Excluding older patches if present');
       const patchesMap: {[key: string]: string[]} = {};
       // Older chromedrivers must not be excluded as they follow a different
@@ -298,20 +298,20 @@ export class ChromedriverStorageClient {
         if (!verObj) {
           continue;
         }
-        if (!_.isArray(patchesMap[verObj.major])) {
+        if (!Array.isArray(patchesMap[verObj.major])) {
           patchesMap[verObj.major] = [];
         }
         patchesMap[verObj.major].push(cdVersion);
       }
-      for (const majorVersion of _.keys(patchesMap)) {
+      for (const majorVersion of Object.keys(patchesMap)) {
         if (patchesMap[majorVersion].length <= 1) {
           continue;
         }
         patchesMap[majorVersion].sort((a: string, b: string) => compareVersions(b, a));
       }
-      if (!_.isEmpty(patchesMap)) {
+      if (!util.isEmpty(patchesMap)) {
         log.debug('Versions mapping: ' + JSON.stringify(patchesMap, null, 2));
-        for (const sortedVersions of _.values(patchesMap)) {
+        for (const sortedVersions of Object.values(patchesMap)) {
           selectedVersions.add(sortedVersions[0]);
         }
         driversToSync = driversToSync.filter((cdName) =>
@@ -379,7 +379,7 @@ export class ChromedriverStorageClient {
       const err = e as Error;
       const msg = `Cannot download chromedriver archive. Original error: ${err.message}`;
       if (isStrict) {
-        throw new Error(msg);
+        throw new Error(msg, {cause: e});
       }
       log.error(msg);
       return false;
@@ -424,7 +424,7 @@ export class ChromedriverStorageClient {
         tmpRoot,
         true,
         (itemPath, isDirectory) =>
-          !isDirectory && _.toLower(path.parse(itemPath).name) === 'chromedriver',
+          !isDirectory && path.parse(itemPath).name.toLowerCase() === 'chromedriver',
       );
       if (!chromedriverPath) {
         throw new Error(
@@ -443,5 +443,5 @@ export class ChromedriverStorageClient {
 
 async function isCrcOk(src: string, checksum: string): Promise<boolean> {
   const md5 = await fs.hash(src, 'md5');
-  return _.toLower(md5) === _.toLower(checksum);
+  return md5.toLowerCase() === checksum.toLowerCase();
 }

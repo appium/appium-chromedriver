@@ -1,9 +1,8 @@
 import events from 'node:events';
 import {JWProxy, PROTOCOLS} from '@appium/base-driver';
-import {logger} from '@appium/support';
+import {logger, util} from '@appium/support';
 import {SubProcess, exec} from 'teen_process';
 import {getChromedriverDir, generateLogPrefix} from './utils';
-import _ from 'lodash';
 import {ChromedriverStorageClient} from './storage-client/storage-client';
 import {CHROMEDRIVER_EVENTS, CHROMEDRIVER_STATES} from './constants';
 import {
@@ -27,11 +26,14 @@ import type {ProxyOptions, HTTPMethod, HTTPBody} from '@appium/types';
 import type {Request, Response} from 'express';
 import type {ChromedriverOpts} from './types';
 
+// Keep this import marked as used at runtime when it is otherwise only referenced in type positions.
+void PROTOCOLS;
+export type ChromedriverState = (typeof CHROMEDRIVER_STATES)[keyof typeof CHROMEDRIVER_STATES];
+
 const DEFAULT_HOST = '127.0.0.1';
 const DEFAULT_PORT = 9515;
 // consider chromedriver ready once startup banner appears
 const chromedriverStdoutStartDetector = (stdout: string): boolean => stdout.startsWith('Starting ');
-type ChromedriverState = (typeof CHROMEDRIVER_STATES)[keyof typeof CHROMEDRIVER_STATES];
 type ChromedriverEventMap = {
   [CHROMEDRIVER_EVENTS.ERROR]: [Error];
   [CHROMEDRIVER_EVENTS.CHANGED]: [{state: ChromedriverState}];
@@ -270,10 +272,10 @@ export class Chromedriver extends events.EventEmitter<ChromedriverEventMap> {
   }
 
   private prepareCapabilitiesForSessionStart(caps: SessionCapabilities): SessionCapabilities {
-    const capabilities = _.cloneDeep(caps);
+    const capabilities = structuredClone(caps);
     // set the logging preferences to ALL browser console logs by default
-    capabilities.loggingPrefs = _.cloneDeep(getCapValue(caps, 'loggingPrefs', {}));
-    if (_.isEmpty(capabilities.loggingPrefs.browser)) {
+    capabilities.loggingPrefs = structuredClone(getCapValue(caps, 'loggingPrefs', {}));
+    if (util.isEmpty(capabilities.loggingPrefs.browser)) {
       capabilities.loggingPrefs.browser = 'ALL';
     }
     return capabilities;

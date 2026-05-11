@@ -1,7 +1,6 @@
-import {system} from '@appium/support';
+import {system, util} from '@appium/support';
 import {retryInterval} from 'asyncbox';
 import {exec} from 'teen_process';
-import _ from 'lodash';
 import {CHROMEDRIVER_STATES} from '../constants';
 import type {ChromedriverCommandContext} from './types';
 
@@ -15,7 +14,7 @@ export function buildChromedriverArgs(this: ChromedriverCommandContext): string[
   if (this.adb?.adbPort) {
     args.push(`--adb-port=${this.adb.adbPort}`);
   }
-  if (_.isArray(this.cmdArgs)) {
+  if (Array.isArray(this.cmdArgs)) {
     args.push(...this.cmdArgs);
   }
   if (this.logPath) {
@@ -48,12 +47,13 @@ export async function waitForOnline(this: ChromedriverCommandContext): Promise<v
       chromedriverStopped = true;
       return;
     }
-    const status: any = await self.getStatus();
-    if (!_.isPlainObject(status) || !status.ready) {
+    const status = await self.getStatus();
+    if (!util.isPlainObject(status) || !status.ready) {
       throw new Error(`The response to the /status API is not valid: ${JSON.stringify(status)}`);
     }
-    this._onlineStatus = status;
-    const versionMatch = VERSION_PATTERN.exec(status.build?.version ?? '');
+    const statusPayload = status as Record<string, any>;
+    this._onlineStatus = statusPayload;
+    const versionMatch = VERSION_PATTERN.exec(statusPayload.build?.version ?? '');
     if (versionMatch) {
       this._driverVersion = versionMatch[1];
       this.log.info(`Chromedriver version: ${this._driverVersion}`);

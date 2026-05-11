@@ -1,6 +1,5 @@
 import {expect} from 'chai';
 import {ChromedriverStorageClient} from '../../lib/storage-client/storage-client';
-import _ from 'lodash';
 
 describe('ChromedriverStorageClient', function () {
   describe('selectMatchingDrivers', function () {
@@ -88,8 +87,8 @@ describe('ChromedriverStorageClient', function () {
     const createClient = (mappingOverride?: AnyObj) => {
       const client = new ChromedriverStorageClient();
       (client as any).mapping = mappingOverride
-        ? _.merge(_.cloneDeep(defaultMapping), mappingOverride)
-        : _.cloneDeep(defaultMapping);
+        ? {...structuredClone(defaultMapping), ...structuredClone(mappingOverride)}
+        : structuredClone(defaultMapping);
       return client;
     };
 

@@ -2,7 +2,6 @@ import {fs, util} from '@appium/support';
 import {asyncmap} from 'asyncbox';
 import {compareVersions} from 'compare-versions';
 import {type ExecError} from 'teen_process';
-import _ from 'lodash';
 import path from 'node:path';
 import * as semver from 'semver';
 import {CHROMEDRIVER_CHROME_MAPPING, getChromedriverBinaryPath} from '../utils';
@@ -33,7 +32,7 @@ type ChromedriverSelectionSelf = ChromedriverCommandContext & {
 export async function getDriversMapping(
   this: ChromedriverCommandContext,
 ): Promise<ChromedriverVersionMapping> {
-  let mapping = _.cloneDeep(CHROMEDRIVER_CHROME_MAPPING);
+  let mapping = structuredClone(CHROMEDRIVER_CHROME_MAPPING);
   if (this.mappingPath) {
     this.log.debug(`Attempting to use Chromedriver->Chrome mapping from '${this.mappingPath}'`);
     if (!(await fs.exists(this.mappingPath))) {
@@ -52,7 +51,7 @@ export async function getDriversMapping(
     this.log.debug('Using the static Chromedriver->Chrome mapping');
   }
 
-  for (const [cdVersion, chromeVersion] of _.toPairs(mapping)) {
+  for (const [cdVersion, chromeVersion] of Object.entries(mapping)) {
     const coercedVersion = semver.coerce(chromeVersion);
     if (coercedVersion) {
       mapping[cdVersion] = coercedVersion.version;
@@ -143,7 +142,7 @@ export async function getChromedrivers(
   )
     .filter((cd): cd is ChromedriverInfo => !!cd)
     .sort((a, b) => compareVersions(b.version, a.version));
-  if (_.isEmpty(cds)) {
+  if (cds.length === 0) {
     this.log.info(`No Chromedrivers were found in '${this.executableDir}'`);
     return cds;
   }
@@ -197,8 +196,8 @@ export async function getCompatibleChromedriver(this: ChromedriverCommandContext
 
   const ctx = this as ChromedriverSelectionSelf;
   const mapping = await ctx.getDriversMapping();
-  if (!_.isEmpty(mapping)) {
-    ctx.log.debug(`The most recent known Chrome version: ${_.values(mapping)[0]}`);
+  if (!util.isEmpty(mapping)) {
+    ctx.log.debug(`The most recent known Chrome version: ${Object.values(mapping)[0]}`);
   }
 
   const syncState = {didStorageSync: false};
@@ -218,7 +217,7 @@ export async function getCompatibleChromedriver(this: ChromedriverCommandContext
     ctx.log.debug(`Found Chrome bundle '${ctx.bundleId}' version '${chromeVersion}'`);
 
     const matchingDrivers = filterChromedriversMatchingChrome(cds, chromeVersion);
-    if (_.isEmpty(matchingDrivers)) {
+    if (matchingDrivers.length === 0) {
       if (ctx.storageClient && !syncState.didStorageSync) {
         try {
           if (await attemptChromedriverStorageSync(ctx, mapping, chromeVersion, syncState)) {
@@ -292,12 +291,13 @@ async function mergeDiscoveredMappingGaps(
     }
     missingVersions[version] = minChromeVersion;
   }
-  if (_.isEmpty(missingVersions)) {
+  const missingCount = Object.keys(missingVersions).length;
+  if (missingCount === 0) {
     return;
   }
   ctx.log.info(
-    `Found ${util.pluralize('Chromedriver', _.size(missingVersions), true)}, ` +
-      `which ${_.size(missingVersions) === 1 ? 'is' : 'are'} missing in the list of known versions: ` +
+    `Found ${util.pluralize('Chromedriver', missingCount, true)}, ` +
+      `which ${missingCount === 1 ? 'is' : 'are'} missing in the list of known versions: ` +
       JSON.stringify(missingVersions),
   );
   await ctx.updateDriversMapping(Object.assign(mapping, missingVersions));
@@ -307,7 +307,7 @@ function pickChromedriverWithBuildCheckDisabled(
   ctx: ChromedriverSelectionSelf,
   cds: ChromedriverInfo[],
 ): string {
-  if (_.isEmpty(cds)) {
+  if (cds.length === 0) {
     throw ctx.log.errorWithException(
       `There must be at least one Chromedriver executable available for use if ` +
         `'chromedriverDisableBuildCheck' capability is set to 'true'`,
@@ -325,7 +325,7 @@ function pickChromedriverWhenChromeUnknown(
   ctx: ChromedriverSelectionSelf,
   cds: ChromedriverInfo[],
 ): string {
-  if (_.isEmpty(cds)) {
+  if (cds.length === 0) {
     throw ctx.log.errorWithException(
       `There must be at least one Chromedriver executable available for use if ` +
         `the current Chrome version cannot be determined`,
@@ -370,12 +370,12 @@ async function attemptChromedriverStorageSync(
   const retrievedMapping = await ctx.storageClient.retrieveMapping();
   ctx.log.debug(
     'Got chromedrivers mapping from the storage: ' +
-      _.truncate(JSON.stringify(retrievedMapping, null, 2), {length: 500}),
+      util.truncateString(JSON.stringify(retrievedMapping, null, 2), {length: 500}),
   );
   const driverKeys = await ctx.storageClient.syncDrivers({
     minBrowserVersion: chromeVersion.major,
   });
-  if (_.isEmpty(driverKeys)) {
+  if (driverKeys.length === 0) {
     return false;
   }
   const synchronizedDriversMapping = driverKeys.reduce((acc, x) => {

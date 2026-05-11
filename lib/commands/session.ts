@@ -1,7 +1,7 @@
 import {PROTOCOLS, isStandardCap} from '@appium/base-driver';
+import {util} from '@appium/support';
 import {generateLogPrefix} from '../utils';
 import {CHROMEDRIVER_EVENTS, CHROMEDRIVER_STATES} from '../constants';
-import _ from 'lodash';
 import * as semver from 'semver';
 import type {ChromedriverCommandContext} from './types';
 
@@ -14,7 +14,7 @@ export type SessionCapabilities = Record<string, any>;
  * Converts a capability name to W3C format by adding the 'goog:' prefix if needed.
  */
 export function toW3cCapName(capName: string): string {
-  return _.isString(capName) && !capName.includes(':') && !isStandardCap(capName)
+  return typeof capName === 'string' && !capName.includes(':') && !isStandardCap(capName)
     ? `${W3C_PREFIX}${capName}`
     : capName;
 }
@@ -27,7 +27,7 @@ export function getCapValue(
   rawCapName: string,
   defaultValue?: any,
 ): any {
-  for (const [capName, capValue] of _.toPairs(allCaps)) {
+  for (const [capName, capValue] of Object.entries(allCaps)) {
     if (toW3cCapName(capName) === toW3cCapName(rawCapName)) {
       return capValue;
     }
@@ -39,13 +39,8 @@ export function getCapValue(
  * Converts all capability names in an object to W3C format.
  */
 export function toW3cCapNames(originalCaps: Record<string, any> = {}): Record<string, any> {
-  return _.reduce(
-    originalCaps,
-    (acc, value, key) => {
-      acc[toW3cCapName(key)] = value;
-      return acc;
-    },
-    {} as Record<string, any>,
+  return Object.fromEntries(
+    Object.entries(originalCaps).map(([key, value]) => [toW3cCapName(key), value]),
   );
 }
 
@@ -67,9 +62,7 @@ export async function startSession(this: ChromedriverCommandContext): Promise<Se
   >;
   this.log.prefix = generateLogPrefix(this, this.jwproxy.sessionId);
   changeState.call(this, CHROMEDRIVER_STATES.ONLINE);
-  return _.has(response, 'capabilities') && response.capabilities
-    ? response.capabilities
-    : response;
+  return response?.capabilities ?? response;
 }
 
 /**
@@ -88,9 +81,10 @@ export function syncProtocol(this: ChromedriverCommandContext): keyof typeof PRO
     }
   }
 
-  const isOperaDriver = _.includes(this._onlineStatus?.message, 'OperaDriver');
+  const statusMsg = this._onlineStatus?.message;
+  const isOperaDriver = typeof statusMsg === 'string' && statusMsg.includes('OperaDriver');
   const chromeOptions = getCapValue(this.capabilities, 'chromeOptions');
-  if (_.isPlainObject(chromeOptions) && chromeOptions.w3c === false) {
+  if (util.isPlainObject(chromeOptions) && chromeOptions.w3c === false) {
     this.log.info(
       `The ChromeDriver v. ${this.driverVersion} supports ${PROTOCOLS.W3C} protocol, ` +
         `but ${PROTOCOLS.MJSONWP} one has been explicitly requested`,
@@ -99,7 +93,7 @@ export function syncProtocol(this: ChromedriverCommandContext): keyof typeof PRO
     return this._desiredProtocol;
   } else if (isOperaDriver) {
     // OperaDriver requires explicit W3C request or it falls back to JWP.
-    if (_.isPlainObject(chromeOptions)) {
+    if (util.isPlainObject(chromeOptions)) {
       chromeOptions.w3c = true;
     } else {
       this.capabilities[toW3cCapName('chromeOptions')] = {w3c: true};
