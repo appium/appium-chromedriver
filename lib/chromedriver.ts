@@ -26,7 +26,7 @@ import type {ProxyOptions, HTTPMethod, HTTPBody} from '@appium/types';
 import type {Request, Response} from 'express';
 import type {ChromedriverOpts} from './types';
 
-// This is a workaround to avoid type errors
+// Keep this import marked as used at runtime when it is otherwise only referenced in type positions.
 void PROTOCOLS;
 export type ChromedriverState = (typeof CHROMEDRIVER_STATES)[keyof typeof CHROMEDRIVER_STATES];
 
