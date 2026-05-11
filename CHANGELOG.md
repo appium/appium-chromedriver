@@ -1,3 +1,9 @@
+## [8.4.0](https://github.com/appium/appium-chromedriver/compare/v8.3.1...v8.4.0) (2026-05-11)
+
+### Features
+
+* Ditch lodash ([#573](https://github.com/appium/appium-chromedriver/issues/573)) ([a03305f](https://github.com/appium/appium-chromedriver/commit/a03305f196ead741c15050940f65afa66c37586f))
+
 ## [8.3.1](https://github.com/appium/appium-chromedriver/compare/v8.3.0...v8.3.1) (2026-05-06)
 
 ### Miscellaneous Chores
