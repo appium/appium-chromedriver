@@ -1,3 +1,9 @@
+## [8.4.4](https://github.com/appium/appium-chromedriver/compare/v8.4.3...v8.4.4) (2026-05-21)
+
+### Miscellaneous Chores
+
+* Bump appium-adb to version 15 ([#577](https://github.com/appium/appium-chromedriver/issues/577)) ([cbfe559](https://github.com/appium/appium-chromedriver/commit/cbfe55944a1775a1d3da5a7ada191b368cd92c6a))
+
 ## [8.4.3](https://github.com/appium/appium-chromedriver/compare/v8.4.2...v8.4.3) (2026-05-21)
 
 ### Miscellaneous Chores
