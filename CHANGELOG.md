@@ -1,3 +1,9 @@
+## [8.4.10](https://github.com/appium/appium-chromedriver/compare/v8.4.9...v8.4.10) (2026-06-19)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump @types/node from 25.9.4 to 26.0.0 ([#583](https://github.com/appium/appium-chromedriver/issues/583)) ([990de7f](https://github.com/appium/appium-chromedriver/commit/990de7f1806d8af5bd34f3dc08285665d4893a3b))
+
 ## [8.4.9](https://github.com/appium/appium-chromedriver/compare/v8.4.8...v8.4.9) (2026-06-18)
 
 ### Miscellaneous Chores
