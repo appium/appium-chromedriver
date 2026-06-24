@@ -1,3 +1,9 @@
+## [8.4.11](https://github.com/appium/appium-chromedriver/compare/v8.4.10...v8.4.11) (2026-06-24)
+
+### Miscellaneous Chores
+
+* **deps:** bump actions/checkout from 6 to 7 ([#584](https://github.com/appium/appium-chromedriver/issues/584)) ([90420ee](https://github.com/appium/appium-chromedriver/commit/90420eee6d993fd52617a03c10886867254ace64))
+
 ## [8.4.10](https://github.com/appium/appium-chromedriver/compare/v8.4.9...v8.4.10) (2026-06-19)
 
 ### Miscellaneous Chores
