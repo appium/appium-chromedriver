@@ -1,3 +1,5 @@
+## [8.4.12](https://github.com/appium/appium-chromedriver/compare/v8.4.11...v8.4.12) (2026-06-29)
+
 ## [8.4.11](https://github.com/appium/appium-chromedriver/compare/v8.4.10...v8.4.11) (2026-06-24)
 
 ### Miscellaneous Chores
