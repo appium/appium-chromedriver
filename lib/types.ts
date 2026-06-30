@@ -19,6 +19,14 @@ export interface ChromedriverOpts {
   details?: {info?: {Browser: string}};
   isAutodownloadEnabled?: boolean;
   reqBasePath?: string;
+  /**
+   * Grant Android runtime permissions to the Chrome package (`bundleId`, defaulting to
+   * `com.android.chrome`) once the driver is online, so the session is not blocked by a
+   * native permission dialog. `true` grants a default set (see `DEFAULT_CHROME_PERMISSIONS`);
+   * an array grants the provided `android.permission.*` names instead. Requires `adb`.
+   * Disabled by default.
+   */
+  grantPermissions?: boolean | string[];
 }
 
 export type ChromedriverVersionMapping = Record<string, string | null>;

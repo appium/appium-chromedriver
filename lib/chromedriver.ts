@@ -4,7 +4,12 @@ import {logger, util} from '@appium/support';
 import {SubProcess, exec} from 'teen_process';
 import {getChromedriverDir, generateLogPrefix} from './utils';
 import {ChromedriverStorageClient} from './storage-client/storage-client';
-import {CHROMEDRIVER_EVENTS, CHROMEDRIVER_STATES} from './constants';
+import {
+  CHROMEDRIVER_EVENTS,
+  CHROMEDRIVER_STATES,
+  CHROME_BUNDLE_ID,
+  DEFAULT_CHROME_PERMISSIONS,
+} from './constants';
 import {
   getDriversMapping,
   getChromedrivers,
@@ -52,6 +57,7 @@ export class Chromedriver extends events.EventEmitter<ChromedriverEventMap> {
   readonly proxyPort: number;
   readonly adb?: ADB;
   readonly cmdArgs?: string[];
+  readonly grantPermissions?: ChromedriverOpts['grantPermissions'];
   proc: SubProcess | null;
   readonly useSystemExecutable: boolean;
   chromedriver?: string;
@@ -108,12 +114,14 @@ export class Chromedriver extends events.EventEmitter<ChromedriverEventMap> {
       details,
       isAutodownloadEnabled = false,
       reqBasePath,
+      grantPermissions,
     } = args;
     this._log = logger.getLogger(generateLogPrefix(this));
     this.proxyHost = host;
     this.proxyPort = parseInt(String(port), 10);
     this.adb = adb;
     this.cmdArgs = cmdArgs;
+    this.grantPermissions = grantPermissions;
     this.proc = null;
     this.useSystemExecutable = useSystemExecutable;
     this.chromedriver = executable;
@@ -178,6 +186,35 @@ export class Chromedriver extends events.EventEmitter<ChromedriverEventMap> {
       return await this.startSession();
     } catch (e) {
       return await this.handleChromedriverStartFailure(e as Error, webviewVersionHolder.version);
+    }
+  }
+
+  /**
+   * Pre-grants Android runtime permissions to the Chrome package so the session is not
+   * interrupted by a native permission dialog (geolocation, camera, file access, ...).
+   * Controlled by the `grantPermissions` option and a no-op unless `adb` is available.
+   * Failures are logged and swallowed so they never abort an otherwise healthy session.
+   */
+  async grantDefaultPermissions(): Promise<void> {
+    if (!this.adb) {
+      this.log.debug('Skipping permission grant: no adb instance is available');
+      return;
+    }
+    const bundleId = this.bundleId ?? CHROME_BUNDLE_ID;
+    const permissions = Array.isArray(this.grantPermissions)
+      ? this.grantPermissions
+      : [...DEFAULT_CHROME_PERMISSIONS];
+    if (permissions.length === 0) {
+      return;
+    }
+    try {
+      this.log.info(`Granting permissions ${JSON.stringify(permissions)} to '${bundleId}'`);
+      await this.adb.grantPermissions(bundleId, permissions);
+    } catch (e) {
+      this.log.warn(
+        `Could not grant permissions to '${bundleId}': ${(e as Error).message}. ` +
+          `Features that rely on these permissions might require manual interaction.`,
+      );
     }
   }
 
@@ -334,6 +371,9 @@ export class Chromedriver extends events.EventEmitter<ChromedriverEventMap> {
     await this.proc.start(chromedriverStdoutStartDetector);
     // wait until /status says ready, then negotiate protocol and start session
     await this.waitForOnline();
+    if (this.grantPermissions) {
+      await this.grantDefaultPermissions();
+    }
   }
 
   private formatChromeVersionMismatchHint(err: Error, webviewVersion?: string): string {

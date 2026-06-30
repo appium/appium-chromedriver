@@ -114,6 +114,30 @@ function runSession2() {
 }
 ```
 
+## Granting Android runtime permissions to Chrome
+
+On Android, Chrome may interrupt an automated session with a native runtime-permission
+dialog the first time a page uses geolocation, the camera (`getUserMedia`), or file
+download/upload. Because that dialog is a native OS prompt rather than web content,
+Chromedriver cannot dismiss it and the session stalls.
+
+Pass the `grantPermissions` option (requires an `adb` instance) to pre-grant the relevant
+permissions to the Chrome package once the driver is online. It is disabled by default:
+
+```js
+// grant a sensible default set (camera, fine/coarse location, read/write storage)
+const driver = new Chromedriver({adb, grantPermissions: true});
+
+// or grant a specific set
+const driver = new Chromedriver({
+  adb,
+  grantPermissions: ['android.permission.ACCESS_FINE_LOCATION'],
+});
+```
+
+A failure to grant (e.g. the permission is not a runtime permission on the device) is
+logged as a warning and never aborts the session.
+
 ## States
 
 Here's what the Chromedriver state machine looks like:

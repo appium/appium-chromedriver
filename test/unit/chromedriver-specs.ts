@@ -1,6 +1,7 @@
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import {Chromedriver} from '../../lib/chromedriver';
+import {CHROME_BUNDLE_ID, DEFAULT_CHROME_PERMISSIONS} from '../../lib/constants';
 import sinon from 'sinon';
 import {fs} from '@appium/support';
 import path from 'node:path';
@@ -303,6 +304,57 @@ describe('chromedriver', function () {
     });
     it('should fail for empty mapping', function () {
       expect(() => utils.getMostRecentChromedriver({})).to.throw(/empty/);
+    });
+  });
+
+  describe('grantDefaultPermissions', function () {
+    it('should be a no-op when no adb is available', async function () {
+      const cd = new Chromedriver({grantPermissions: true});
+      // should resolve without throwing even though there is no adb
+      await cd.grantDefaultPermissions();
+    });
+
+    it('should grant the default permission set to the Chrome package', async function () {
+      const grantStub = sinon.stub().resolves();
+      const cd = new Chromedriver({
+        adb: {grantPermissions: grantStub} as any,
+        grantPermissions: true,
+      });
+      await cd.grantDefaultPermissions();
+      expect(grantStub.calledOnce).to.be.true;
+      expect(grantStub.firstCall.args[0]).to.eql(CHROME_BUNDLE_ID);
+      expect(grantStub.firstCall.args[1]).to.eql([...DEFAULT_CHROME_PERMISSIONS]);
+    });
+
+    it('should grant a custom permission list when provided as an array', async function () {
+      const grantStub = sinon.stub().resolves();
+      const perms = ['android.permission.CAMERA'];
+      const cd = new Chromedriver({
+        adb: {grantPermissions: grantStub} as any,
+        grantPermissions: perms,
+      });
+      await cd.grantDefaultPermissions();
+      expect(grantStub.firstCall.args[1]).to.eql(perms);
+    });
+
+    it('should target a custom bundleId when one is set', async function () {
+      const grantStub = sinon.stub().resolves();
+      const cd = new Chromedriver({
+        adb: {grantPermissions: grantStub} as any,
+        bundleId: 'com.android.chrome.beta',
+        grantPermissions: true,
+      });
+      await cd.grantDefaultPermissions();
+      expect(grantStub.firstCall.args[0]).to.eql('com.android.chrome.beta');
+    });
+
+    it('should swallow adb errors instead of failing the session', async function () {
+      const grantStub = sinon.stub().rejects(new Error('pm grant failed'));
+      const cd = new Chromedriver({
+        adb: {grantPermissions: grantStub} as any,
+        grantPermissions: true,
+      });
+      await expect(cd.grantDefaultPermissions()).to.eventually.be.fulfilled;
     });
   });
 });
