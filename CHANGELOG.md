@@ -1,3 +1,9 @@
+## [8.4.14](https://github.com/appium/appium-chromedriver/compare/v8.4.13...v8.4.14) (2026-07-01)
+
+### Miscellaneous Chores
+
+* downgrade conventional-changelog-conventionalcommits to v9 ([#590](https://github.com/appium/appium-chromedriver/issues/590)) ([9c65719](https://github.com/appium/appium-chromedriver/commit/9c65719a5dcd62551b992d826d45019a53650183))
+
 ## [8.4.13](https://github.com/appium/appium-chromedriver/compare/v8.4.12...v8.4.13) (2026-07-01)
 
 ## [8.4.12](https://github.com/appium/appium-chromedriver/compare/v8.4.11...v8.4.12) (2026-06-29)
