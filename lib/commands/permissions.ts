@@ -9,8 +9,7 @@ import type {Chromedriver} from '../chromedriver';
  * `grantPermissions` option is enabled. Because the grant was requested explicitly, any failure
  * is propagated rather than swallowed.
  *
- * @this {Chromedriver}
- * @throws {Error} If `adb` is not available or the permissions could not be granted.
+ * @throws If `adb` is not available or the permissions could not be granted.
  */
 export async function grantChromePermissions(this: Chromedriver): Promise<void> {
   if (!this.adb) {
@@ -20,6 +19,5 @@ export async function grantChromePermissions(this: Chromedriver): Promise<void> 
     );
   }
   const bundleId = this.bundleId ?? CHROME_BUNDLE_ID;
-  this.log.info(`Granting all runtime permissions to '${bundleId}'`);
   await this.adb.grantAllPermissions(bundleId);
 }
