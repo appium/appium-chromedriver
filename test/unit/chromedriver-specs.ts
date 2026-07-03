@@ -341,7 +341,9 @@ describe('chromedriver', function () {
         adb: {grantAllPermissions: grantStub} as any,
         grantPermissions: true,
       });
-      await expect((cd as any).grantChromePermissions()).to.eventually.be.rejectedWith(/pm grant failed/);
+      await expect((cd as any).grantChromePermissions()).to.eventually.be.rejectedWith(
+        /pm grant failed/,
+      );
     });
   });
 });
