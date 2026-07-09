@@ -1,3 +1,9 @@
+## [8.4.16](https://github.com/appium/appium-chromedriver/compare/v8.4.15...v8.4.16) (2026-07-09)
+
+### Miscellaneous Chores
+
+* ChromeDriver Bump to v150.0.7871.115 ([#594](https://github.com/appium/appium-chromedriver/issues/594)) ([e8bcdab](https://github.com/appium/appium-chromedriver/commit/e8bcdab456c48109a5e0e68e82ddd5b1f520cd93))
+
 ## [8.4.15](https://github.com/appium/appium-chromedriver/compare/v8.4.14...v8.4.15) (2026-07-08)
 
 ### Miscellaneous Chores
