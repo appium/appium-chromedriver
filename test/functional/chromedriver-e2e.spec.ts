@@ -31,7 +31,7 @@ async function assertNoRunningChromedrivers(): Promise<void> {
     expect(pids).to.have.length(0);
   } catch (err: any) {
     // pgrep exits with code 1 when no matching processes are found.
-    if (err.exitCode !== 1) {
+    if (err.code !== 1) {
       throw err;
     }
   }
