@@ -1,5 +1,6 @@
 import {expect} from 'chai';
 import {ChromedriverStorageClient} from '../../lib/storage-client/storage-client';
+import {describe, it} from 'node:test';
 
 describe('ChromedriverStorageClient', function () {
   describe('selectMatchingDrivers', function () {

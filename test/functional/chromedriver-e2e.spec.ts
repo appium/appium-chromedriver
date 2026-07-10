@@ -3,6 +3,7 @@ import chaiAsPromised from 'chai-as-promised';
 import {Chromedriver, type ChromedriverState} from '../../lib/chromedriver';
 import {install} from '../helpers/install';
 import {exec} from 'teen_process';
+import {describe, it, before} from 'node:test';
 
 use(chaiAsPromised);
 
@@ -60,9 +61,7 @@ function buildReqRes(url: string, method: string, body: any): [any, any] {
   return [req, res];
 }
 
-describe('chromedriver binary setup', function () {
-  this.timeout(20000);
-
+describe('chromedriver binary setup', {timeout: 20000}, function () {
   before(async function () {
     await install();
   });
@@ -76,10 +75,9 @@ describe('chromedriver binary setup', function () {
 const caps = {browserName: 'chrome'};
 const expectedCaps = {browserName: 'chrome', loggingPrefs: {browser: 'ALL'}};
 
-describe('chromedriver with EventEmitter', function () {
+describe('chromedriver with EventEmitter', {timeout: 120000}, function () {
   let cd: Chromedriver | null = null;
 
-  this.timeout(120000);
   before(function () {
     cd = new Chromedriver({});
   });
@@ -159,10 +157,9 @@ describe('chromedriver with EventEmitter', function () {
   });
 });
 
-describe('chromedriver with async/await', function () {
+describe('chromedriver with async/await', {timeout: 120000}, function () {
   let cd: Chromedriver | null = null;
 
-  this.timeout(120000);
   before(function () {
     cd = new Chromedriver({});
   });

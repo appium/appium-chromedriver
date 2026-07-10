@@ -2,12 +2,11 @@ import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import {ChromedriverStorageClient} from '../../lib/storage-client/storage-client';
 import {fs, tempDir} from '@appium/support';
+import {describe, it} from 'node:test';
 
 use(chaiAsPromised);
 
-describe('ChromedriverStorageClient', function () {
-  this.timeout(2000000);
-
+describe('ChromedriverStorageClient', {timeout: 2000000}, function () {
   it('should retrieve chromedrivers mapping', async function () {
     const client = new ChromedriverStorageClient();
     const mapping = await client.retrieveMapping();

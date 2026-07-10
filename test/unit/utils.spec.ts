@@ -1,5 +1,6 @@
 import {expect} from 'chai';
 import {convertToInt} from '../../lib/utils';
+import {describe, it} from 'node:test';
 
 describe('utils', function () {
   describe('convertToInt', function () {

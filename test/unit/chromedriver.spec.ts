@@ -2,9 +2,16 @@ import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import {Chromedriver} from '../../lib/chromedriver';
 import sinon from 'sinon';
-import {fs} from '@appium/support';
+import {fs, node} from '@appium/support';
 import path from 'node:path';
 import * as utils from '../../lib/utils';
+import {describe, beforeEach, afterEach, it, before} from 'node:test';
+
+const FIXTURES_DIR = path.resolve(
+  node.getModuleRootSync('appium-chromedriver', __filename)!,
+  'test',
+  'fixtures',
+);
 
 use(chaiAsPromised);
 
@@ -242,7 +249,7 @@ describe('chromedriver', function () {
           adb: {
             getApiLevel: async () => 25,
           } as any,
-          mappingPath: path.resolve(__dirname, '..', 'fixtures', 'alt-mapping.json'),
+          mappingPath: path.resolve(FIXTURES_DIR, 'alt-mapping.json'),
         });
 
         sandbox.stub(utils, 'getChromeVersion').resolves('63.0.3239.99');
@@ -260,7 +267,7 @@ describe('chromedriver', function () {
           adb: {
             getApiLevel: async () => 25,
           } as any,
-          mappingPath: path.resolve(__dirname, '..', 'fixtures', 'alt-mapping-nonsemver.json'),
+          mappingPath: path.resolve(FIXTURES_DIR, 'alt-mapping-nonsemver.json'),
         });
         sandbox.stub(utils, 'getChromeVersion').resolves('63.0.3239.99');
         sandbox.stub(fs, 'glob').resolves(['/path/to/chromedriver-42']);
