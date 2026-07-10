@@ -1,3 +1,9 @@
+## [8.4.17](https://github.com/appium/appium-chromedriver/compare/v8.4.16...v8.4.17) (2026-07-10)
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump @types/sinon from 21.0.1 to 22.0.0 ([#589](https://github.com/appium/appium-chromedriver/issues/589)) ([5b7af95](https://github.com/appium/appium-chromedriver/commit/5b7af95a9815c3d7ca298dc5a1cc5d9116c9b599))
+
 ## [8.4.16](https://github.com/appium/appium-chromedriver/compare/v8.4.15...v8.4.16) (2026-07-09)
 
 ### Miscellaneous Chores
