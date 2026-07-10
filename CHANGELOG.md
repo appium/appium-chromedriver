@@ -1,3 +1,9 @@
+## [8.4.18](https://github.com/appium/appium-chromedriver/compare/v8.4.17...v8.4.18) (2026-07-10)
+
+### Miscellaneous Chores
+
+* Drop mocha ([#596](https://github.com/appium/appium-chromedriver/issues/596)) ([b7ce7ec](https://github.com/appium/appium-chromedriver/commit/b7ce7ecc14801e6e66c3308ebdb24eb98b40b8d0))
+
 ## [8.4.17](https://github.com/appium/appium-chromedriver/compare/v8.4.16...v8.4.17) (2026-07-10)
 
 ### Miscellaneous Chores
