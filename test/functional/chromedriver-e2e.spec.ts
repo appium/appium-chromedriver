@@ -24,20 +24,17 @@ function nextError(cd: Chromedriver): Promise<Error> {
 }
 
 async function assertNoRunningChromedrivers(): Promise<void> {
-  const {stdout} = await exec('ps', ['aux']);
-  let count = 0;
-  for (const line of stdout.split('\n')) {
-    // Match chromedriver process but exclude ps/grep commands and the command line itself
-    if (
-      line.match(/chromedriver/i) &&
-      !line.match(/ps\s+aux|grep\s+chromedriver|node.*chromedriver.*test/i) &&
-      line.match(/\d+\s+\d+/) // Has PID and other process info (actual process line)
-    ) {
-      count++;
+  try {
+    const {stdout} = await exec('pgrep', ['-x', 'chromedriver']);
+    const pids = stdout.trim().split('\n').filter(Boolean);
+
+    expect(pids).to.have.length(0);
+  } catch (err: any) {
+    // pgrep exits with code 1 when no matching processes are found.
+    if (err.exitCode !== 1) {
+      throw err;
     }
   }
-
-  expect(count).to.eql(0);
 }
 
 function buildReqRes(url: string, method: string, body: any): [any, any] {
