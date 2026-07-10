@@ -3,6 +3,7 @@ import chaiAsPromised from 'chai-as-promised';
 import {Chromedriver, type ChromedriverState} from '../../lib/chromedriver';
 import {install} from '../helpers/install';
 import {exec} from 'teen_process';
+import {describe, it, before} from 'node:test';
 
 use(chaiAsPromised);
 
@@ -23,20 +24,17 @@ function nextError(cd: Chromedriver): Promise<Error> {
 }
 
 async function assertNoRunningChromedrivers(): Promise<void> {
-  const {stdout} = await exec('ps', ['aux']);
-  let count = 0;
-  for (const line of stdout.split('\n')) {
-    // Match chromedriver process but exclude ps/grep commands and the command line itself
-    if (
-      line.match(/chromedriver/i) &&
-      !line.match(/ps\s+aux|grep\s+chromedriver|node.*chromedriver.*test/i) &&
-      line.match(/\d+\s+\d+/) // Has PID and other process info (actual process line)
-    ) {
-      count++;
+  try {
+    const {stdout} = await exec('pgrep', ['-x', 'chromedriver']);
+    const pids = stdout.trim().split('\n').filter(Boolean);
+
+    expect(pids).to.have.length(0);
+  } catch (err: any) {
+    // pgrep exits with code 1 when no matching processes are found.
+    if (err.code !== 1) {
+      throw err;
     }
   }
-
-  expect(count).to.eql(0);
 }
 
 function buildReqRes(url: string, method: string, body: any): [any, any] {
@@ -60,9 +58,7 @@ function buildReqRes(url: string, method: string, body: any): [any, any] {
   return [req, res];
 }
 
-describe('chromedriver binary setup', function () {
-  this.timeout(20000);
-
+describe('chromedriver binary setup', {timeout: 20000}, function () {
   before(async function () {
     await install();
   });
@@ -76,10 +72,9 @@ describe('chromedriver binary setup', function () {
 const caps = {browserName: 'chrome'};
 const expectedCaps = {browserName: 'chrome', loggingPrefs: {browser: 'ALL'}};
 
-describe('chromedriver with EventEmitter', function () {
+describe('chromedriver with EventEmitter', {timeout: 120000}, function () {
   let cd: Chromedriver | null = null;
 
-  this.timeout(120000);
   before(function () {
     cd = new Chromedriver({});
   });
@@ -159,10 +154,9 @@ describe('chromedriver with EventEmitter', function () {
   });
 });
 
-describe('chromedriver with async/await', function () {
+describe('chromedriver with async/await', {timeout: 120000}, function () {
   let cd: Chromedriver | null = null;
 
-  this.timeout(120000);
   before(function () {
     cd = new Chromedriver({});
   });

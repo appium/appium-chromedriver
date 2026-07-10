@@ -1,4 +1,4 @@
-import {fs, mkdirp} from '@appium/support';
+import {fs} from '@appium/support';
 import {ChromedriverStorageClient} from '../../lib/storage-client/storage-client';
 import {CD_VER, getOsInfo, getChromedriverDir} from '../../lib/utils';
 
@@ -31,7 +31,7 @@ export async function install(): Promise<void> {
 async function prepareChromedriverDir(platformName: string): Promise<string> {
   const chromedriverDir = getChromedriverDir(platformName);
   if (!(await fs.exists(chromedriverDir))) {
-    await mkdirp(chromedriverDir);
+    await fs.mkdir(chromedriverDir, {recursive: true});
   }
   return chromedriverDir;
 }
