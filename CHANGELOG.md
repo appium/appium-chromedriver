@@ -1,3 +1,9 @@
+## [8.4.20](https://github.com/appium/appium-chromedriver/compare/v8.4.19...v8.4.20) (2026-07-15)
+
+### Miscellaneous Chores
+
+* **deps:** bump actions/setup-node from 6 to 7 ([#598](https://github.com/appium/appium-chromedriver/issues/598)) ([ca4f2de](https://github.com/appium/appium-chromedriver/commit/ca4f2de12ce359bb0d0019ca1e6719008597b5de))
+
 ## [8.4.19](https://github.com/appium/appium-chromedriver/compare/v8.4.18...v8.4.19) (2026-07-15)
 
 ### Miscellaneous Chores
