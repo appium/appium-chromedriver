@@ -1,4 +1,4 @@
-import {getChromedriverDir, retrieveData, getOsInfo, convertToInt, getCpuType} from '../utils';
+import {getChromedriverDir, retrieveData, getOsInfo, convertToInt, getCpuType} from '../utils.js';
 import path from 'node:path';
 import {asyncmap} from 'asyncbox';
 import {system, fs, logger, tempDir, zip, util, net} from '@appium/support';
@@ -10,12 +10,12 @@ import {
   ARCH,
   OS,
   CPU,
-} from '../constants';
-import {parseGoogleapiStorageXml} from './googleapis';
+} from '../constants.js';
+import {parseGoogleapiStorageXml} from './googleapis.js';
 import {
   parseKnownGoodVersionsWithDownloadsJson,
   parseLatestKnownGoodVersionsJson,
-} from './chromelabs';
+} from './chromelabs.js';
 import {compareVersions} from 'compare-versions';
 import * as semver from 'semver';
 import type {
@@ -23,7 +23,7 @@ import type {
   SyncOptions,
   OSInfo,
   ChromedriverDetailsMapping,
-} from '../types';
+} from '../types.js';
 
 const MAX_PARALLEL_DOWNLOADS = 5;
 

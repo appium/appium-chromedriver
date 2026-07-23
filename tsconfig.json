@@ -5,7 +5,9 @@
     "outDir": "build",
     "checkJs": true,
     "esModuleInterop": true,
-    "strict": true
+    "strict": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext"
   },
   "include": ["lib", "test"]
 }

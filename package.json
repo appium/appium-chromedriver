@@ -26,6 +26,7 @@
     "singleQuote": true
   },
   "main": "./build/lib/index.js",
+  "type": "module",
   "directories": {
     "lib": "lib"
   },
@@ -36,6 +37,13 @@
     "CHANGELOG.md"
   ],
   "types": "./build/lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./build/lib/index.d.ts",
+      "import": "./build/lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "dependencies": {
     "@appium/base-driver": "^10.0.0-rc.2",
     "@appium/support": "^7.2.2",
@@ -57,8 +65,8 @@
     "prepare": "npm run build",
     "format": "prettier -w ./lib ./test",
     "format:check": "prettier --check ./lib ./test",
-    "test": "node --test --test-force-exit --test-timeout=60000 \"./build/test/unit/**/*.spec.js\"",
-    "e2e-test": "node --test --test-force-exit --test-concurrency=1 --test-timeout=600000 \"./build/test/functional/**/*.spec.js\""
+    "test": "node --enable-source-maps --test --test-force-exit --test-timeout=60000 \"./build/test/unit/**/*.spec.js\"",
+    "e2e-test": "node --enable-source-maps --test --test-force-exit --test-concurrency=1 --test-timeout=600000 \"./build/test/functional/**/*.spec.js\""
   },
   "devDependencies": {
     "@appium/eslint-config-appium-ts": "^3.0.0",
@@ -74,6 +82,7 @@
     "chai": "^6.0.0",
     "chai-as-promised": "^8.0.0",
     "conventional-changelog-conventionalcommits": "^9.3.1",
+    "esmock": "^2.7.6",
     "prettier": "^3.0.0",
     "semantic-release": "^25.0.2",
     "sinon": "^22.0.0",

@@ -1,8 +1,8 @@
 import {system, util} from '@appium/support';
 import {retryInterval} from 'asyncbox';
 import {exec} from 'teen_process';
-import {CHROMEDRIVER_STATES} from '../constants';
-import type {ChromedriverCommandContext} from './types';
+import {CHROMEDRIVER_STATES} from '../constants.js';
+import type {ChromedriverCommandContext} from './types.js';
 
 const VERSION_PATTERN = /([\d.]+)/;
 

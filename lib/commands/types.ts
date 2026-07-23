@@ -4,8 +4,8 @@ import {PROTOCOLS, type JWProxy} from '@appium/base-driver';
 import type * as TeenProcess from 'teen_process';
 import type {ADB} from 'appium-adb';
 import type {AppiumLogger} from '@appium/types';
-import type {ChromedriverOpts} from '../types';
-import type {ChromedriverStorageClient} from '../storage-client/storage-client';
+import type {ChromedriverOpts} from '../types.js';
+import type {ChromedriverStorageClient} from '../storage-client/storage-client.js';
 import type {EventEmitter} from 'node:events';
 
 export interface ChromedriverCommandContext extends EventEmitter {

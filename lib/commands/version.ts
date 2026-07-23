@@ -1,6 +1,6 @@
 import * as semver from 'semver';
-import {getChromeVersion} from '../utils';
-import type {ChromedriverCommandContext} from './types';
+import {getChromeVersion} from '../utils.js';
+import type {ChromedriverCommandContext} from './types.js';
 
 const CHROME_BUNDLE_ID = 'com.android.chrome';
 const WEBVIEW_SHELL_BUNDLE_ID = 'org.chromium.webview_shell';

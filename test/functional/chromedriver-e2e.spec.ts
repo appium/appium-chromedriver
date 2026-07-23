@@ -1,7 +1,7 @@
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import {Chromedriver, type ChromedriverState} from '../../lib/chromedriver';
-import {install} from '../helpers/install';
+import {Chromedriver, type ChromedriverState} from '../../lib/chromedriver.js';
+import {install} from '../helpers/install.js';
 import {exec} from 'teen_process';
 import {describe, it, before} from 'node:test';
 
