@@ -81,7 +81,9 @@ describe('chromedriver', function () {
         });
       });
       beforeEach(function () {
-        getChromedriverBinaryPathSpy = sandbox.spy(utils.getChromedriverBinaryPath);
+        getChromedriverBinaryPathSpy = sandbox
+          .stub()
+          .rejects(new Error('getChromedriverBinaryPath should not have been called'));
         currentGetChromedriverBinaryPath = getChromedriverBinaryPathSpy;
       });
       afterEach(function () {
