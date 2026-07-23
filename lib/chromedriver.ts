@@ -2,29 +2,29 @@ import events from 'node:events';
 import {JWProxy, PROTOCOLS} from '@appium/base-driver';
 import {logger, util} from '@appium/support';
 import {SubProcess, exec} from 'teen_process';
-import {getChromedriverDir, generateLogPrefix} from './utils';
-import {ChromedriverStorageClient} from './storage-client/storage-client';
-import {CHROMEDRIVER_EVENTS, CHROMEDRIVER_STATES} from './constants';
+import {getChromedriverDir, generateLogPrefix} from './utils.js';
+import {ChromedriverStorageClient} from './storage-client/storage-client.js';
+import {CHROMEDRIVER_EVENTS, CHROMEDRIVER_STATES} from './constants.js';
 import {
   getDriversMapping,
   getChromedrivers,
   updateDriversMapping,
   getCompatibleChromedriver,
   initChromedriverPath,
-} from './commands/binary';
-import {getChromeVersionForAutodetection} from './commands/version';
-import {buildChromedriverArgs, waitForOnline, getStatus, killAll} from './commands/process';
+} from './commands/binary.js';
+import {getChromeVersionForAutodetection} from './commands/version.js';
+import {buildChromedriverArgs, waitForOnline, getStatus, killAll} from './commands/process.js';
 import {
   syncProtocol,
   startSession,
   changeState,
   getCapValue,
   type SessionCapabilities,
-} from './commands/session';
+} from './commands/session.js';
 import type {ADB} from 'appium-adb';
 import type {ProxyOptions, HTTPMethod, HTTPBody} from '@appium/types';
 import type {Request, Response} from 'express';
-import type {ChromedriverOpts} from './types';
+import type {ChromedriverOpts} from './types.js';
 
 // Keep this import marked as used at runtime when it is otherwise only referenced in type positions.
 void PROTOCOLS;

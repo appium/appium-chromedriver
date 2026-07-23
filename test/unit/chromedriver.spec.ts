@@ -1,19 +1,36 @@
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import {Chromedriver} from '../../lib/chromedriver';
 import sinon from 'sinon';
 import {fs, node} from '@appium/support';
 import path from 'node:path';
-import * as utils from '../../lib/utils';
+import {fileURLToPath} from 'node:url';
+import esmock from 'esmock';
+import * as utils from '../../lib/utils.js';
+import type * as ChromedriverModule from '../../lib/chromedriver.js';
 import {describe, beforeEach, afterEach, it, before} from 'node:test';
 
 const FIXTURES_DIR = path.resolve(
-  node.getModuleRootSync('appium-chromedriver', __filename)!,
+  node.getModuleRootSync('appium-chromedriver', fileURLToPath(import.meta.url))!,
   'test',
   'fixtures',
 );
 
 use(chaiAsPromised);
+
+let currentGetChromedriverBinaryPath: (...args: any[]) => any = utils.getChromedriverBinaryPath;
+let currentGetChromeVersion: (...args: any[]) => any = utils.getChromeVersion;
+
+const {Chromedriver} = await esmock<typeof ChromedriverModule>(
+  '../../lib/chromedriver.js',
+  import.meta.url,
+  {},
+  {
+    '../../lib/utils.js': {
+      getChromedriverBinaryPath: (...args: any[]) => currentGetChromedriverBinaryPath(...args),
+      getChromeVersion: (...args: any[]) => currentGetChromeVersion(...args),
+    },
+  },
+);
 
 describe('chromedriver', function () {
   let sandbox: sinon.SinonSandbox;
@@ -23,12 +40,14 @@ describe('chromedriver', function () {
   });
   afterEach(function () {
     sandbox.restore();
+    currentGetChromedriverBinaryPath = utils.getChromedriverBinaryPath;
+    currentGetChromeVersion = utils.getChromeVersion;
   });
 
   describe('getCompatibleChromedriver', function () {
     describe('desktop', function () {
       it('should find generic binary', async function () {
-        sandbox.stub(utils, 'getChromedriverBinaryPath').resolves('/path/to/chromedriver');
+        currentGetChromedriverBinaryPath = sandbox.stub().resolves('/path/to/chromedriver');
 
         const cd = new Chromedriver({});
         const binPath = await (cd as any).getCompatibleChromedriver();
@@ -40,7 +59,7 @@ describe('chromedriver', function () {
           executableDir: '/some/local/dir/for/chromedrivers',
         });
 
-        sandbox.stub(utils, 'getChromeVersion').resolves('63.0.3239.99');
+        currentGetChromeVersion = sandbox.stub().resolves('63.0.3239.99');
         sandbox.stub(fs, 'glob').resolves(['/some/local/dir/for/chromedrivers/chromedriver']);
         sandbox.stub(cd, '_execFunc').resolves({
           stdout: 'ChromeDriver 2.36.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
@@ -52,7 +71,7 @@ describe('chromedriver', function () {
     });
 
     describe('Android', function () {
-      let cd: Chromedriver;
+      let cd: InstanceType<typeof Chromedriver>;
       let getChromedriverBinaryPathSpy: sinon.SinonSpy;
       before(function () {
         cd = new Chromedriver({
@@ -62,14 +81,15 @@ describe('chromedriver', function () {
         });
       });
       beforeEach(function () {
-        getChromedriverBinaryPathSpy = sandbox.spy(utils, 'getChromedriverBinaryPath');
+        getChromedriverBinaryPathSpy = sandbox.spy(utils.getChromedriverBinaryPath);
+        currentGetChromedriverBinaryPath = getChromedriverBinaryPathSpy;
       });
       afterEach(function () {
         expect(getChromedriverBinaryPathSpy.called).to.be.false;
       });
 
       it('should find a compatible binary if only one binary exists', async function () {
-        sandbox.stub(utils, 'getChromeVersion').resolves('63.0.3239.99');
+        currentGetChromeVersion = sandbox.stub().resolves('63.0.3239.99');
         sandbox.stub(fs, 'glob').resolves(['/path/to/chromedriver']);
         sandbox.stub(cd, '_execFunc').resolves({
           stdout: 'ChromeDriver 2.36.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
@@ -80,7 +100,7 @@ describe('chromedriver', function () {
       });
 
       it('should find most recent compatible binary for older driver versions', async function () {
-        sandbox.stub(utils, 'getChromeVersion').resolves('70.0.3029.42');
+        currentGetChromeVersion = sandbox.stub().resolves('70.0.3029.42');
         sandbox
           .stub(fs, 'glob')
           .resolves([
@@ -195,7 +215,7 @@ describe('chromedriver', function () {
       });
 
       it('should fail when chrome is too new', async function () {
-        sandbox.stub(utils, 'getChromeVersion').resolves('10000.0.0.42');
+        currentGetChromeVersion = sandbox.stub().resolves('10000.0.0.42');
         sandbox
           .stub(fs, 'glob')
           .resolves([
@@ -234,7 +254,7 @@ describe('chromedriver', function () {
           executableDir: '/some/local/dir/for/chromedrivers',
         });
 
-        sandbox.stub(utils, 'getChromeVersion').resolves('63.0.3239.99');
+        currentGetChromeVersion = sandbox.stub().resolves('63.0.3239.99');
         sandbox.stub(fs, 'glob').resolves(['/some/local/dir/for/chromedrivers/chromedriver']);
         sandbox.stub(cd, '_execFunc').resolves({
           stdout: 'ChromeDriver 2.36.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
@@ -252,7 +272,7 @@ describe('chromedriver', function () {
           mappingPath: path.resolve(FIXTURES_DIR, 'alt-mapping.json'),
         });
 
-        sandbox.stub(utils, 'getChromeVersion').resolves('63.0.3239.99');
+        currentGetChromeVersion = sandbox.stub().resolves('63.0.3239.99');
         sandbox.stub(fs, 'glob').resolves(['/path/to/chromedriver-42']);
         sandbox.stub(cd, '_execFunc').resolves({
           stdout: 'ChromeDriver 2.42.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
@@ -269,7 +289,7 @@ describe('chromedriver', function () {
           } as any,
           mappingPath: path.resolve(FIXTURES_DIR, 'alt-mapping-nonsemver.json'),
         });
-        sandbox.stub(utils, 'getChromeVersion').resolves('63.0.3239.99');
+        currentGetChromeVersion = sandbox.stub().resolves('63.0.3239.99');
         sandbox.stub(fs, 'glob').resolves(['/path/to/chromedriver-42']);
         sandbox.stub(cd, '_execFunc').resolves({
           stdout: 'ChromeDriver 2.42.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',

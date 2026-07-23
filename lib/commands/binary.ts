@@ -4,9 +4,9 @@ import {compareVersions} from 'compare-versions';
 import {type ExecError} from 'teen_process';
 import path from 'node:path';
 import * as semver from 'semver';
-import {CHROMEDRIVER_CHROME_MAPPING, getChromedriverBinaryPath} from '../utils';
-import type {ChromedriverVersionMapping} from '../types';
-import type {ChromedriverCommandContext} from './types';
+import {CHROMEDRIVER_CHROME_MAPPING, getChromedriverBinaryPath} from '../utils.js';
+import type {ChromedriverVersionMapping} from '../types.js';
+import type {ChromedriverCommandContext} from './types.js';
 
 const NEW_CD_VERSION_FORMAT_MAJOR_VERSION = 73;
 const CD_VERSION_TIMEOUT = 5000;

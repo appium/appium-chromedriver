@@ -1,8 +1,8 @@
 import path from 'node:path';
 import {logger} from '@appium/support';
 import * as semver from 'semver';
-import {ARCH, CPU} from '../constants';
-import type {ChromedriverDetailsMapping} from '../types';
+import {ARCH, CPU} from '../constants.js';
+import type {ChromedriverDetailsMapping} from '../types.js';
 
 interface VersionEntry {
   version: string;

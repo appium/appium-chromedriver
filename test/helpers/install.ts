@@ -1,6 +1,6 @@
 import {fs} from '@appium/support';
-import {ChromedriverStorageClient} from '../../lib/storage-client/storage-client';
-import {CD_VER, getOsInfo, getChromedriverDir} from '../../lib/utils';
+import {ChromedriverStorageClient} from '../../lib/storage-client/storage-client.js';
+import {CD_VER, getOsInfo, getChromedriverDir} from '../../lib/utils.js';
 
 const LATEST_VERSION = 'LATEST';
 

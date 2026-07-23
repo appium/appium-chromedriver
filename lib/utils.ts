@@ -1,13 +1,15 @@
 import {system, fs, node, util} from '@appium/support';
 import {BaseDriver} from '@appium/base-driver';
 import path from 'node:path';
+import {readFileSync} from 'node:fs';
+import {fileURLToPath} from 'node:url';
 import {compareVersions} from 'compare-versions';
 import axios from 'axios';
 import type {AxiosRequestConfig} from 'axios';
 import os from 'node:os';
-import {OS, CPU} from './constants';
+import {OS, CPU} from './constants.js';
 import type {ADB} from 'appium-adb';
-import type {ChromedriverVersionMapping, OSInfo} from './types';
+import type {ChromedriverVersionMapping, OSInfo} from './types.js';
 
 const CD_EXECUTABLE_PREFIX = 'chromedriver';
 const MODULE_NAME = 'appium-chromedriver';
@@ -18,7 +20,7 @@ const MODULE_NAME = 'appium-chromedriver';
  * @throws {Error} If the current module root folder cannot be determined
  */
 const getModuleRoot = util.memoize(function getModuleRoot(): string {
-  const root = node.getModuleRootSync(MODULE_NAME, __filename);
+  const root = node.getModuleRootSync(MODULE_NAME, fileURLToPath(import.meta.url));
   if (!root) {
     throw new Error(`Cannot find the root folder of the ${MODULE_NAME} Node.js module`);
   }
@@ -26,8 +28,8 @@ const getModuleRoot = util.memoize(function getModuleRoot(): string {
 });
 
 // Chromedriver version: minimum Chrome version
-export const CHROMEDRIVER_CHROME_MAPPING: ChromedriverVersionMapping = require(
-  path.join(getModuleRoot(), 'config', 'mapping.json'),
+export const CHROMEDRIVER_CHROME_MAPPING: ChromedriverVersionMapping = JSON.parse(
+  readFileSync(path.join(getModuleRoot(), 'config', 'mapping.json'), 'utf8'),
 );
 export const CD_BASE_DIR = path.join(getModuleRoot(), 'chromedriver');
 

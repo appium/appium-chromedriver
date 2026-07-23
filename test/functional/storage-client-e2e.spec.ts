@@ -1,6 +1,6 @@
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import {ChromedriverStorageClient} from '../../lib/storage-client/storage-client';
+import {ChromedriverStorageClient} from '../../lib/storage-client/storage-client.js';
 import {fs, tempDir} from '@appium/support';
 import {describe, it} from 'node:test';
 

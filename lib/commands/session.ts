@@ -1,9 +1,9 @@
 import {PROTOCOLS, isStandardCap} from '@appium/base-driver';
 import {util} from '@appium/support';
-import {generateLogPrefix} from '../utils';
-import {CHROMEDRIVER_EVENTS, CHROMEDRIVER_STATES} from '../constants';
+import {generateLogPrefix} from '../utils.js';
+import {CHROMEDRIVER_EVENTS, CHROMEDRIVER_STATES} from '../constants.js';
 import * as semver from 'semver';
-import type {ChromedriverCommandContext} from './types';
+import type {ChromedriverCommandContext} from './types.js';
 
 const MIN_CD_VERSION_WITH_W3C_SUPPORT = 75;
 const W3C_PREFIX = 'goog:';

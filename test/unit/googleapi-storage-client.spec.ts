@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {parseNotes} from '../../lib/storage-client/googleapis';
+import {parseNotes} from '../../lib/storage-client/googleapis.js';
 import {describe, it} from 'node:test';
 
 describe('GoogleapiChromedriverStorageClient', function () {

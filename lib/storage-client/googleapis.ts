@@ -1,15 +1,21 @@
 import {select as xpathSelect} from 'xpath';
 import {util, logger} from '@appium/support';
-import {retrieveData} from '../utils';
+import {retrieveData} from '../utils.js';
 import {asyncmap} from 'asyncbox';
-import {STORAGE_REQ_TIMEOUT_MS, GOOGLEAPIS_CDN, ARCH, CPU, APPLE_ARM_SUFFIXES} from '../constants';
+import {
+  STORAGE_REQ_TIMEOUT_MS,
+  GOOGLEAPIS_CDN,
+  ARCH,
+  CPU,
+  APPLE_ARM_SUFFIXES,
+} from '../constants.js';
 import {DOMParser} from '@xmldom/xmldom';
 import path from 'node:path';
 import type {
   AdditionalDriverDetails,
   ChromedriverDetails,
   ChromedriverDetailsMapping,
-} from '../types';
+} from '../types.js';
 
 const log = logger.getLogger('ChromedriverGoogleapisStorageClient');
 const MAX_PARALLEL_DOWNLOADS = 5;
