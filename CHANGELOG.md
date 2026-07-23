@@ -1,3 +1,9 @@
+## [9.0.1](https://github.com/appium/appium-chromedriver/compare/v9.0.0...v9.0.1) (2026-07-23)
+
+### Miscellaneous Chores
+
+* **deps:** bump appium-adb from 15.0.9 to 16.0.0 ([#605](https://github.com/appium/appium-chromedriver/issues/605)) ([7676b4a](https://github.com/appium/appium-chromedriver/commit/7676b4a0063d0b39d340f8f23fe26d10b68a06c5))
+
 ## [9.0.0](https://github.com/appium/appium-chromedriver/compare/v8.4.22...v9.0.0) (2026-07-23)
 
 ### ⚠ BREAKING CHANGES
