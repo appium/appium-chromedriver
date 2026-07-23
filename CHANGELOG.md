@@ -1,3 +1,13 @@
+## [9.0.0](https://github.com/appium/appium-chromedriver/compare/v8.4.22...v9.0.0) (2026-07-23)
+
+### ⚠ BREAKING CHANGES
+
+* Consumers using require('appium-chromedriver') must switch to import/dynamic import() — the package no longer ships a CommonJS entry point.
+
+### Features
+
+* Migrate the package to ESM ([#604](https://github.com/appium/appium-chromedriver/issues/604)) ([ba53d68](https://github.com/appium/appium-chromedriver/commit/ba53d68d91dd74a5ffd4c0f6cd727b58eaa2e27b))
+
 ## [8.4.22](https://github.com/appium/appium-chromedriver/compare/v8.4.21...v8.4.22) (2026-07-23)
 
 ### Miscellaneous Chores
