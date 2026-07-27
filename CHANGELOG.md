@@ -1,3 +1,9 @@
+## [9.0.3](https://github.com/appium/appium-chromedriver/compare/v9.0.2...v9.0.3) (2026-07-27)
+
+### Miscellaneous Chores
+
+* Drop chai ([#608](https://github.com/appium/appium-chromedriver/issues/608)) ([e420c35](https://github.com/appium/appium-chromedriver/commit/e420c35309c65cbfb7e43916a099bb58f333f200))
+
 ## [9.0.2](https://github.com/appium/appium-chromedriver/compare/v9.0.1...v9.0.2) (2026-07-27)
 
 ### Miscellaneous Chores
