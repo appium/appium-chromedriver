@@ -1,10 +1,12 @@
 import events from 'node:events';
+
 import {JWProxy, PROTOCOLS} from '@appium/base-driver';
 import {logger, util} from '@appium/support';
+import type {ProxyOptions, HTTPMethod, HTTPBody} from '@appium/types';
+import type {ADB} from 'appium-adb';
+import type {Request, Response} from 'express';
 import {SubProcess, exec} from 'teen_process';
-import {getChromedriverDir, generateLogPrefix} from './utils.js';
-import {ChromedriverStorageClient} from './storage-client/storage-client.js';
-import {CHROMEDRIVER_EVENTS, CHROMEDRIVER_STATES} from './constants.js';
+
 import {
   getDriversMapping,
   getChromedrivers,
@@ -12,19 +14,13 @@ import {
   getCompatibleChromedriver,
   initChromedriverPath,
 } from './commands/binary.js';
-import {getChromeVersionForAutodetection} from './commands/version.js';
 import {buildChromedriverArgs, waitForOnline, getStatus, killAll} from './commands/process.js';
-import {
-  syncProtocol,
-  startSession,
-  changeState,
-  getCapValue,
-  type SessionCapabilities,
-} from './commands/session.js';
-import type {ADB} from 'appium-adb';
-import type {ProxyOptions, HTTPMethod, HTTPBody} from '@appium/types';
-import type {Request, Response} from 'express';
+import {syncProtocol, startSession, changeState, getCapValue, type SessionCapabilities} from './commands/session.js';
+import {getChromeVersionForAutodetection} from './commands/version.js';
+import {CHROMEDRIVER_EVENTS, CHROMEDRIVER_STATES} from './constants.js';
+import {ChromedriverStorageClient} from './storage-client/storage-client.js';
 import type {ChromedriverOpts} from './types.js';
+import {getChromedriverDir, generateLogPrefix} from './utils.js';
 
 // Keep this import marked as used at runtime when it is otherwise only referenced in type positions.
 void PROTOCOLS;
@@ -320,10 +316,7 @@ export class Chromedriver extends events.EventEmitter<ChromedriverEventMap> {
     });
   }
 
-  private async launchChromedriverProcess(
-    args: string[],
-    webviewVersionHolder: WebviewVersionCapture,
-  ): Promise<void> {
+  private async launchChromedriverProcess(args: string[], webviewVersionHolder: WebviewVersionCapture): Promise<void> {
     const chromedriverPath = await this.initChromedriverPath();
     // remove stale chromedriver/adb-forward leftovers before launching
     await this.killAll();
@@ -341,8 +334,7 @@ export class Chromedriver extends events.EventEmitter<ChromedriverEventMap> {
       return '';
     }
     // enrich the common version-mismatch error with actionable context
-    let message =
-      'Unable to automate Chrome version because it is not supported by this version of Chromedriver.\n';
+    let message = 'Unable to automate Chrome version because it is not supported by this version of Chromedriver.\n';
     if (webviewVersion) {
       message += `Chrome version on the device: ${webviewVersion}\n`;
     }
@@ -354,10 +346,7 @@ export class Chromedriver extends events.EventEmitter<ChromedriverEventMap> {
     return message;
   }
 
-  private async handleChromedriverStartFailure(
-    err: Error,
-    webviewVersion?: string,
-  ): Promise<never> {
+  private async handleChromedriverStartFailure(err: Error, webviewVersion?: string): Promise<never> {
     this.log.debug(err);
     this.emit(Chromedriver.EVENT_ERROR, err);
     // an error does not always mean subprocess has already exited

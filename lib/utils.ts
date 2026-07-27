@@ -1,14 +1,16 @@
-import {system, fs, node, util} from '@appium/support';
-import {BaseDriver} from '@appium/base-driver';
-import path from 'node:path';
 import {readFileSync} from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {compareVersions} from 'compare-versions';
+
+import {BaseDriver} from '@appium/base-driver';
+import {system, fs, node, util} from '@appium/support';
+import type {ADB} from 'appium-adb';
 import axios from 'axios';
 import type {AxiosRequestConfig} from 'axios';
-import os from 'node:os';
+import {compareVersions} from 'compare-versions';
+
 import {OS, CPU} from './constants.js';
-import type {ADB} from 'appium-adb';
 import type {ChromedriverVersionMapping, OSInfo} from './types.js';
 
 const CD_EXECUTABLE_PREFIX = 'chromedriver';
@@ -39,9 +41,7 @@ export const CD_BASE_DIR = path.join(getModuleRoot(), 'chromedriver');
  * @returns The most recent version string.
  * @throws {Error} If the mapping is empty.
  */
-export function getMostRecentChromedriver(
-  mapping: ChromedriverVersionMapping = CHROMEDRIVER_CHROME_MAPPING,
-): string {
+export function getMostRecentChromedriver(mapping: ChromedriverVersionMapping = CHROMEDRIVER_CHROME_MAPPING): string {
   if (util.isEmpty(mapping)) {
     throw new Error('Unable to get most recent Chromedriver version from empty mapping');
   }
@@ -50,9 +50,7 @@ export function getMostRecentChromedriver(
 }
 
 export const CD_VER: string =
-  process.env.npm_config_chromedriver_version ||
-  process.env.CHROMEDRIVER_VERSION ||
-  getMostRecentChromedriver();
+  process.env.npm_config_chromedriver_version || process.env.CHROMEDRIVER_VERSION || getMostRecentChromedriver();
 
 /**
  * Gets the Chrome version for a given bundle ID using ADB.
@@ -160,10 +158,7 @@ const getBaseDriverInstance = util.memoize(() => new BaseDriver({}, false));
  * @returns The generated log prefix string.
  */
 export function generateLogPrefix(obj: any, sessionId: string | null = null): string {
-  return getBaseDriverInstance().helpers.generateDriverLogPrefix(
-    obj,
-    sessionId ? sessionId : undefined,
-  );
+  return getBaseDriverInstance().helpers.generateDriverLogPrefix(obj, sessionId ? sessionId : undefined);
 }
 
 /**

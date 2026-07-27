@@ -5,9 +5,7 @@ export const GOOGLEAPIS_CDN =
   'https://chromedriver.storage.googleapis.com';
 export const USER_AGENT = 'appium';
 export const CHROMELABS_URL =
-  process.env.npm_config_chromelabs_url ||
-  process.env.CHROMELABS_URL ||
-  'https://googlechromelabs.github.io';
+  process.env.npm_config_chromelabs_url || process.env.CHROMELABS_URL || 'https://googlechromelabs.github.io';
 export const OS = {
   LINUX: 'linux',
   WINDOWS: 'win',

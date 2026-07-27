@@ -1,4 +1,5 @@
 import * as semver from 'semver';
+
 import {getChromeVersion} from '../utils.js';
 import type {ChromedriverCommandContext} from './types.js';
 
@@ -49,9 +50,7 @@ function tryCoerceVersionFromCdpDetails(ctx: ChromedriverCommandContext): semver
   return semver.coerce(versionMatch[1]);
 }
 
-async function resolveChromeVersionForWebviewShell(
-  ctx: ChromedriverCommandContext,
-): Promise<semver.SemVer | null> {
+async function resolveChromeVersionForWebviewShell(ctx: ChromedriverCommandContext): Promise<semver.SemVer | null> {
   if (!ctx.adb) {
     return null;
   }
@@ -70,9 +69,7 @@ async function remapLegacyWebviewBundleId(ctx: ChromedriverCommandContext): Prom
     return;
   }
   const apiLevel = await ctx.adb.getApiLevel();
-  const isLegacyWebviewBundle = [WEBVIEW_SHELL_BUNDLE_ID, ...WEBVIEW_BUNDLE_IDS].includes(
-    ctx.bundleId ?? '',
-  );
+  const isLegacyWebviewBundle = [WEBVIEW_SHELL_BUNDLE_ID, ...WEBVIEW_BUNDLE_IDS].includes(ctx.bundleId ?? '');
   if (apiLevel >= 24 && apiLevel <= 28 && isLegacyWebviewBundle) {
     ctx.bundleId = CHROME_BUNDLE_ID;
   }
@@ -82,9 +79,7 @@ async function remapLegacyWebviewBundleId(ctx: ChromedriverCommandContext): Prom
  * When no bundle id is set, default to Chrome and probe known WebView providers.
  * Returns a version string if a WebView package reports one; otherwise leaves bundleId as Chrome.
  */
-async function resolveChromeVersionByProbingWebviews(
-  ctx: ChromedriverCommandContext,
-): Promise<string | null> {
+async function resolveChromeVersionByProbingWebviews(ctx: ChromedriverCommandContext): Promise<string | null> {
   if (ctx.bundleId) {
     return null;
   }

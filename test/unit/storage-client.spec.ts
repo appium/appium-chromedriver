@@ -1,6 +1,8 @@
-import {expect} from 'chai';
-import {ChromedriverStorageClient} from '../../lib/storage-client/storage-client.js';
 import {describe, it} from 'node:test';
+
+import {expect} from 'chai';
+
+import {ChromedriverStorageClient} from '../../lib/storage-client/storage-client.js';
 
 describe('ChromedriverStorageClient', function () {
   describe('selectMatchingDrivers', function () {
@@ -103,10 +105,7 @@ describe('ChromedriverStorageClient', function () {
         arch: '64',
         cpu: 'intel',
       });
-      expect(selectedDrivers).to.eql([
-        '2.0/chromedriver_win32.zip',
-        '76.0.3809.12/chromedriver_win32.zip',
-      ]);
+      expect(selectedDrivers).to.eql(['2.0/chromedriver_win32.zip', '76.0.3809.12/chromedriver_win32.zip']);
     });
 
     it('should select appropriate drivers if versions are set', function () {
@@ -188,10 +187,7 @@ describe('ChromedriverStorageClient', function () {
         arch: '64',
         cpu: 'arm',
       });
-      expect(selectedDrivers).to.eql([
-        '2.0/chromedriver_win64.zip',
-        '76.0.3809.12/chromedriver_win64.zip',
-      ]);
+      expect(selectedDrivers).to.eql(['2.0/chromedriver_win64.zip', '76.0.3809.12/chromedriver_win64.zip']);
     });
   });
 });

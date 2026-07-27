@@ -1,6 +1,8 @@
-import {expect} from 'chai';
-import {toW3cCapNames, getCapValue} from '../../lib/commands/session.js';
 import {describe, it} from 'node:test';
+
+import {expect} from 'chai';
+
+import {toW3cCapNames, getCapValue} from '../../lib/commands/session.js';
 
 describe('Protocol Helpers', function () {
   const caps = {

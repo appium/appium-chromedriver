@@ -1,8 +1,10 @@
+import {describe, it} from 'node:test';
+
+import {fs, tempDir} from '@appium/support';
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
+
 import {ChromedriverStorageClient} from '../../lib/storage-client/storage-client.js';
-import {fs, tempDir} from '@appium/support';
-import {describe, it} from 'node:test';
 
 use(chaiAsPromised);
 
@@ -32,9 +34,7 @@ describe('ChromedriverStorageClient', {timeout: 2000000}, function () {
       chromedriverDir: tmpRoot,
     });
     try {
-      expect(
-        (await client.syncDrivers({versions: ['115.0.5790.102', '116.0.5791.0']})).length,
-      ).to.be.greaterThan(0);
+      expect((await client.syncDrivers({versions: ['115.0.5790.102', '116.0.5791.0']})).length).to.be.greaterThan(0);
       expect((await fs.readdir(tmpRoot)).length).to.be.eql(2);
     } finally {
       await fs.rimraf(tmpRoot);

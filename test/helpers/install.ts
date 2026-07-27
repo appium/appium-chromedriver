@@ -1,4 +1,5 @@
 import {fs} from '@appium/support';
+
 import {ChromedriverStorageClient} from '../../lib/storage-client/storage-client.js';
 import {CD_VER, getOsInfo, getChromedriverDir} from '../../lib/utils.js';
 
@@ -14,8 +15,7 @@ export async function install(): Promise<void> {
   const client = new ChromedriverStorageClient({
     chromedriverDir: await prepareChromedriverDir(osInfo.name),
   });
-  const chromeDriverVersion: string =
-    CD_VER === LATEST_VERSION ? await client.getLatestKnownGoodVersion() : CD_VER;
+  const chromeDriverVersion: string = CD_VER === LATEST_VERSION ? await client.getLatestKnownGoodVersion() : CD_VER;
   await client.syncDrivers({
     osInfo,
     versions: [chromeDriverVersion],

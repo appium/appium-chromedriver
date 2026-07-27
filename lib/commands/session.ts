@@ -1,8 +1,9 @@
 import {PROTOCOLS, isStandardCap} from '@appium/base-driver';
 import {util} from '@appium/support';
-import {generateLogPrefix} from '../utils.js';
-import {CHROMEDRIVER_EVENTS, CHROMEDRIVER_STATES} from '../constants.js';
 import * as semver from 'semver';
+
+import {CHROMEDRIVER_EVENTS, CHROMEDRIVER_STATES} from '../constants.js';
+import {generateLogPrefix} from '../utils.js';
 import type {ChromedriverCommandContext} from './types.js';
 
 const MIN_CD_VERSION_WITH_W3C_SUPPORT = 75;
@@ -22,11 +23,7 @@ export function toW3cCapName(capName: string): string {
 /**
  * Gets a capability value from a capabilities object, handling both standard and W3C format names.
  */
-export function getCapValue(
-  allCaps: Record<string, any> = {},
-  rawCapName: string,
-  defaultValue?: any,
-): any {
+export function getCapValue(allCaps: Record<string, any> = {}, rawCapName: string, defaultValue?: any): any {
   for (const [capName, capValue] of Object.entries(allCaps)) {
     if (toW3cCapName(capName) === toW3cCapName(rawCapName)) {
       return capValue;
@@ -39,9 +36,7 @@ export function getCapValue(
  * Converts all capability names in an object to W3C format.
  */
 export function toW3cCapNames(originalCaps: Record<string, any> = {}): Record<string, any> {
-  return Object.fromEntries(
-    Object.entries(originalCaps).map(([key, value]) => [toW3cCapName(key), value]),
-  );
+  return Object.fromEntries(Object.entries(originalCaps).map(([key, value]) => [toW3cCapName(key), value]));
 }
 
 /**
@@ -53,13 +48,9 @@ export async function startSession(this: ChromedriverCommandContext): Promise<Se
       ? {capabilities: {alwaysMatch: toW3cCapNames(this.capabilities)}}
       : {desiredCapabilities: this.capabilities};
   this.log.info(
-    `Starting ${this._desiredProtocol} Chromedriver session with capabilities: ` +
-      JSON.stringify(sessionCaps, null, 2),
+    `Starting ${this._desiredProtocol} Chromedriver session with capabilities: ` + JSON.stringify(sessionCaps, null, 2),
   );
-  const response = (await this.jwproxy.command('/session', 'POST', sessionCaps)) as Record<
-    string,
-    any
-  >;
+  const response = (await this.jwproxy.command('/session', 'POST', sessionCaps)) as Record<string, any>;
   this.log.prefix = generateLogPrefix(this, this.jwproxy.sessionId);
   changeState.call(this, CHROMEDRIVER_STATES.ONLINE);
   return response?.capabilities ?? response;
