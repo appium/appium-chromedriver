@@ -1,18 +1,15 @@
+import assert from 'node:assert/strict';
 import {describe, it} from 'node:test';
 
 import {fs, tempDir} from '@appium/support';
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 
 import {ChromedriverStorageClient} from '../../lib/storage-client/storage-client.js';
-
-use(chaiAsPromised);
 
 describe('ChromedriverStorageClient', {timeout: 2000000}, function () {
   it('should retrieve chromedrivers mapping', async function () {
     const client = new ChromedriverStorageClient();
     const mapping = await client.retrieveMapping();
-    expect(Object.keys(mapping).length).to.be.greaterThan(0);
+    assert.ok(Object.keys(mapping).length > 0);
   });
 
   it('should retrieve older chromedrivers by versions', async function () {
@@ -21,8 +18,8 @@ describe('ChromedriverStorageClient', {timeout: 2000000}, function () {
       chromedriverDir: tmpRoot,
     });
     try {
-      expect((await client.syncDrivers({versions: ['2.35', '2.34']})).length).to.be.greaterThan(0);
-      expect((await fs.readdir(tmpRoot)).length).to.be.eql(2);
+      assert.ok((await client.syncDrivers({versions: ['2.35', '2.34']})).length > 0);
+      assert.strictEqual((await fs.readdir(tmpRoot)).length, 2);
     } finally {
       await fs.rimraf(tmpRoot);
     }
@@ -34,8 +31,8 @@ describe('ChromedriverStorageClient', {timeout: 2000000}, function () {
       chromedriverDir: tmpRoot,
     });
     try {
-      expect((await client.syncDrivers({versions: ['115.0.5790.102', '116.0.5791.0']})).length).to.be.greaterThan(0);
-      expect((await fs.readdir(tmpRoot)).length).to.be.eql(2);
+      assert.ok((await client.syncDrivers({versions: ['115.0.5790.102', '116.0.5791.0']})).length > 0);
+      assert.strictEqual((await fs.readdir(tmpRoot)).length, 2);
     } finally {
       await fs.rimraf(tmpRoot);
     }
@@ -47,8 +44,8 @@ describe('ChromedriverStorageClient', {timeout: 2000000}, function () {
       chromedriverDir: tmpRoot,
     });
     try {
-      expect((await client.syncDrivers({minBrowserVersion: 44})).length).to.be.greaterThan(0);
-      expect((await fs.readdir(tmpRoot)).length).to.be.greaterThan(0);
+      assert.ok((await client.syncDrivers({minBrowserVersion: 44})).length > 0);
+      assert.ok((await fs.readdir(tmpRoot)).length > 0);
     } finally {
       await fs.rimraf(tmpRoot);
     }
@@ -60,8 +57,8 @@ describe('ChromedriverStorageClient', {timeout: 2000000}, function () {
       chromedriverDir: tmpRoot,
     });
     try {
-      expect((await client.syncDrivers({minBrowserVersion: 74})).length).to.be.greaterThan(0);
-      expect((await fs.readdir(tmpRoot)).length).to.be.greaterThan(0);
+      assert.ok((await client.syncDrivers({minBrowserVersion: 74})).length > 0);
+      assert.ok((await fs.readdir(tmpRoot)).length > 0);
     } finally {
       await fs.rimraf(tmpRoot);
     }
