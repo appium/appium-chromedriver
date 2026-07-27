@@ -188,7 +188,7 @@ async function retrieveAdditionalDriverInfo(
   );
   const {minBrowserVersion} = parseNotes(notes);
   if (!minBrowserVersion) {
-    log.debug(`The driver '${driverKey}' does not contain valid release notes at ${notesUrl}. ` + `Skipping it`);
+    log.debug(`The driver '${driverKey}' does not contain valid release notes at ${notesUrl}. Skipping it`);
     return;
   }
   infoDict.minBrowserVersion = minBrowserVersion;

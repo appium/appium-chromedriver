@@ -75,7 +75,7 @@ export async function getChromedrivers(
     nodir: true,
     absolute: true,
   });
-  this.log.debug(`Found ${util.pluralize('executable', executables.length, true)} ` + `in '${this.executableDir}'`);
+  this.log.debug(`Found ${util.pluralize('executable', executables.length, true)} in '${this.executableDir}'`);
   const cds = (
     await asyncmap(executables, async (executable: string) => {
       const logError = ({message, stdout, stderr}: {message: string; stdout?: string; stderr?: string}): null => {
@@ -224,7 +224,7 @@ export async function getCompatibleChromedriver(this: ChromedriverCommandContext
   }
 
   throw new Error(
-    `Exceeded ${GET_COMPATIBLE_CHROMEDRIVER_MAX_ITERATIONS} iterations while selecting a ` + `compatible Chromedriver.`,
+    `Exceeded ${GET_COMPATIBLE_CHROMEDRIVER_MAX_ITERATIONS} iterations while selecting a compatible Chromedriver.`,
   );
 }
 
