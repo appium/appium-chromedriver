@@ -1,6 +1,5 @@
+import assert from 'node:assert/strict';
 import {describe, it} from 'node:test';
-
-import {expect} from 'chai';
 
 import {parseNotes} from '../../lib/storage-client/googleapis.js';
 
@@ -36,7 +35,7 @@ describe('GoogleapiChromedriverStorageClient', function () {
       Resolved issue 626: silence chrome logging by default on windows [Pri-1]
       Resolved issue 973: ChromeDriver fails to close DevTools UI before executing commands [OS-All, Pri-2]
       `);
-      expect(info).to.eql({
+      assert.deepStrictEqual(info, {
         version: '2.16',
         minBrowserVersion: '42',
       });
@@ -58,7 +57,7 @@ describe('GoogleapiChromedriverStorageClient', function () {
       Resolved issue 2555: Script result serialization is not spec compliant [Pri-3]
       Resolved issue 2892: excludeSwitches option should allow leading dashes in switch names [Pri-3]
       `);
-      expect(info).to.eql({
+      assert.deepStrictEqual(info, {
         version: '76.0.3809.12',
         minBrowserVersion: '76',
       });
@@ -66,7 +65,7 @@ describe('GoogleapiChromedriverStorageClient', function () {
 
     it('should parse invalid notes.txt', function () {
       const info = parseNotes('');
-      expect(info).to.eql({});
+      assert.deepStrictEqual(info, {});
     });
 
     it('should parse semivalid notes.txt', function () {
@@ -77,7 +76,7 @@ describe('GoogleapiChromedriverStorageClient', function () {
       Resolved issue 1106: ChromeDriver does not switch back to top frame after navigation events [OS-All, Pri-0]
       Resolved issue 1102: ChromeDriver does not report ""hasTouchScreen"" when it has a touchscreen [OS-Android, Pri-1]
       `);
-      expect(info).to.eql({
+      assert.deepStrictEqual(info, {
         version: '2.16',
       });
     });

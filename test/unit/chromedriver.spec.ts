@@ -1,10 +1,9 @@
+import assert from 'node:assert/strict';
 import path from 'node:path';
 import {describe, beforeEach, afterEach, it, before} from 'node:test';
 import {fileURLToPath} from 'node:url';
 
 import {fs, node} from '@appium/support';
-import {expect, use} from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import esmock from 'esmock';
 import sinon from 'sinon';
 
@@ -16,8 +15,6 @@ const FIXTURES_DIR = path.resolve(
   'test',
   'fixtures',
 );
-
-use(chaiAsPromised);
 
 let currentGetChromedriverBinaryPath: (...args: any[]) => any = utils.getChromedriverBinaryPath;
 let currentGetChromeVersion: (...args: any[]) => any = utils.getChromeVersion;
@@ -53,7 +50,7 @@ describe('chromedriver', function () {
 
         const cd = new Chromedriver({});
         const binPath = await (cd as any).getCompatibleChromedriver();
-        expect(binPath).to.eql('/path/to/chromedriver');
+        assert.strictEqual(binPath, '/path/to/chromedriver');
       });
 
       it('should search specified directory if provided', async function () {
@@ -68,7 +65,7 @@ describe('chromedriver', function () {
         } as any);
 
         const binPath = await (cd as any).getCompatibleChromedriver();
-        expect(binPath).to.eql('/some/local/dir/for/chromedrivers/chromedriver');
+        assert.strictEqual(binPath, '/some/local/dir/for/chromedrivers/chromedriver');
       });
     });
 
@@ -89,7 +86,7 @@ describe('chromedriver', function () {
         currentGetChromedriverBinaryPath = getChromedriverBinaryPathSpy;
       });
       afterEach(function () {
-        expect(getChromedriverBinaryPathSpy.called).to.be.false;
+        assert.strictEqual(getChromedriverBinaryPathSpy.called, false);
       });
 
       it('should find a compatible binary if only one binary exists', async function () {
@@ -100,7 +97,7 @@ describe('chromedriver', function () {
         } as any);
 
         const binPath = await (cd as any).getCompatibleChromedriver();
-        expect(binPath).to.eql('/path/to/chromedriver');
+        assert.strictEqual(binPath, '/path/to/chromedriver');
       });
 
       it('should find most recent compatible binary for older driver versions', async function () {
@@ -148,7 +145,7 @@ describe('chromedriver', function () {
           } as any);
 
         const binPath = await (cd as any).getCompatibleChromedriver();
-        expect(binPath).to.eql('/path/to/chromedriver-36');
+        assert.strictEqual(binPath, '/path/to/chromedriver-36');
       });
 
       it('should correctly determine Chromedriver versions', async function () {
@@ -204,8 +201,8 @@ describe('chromedriver', function () {
         for (let i = 0; i < chromedrivers.length; i++) {
           const chromedriver = chromedrivers[i];
           const expectedVersion = expectedVersions[i];
-          expect(chromedriver.version).to.eql(expectedVersion);
-          expect(chromedriver.minChromeVersion).to.not.be.null;
+          assert.strictEqual(chromedriver.version, expectedVersion);
+          assert.notStrictEqual(chromedriver.minChromeVersion, null);
         }
       });
 
@@ -238,7 +235,7 @@ describe('chromedriver', function () {
             stdout: 'ChromeDriver 2.35.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
           } as any);
 
-        await expect((cd as any).getCompatibleChromedriver()).to.eventually.be.rejected;
+        await assert.rejects((cd as any).getCompatibleChromedriver());
       });
 
       it('should search specified directory if provided', async function () {
@@ -256,7 +253,7 @@ describe('chromedriver', function () {
         } as any);
 
         const binPath = await (cd as any).getCompatibleChromedriver();
-        expect(binPath).to.eql('/some/local/dir/for/chromedrivers/chromedriver');
+        assert.strictEqual(binPath, '/some/local/dir/for/chromedrivers/chromedriver');
       });
 
       it('should use alternative mapping if provided', async function () {
@@ -274,7 +271,7 @@ describe('chromedriver', function () {
         } as any);
 
         const binPath = await (cd as any).getCompatibleChromedriver();
-        expect(binPath).to.eql('/path/to/chromedriver-42');
+        assert.strictEqual(binPath, '/path/to/chromedriver-42');
       });
 
       it('should use alternative mapping if provided even if semver is broken', async function () {
@@ -290,14 +287,14 @@ describe('chromedriver', function () {
           stdout: 'ChromeDriver 2.42.540469 (1881fd7f8641508feb5166b7cae561d87723cfa8)',
         } as any);
         const binPath = await (cd as any).getCompatibleChromedriver();
-        expect(binPath).to.eql('/path/to/chromedriver-42');
+        assert.strictEqual(binPath, '/path/to/chromedriver-42');
       });
     });
   });
 
   describe('getMostRecentChromedriver', function () {
     it('should get a value by default', function () {
-      expect(utils.getMostRecentChromedriver()).to.be.a('string');
+      assert.strictEqual(typeof utils.getMostRecentChromedriver(), 'string');
     });
     it('should get the most recent version', function () {
       const mapping = {
@@ -309,7 +306,7 @@ describe('chromedriver', function () {
         2.7: '30.0.1573',
         2.6: '29.0.1545',
       };
-      expect(utils.getMostRecentChromedriver(mapping)).to.eql('2.12');
+      assert.strictEqual(utils.getMostRecentChromedriver(mapping), '2.12');
     });
     it('should handle broken semver', function () {
       const mapping = {
@@ -321,10 +318,10 @@ describe('chromedriver', function () {
         2.7: '30.0.1573',
         2.6: '29.0.1545',
       };
-      expect(utils.getMostRecentChromedriver(mapping)).to.eql('2.12');
+      assert.strictEqual(utils.getMostRecentChromedriver(mapping), '2.12');
     });
     it('should fail for empty mapping', function () {
-      expect(() => utils.getMostRecentChromedriver({})).to.throw(/empty/);
+      assert.throws(() => utils.getMostRecentChromedriver({}), /empty/);
     });
   });
 });

@@ -1,6 +1,5 @@
+import assert from 'node:assert/strict';
 import {describe, it} from 'node:test';
-
-import {expect} from 'chai';
 
 import {ChromedriverStorageClient} from '../../lib/storage-client/storage-client.js';
 
@@ -105,7 +104,7 @@ describe('ChromedriverStorageClient', function () {
         arch: '64',
         cpu: 'intel',
       });
-      expect(selectedDrivers).to.eql(['2.0/chromedriver_win32.zip', '76.0.3809.12/chromedriver_win32.zip']);
+      assert.deepStrictEqual(selectedDrivers, ['2.0/chromedriver_win32.zip', '76.0.3809.12/chromedriver_win32.zip']);
     });
 
     it('should select appropriate drivers if versions are set', function () {
@@ -121,7 +120,7 @@ describe('ChromedriverStorageClient', function () {
           versions: ['76.0.3809.12'],
         },
       );
-      expect(selectedDrivers).to.eql(['76.0.3809.12/chromedriver_linux64.zip']);
+      assert.deepStrictEqual(selectedDrivers, ['76.0.3809.12/chromedriver_linux64.zip']);
     });
 
     it('should select appropriate drivers if minBrowserVersion is set', function () {
@@ -137,7 +136,7 @@ describe('ChromedriverStorageClient', function () {
           minBrowserVersion: 60,
         },
       );
-      expect(selectedDrivers).to.eql(['76.0.3809.12/chromedriver_mac64.zip']);
+      assert.deepStrictEqual(selectedDrivers, ['76.0.3809.12/chromedriver_mac64.zip']);
     });
 
     it('should select appropriate drivers if both minBrowserVersion and versions are set', function () {
@@ -154,7 +153,7 @@ describe('ChromedriverStorageClient', function () {
           minBrowserVersion: 60,
         },
       );
-      expect(selectedDrivers).to.eql(['76.0.3809.12/chromedriver_mac64.zip']);
+      assert.deepStrictEqual(selectedDrivers, ['76.0.3809.12/chromedriver_mac64.zip']);
     });
 
     it('should fallback to Intel drivers for Windows ARM', function () {
@@ -187,7 +186,7 @@ describe('ChromedriverStorageClient', function () {
         arch: '64',
         cpu: 'arm',
       });
-      expect(selectedDrivers).to.eql(['2.0/chromedriver_win64.zip', '76.0.3809.12/chromedriver_win64.zip']);
+      assert.deepStrictEqual(selectedDrivers, ['2.0/chromedriver_win64.zip', '76.0.3809.12/chromedriver_win64.zip']);
     });
   });
 });

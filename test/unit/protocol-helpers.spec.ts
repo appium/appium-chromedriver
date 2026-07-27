@@ -1,6 +1,5 @@
+import assert from 'node:assert/strict';
 import {describe, it} from 'node:test';
-
-import {expect} from 'chai';
 
 import {toW3cCapNames, getCapValue} from '../../lib/commands/session.js';
 
@@ -19,7 +18,7 @@ describe('Protocol Helpers', function () {
 
   it('should properly add w3c prefixes where needed', function () {
     const result = toW3cCapNames(caps);
-    expect(result).to.eql({
+    assert.deepStrictEqual(result, {
       'goog:loggingPrefs': {
         detach: true,
       },
@@ -34,12 +33,12 @@ describe('Protocol Helpers', function () {
 
   it('should properly parse values from different caps', function () {
     const v1 = getCapValue(caps, 'loggingPrefs');
-    expect(v1).to.eql({
+    assert.deepStrictEqual(v1, {
       detach: true,
     });
 
     const v2 = getCapValue(caps, 'goog:perfLoggingPrefs');
-    expect(v2).to.eql({
+    assert.deepStrictEqual(v2, {
       enableNetwork: true,
     });
 
@@ -49,7 +48,7 @@ describe('Protocol Helpers', function () {
       },
       'proxy',
     );
-    expect(v3).to.eql('some');
+    assert.strictEqual(v3, 'some');
 
     const v4 = getCapValue(
       {
@@ -58,6 +57,6 @@ describe('Protocol Helpers', function () {
       'goog:proxy',
       {},
     );
-    expect(v4).to.eql({});
+    assert.deepStrictEqual(v4, {});
   });
 });
