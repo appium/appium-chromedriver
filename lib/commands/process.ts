@@ -1,6 +1,7 @@
 import {system, util} from '@appium/support';
 import {retryInterval} from 'asyncbox';
 import {exec} from 'teen_process';
+
 import {CHROMEDRIVER_STATES} from '../constants.js';
 import type {ChromedriverCommandContext} from './types.js';
 
@@ -72,12 +73,7 @@ export async function waitForOnline(this: ChromedriverCommandContext): Promise<v
 export async function killAll(this: ChromedriverCommandContext): Promise<void> {
   const cmd = system.isWindows() ? 'wmic' : 'pkill';
   const args = system.isWindows()
-    ? [
-        'process',
-        'where',
-        `commandline like '%chromedriver.exe%--port=${this.proxyPort}%'`,
-        'delete',
-      ]
+    ? ['process', 'where', `commandline like '%chromedriver.exe%--port=${this.proxyPort}%'`, 'delete']
     : ['-15', '-f', `${this.chromedriver}.*--port=${this.proxyPort}`];
   this.log.debug(`Killing any old chromedrivers, running: ${cmd} ${args.join(' ')}`);
   try {

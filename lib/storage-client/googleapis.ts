@@ -1,21 +1,13 @@
-import {select as xpathSelect} from 'xpath';
-import {util, logger} from '@appium/support';
-import {retrieveData} from '../utils.js';
-import {asyncmap} from 'asyncbox';
-import {
-  STORAGE_REQ_TIMEOUT_MS,
-  GOOGLEAPIS_CDN,
-  ARCH,
-  CPU,
-  APPLE_ARM_SUFFIXES,
-} from '../constants.js';
-import {DOMParser} from '@xmldom/xmldom';
 import path from 'node:path';
-import type {
-  AdditionalDriverDetails,
-  ChromedriverDetails,
-  ChromedriverDetailsMapping,
-} from '../types.js';
+
+import {util, logger} from '@appium/support';
+import {DOMParser} from '@xmldom/xmldom';
+import {asyncmap} from 'asyncbox';
+import {select as xpathSelect} from 'xpath';
+
+import {STORAGE_REQ_TIMEOUT_MS, GOOGLEAPIS_CDN, ARCH, CPU, APPLE_ARM_SUFFIXES} from '../constants.js';
+import type {AdditionalDriverDetails, ChromedriverDetails, ChromedriverDetailsMapping} from '../types.js';
+import {retrieveData} from '../utils.js';
 
 const log = logger.getLogger('ChromedriverGoogleapisStorageClient');
 const MAX_PARALLEL_DOWNLOADS = 5;
@@ -96,9 +88,7 @@ export async function parseGoogleapiStorageXml(
   shouldParseNotes = true,
 ): Promise<ChromedriverDetailsMapping> {
   const doc = new DOMParser().parseFromString(xml, 'text/xml');
-  const driverNodes = xpathSelect(`//*[local-name(.)='Contents']`, doc as unknown as Node) as Array<
-    Node | Attr
-  >;
+  const driverNodes = xpathSelect(`//*[local-name(.)='Contents']`, doc as unknown as Node) as Array<Node | Attr>;
   log.debug(`Parsed ${driverNodes.length} entries from storage XML`);
   if (driverNodes.length === 0) {
     throw new Error('Cannot retrieve any valid Chromedriver entries from the storage config');
@@ -198,17 +188,12 @@ async function retrieveAdditionalDriverInfo(
   );
   const {minBrowserVersion} = parseNotes(notes);
   if (!minBrowserVersion) {
-    log.debug(
-      `The driver '${driverKey}' does not contain valid release notes at ${notesUrl}. ` +
-        `Skipping it`,
-    );
+    log.debug(`The driver '${driverKey}' does not contain valid release notes at ${notesUrl}. Skipping it`);
     return;
   }
   infoDict.minBrowserVersion = minBrowserVersion;
 }
 
 function extractNodeText(node: Node | null | undefined): string | null {
-  return !node?.firstChild || !util.hasValue(node.firstChild.nodeValue)
-    ? null
-    : node.firstChild.nodeValue;
+  return !node?.firstChild || !util.hasValue(node.firstChild.nodeValue) ? null : node.firstChild.nodeValue;
 }

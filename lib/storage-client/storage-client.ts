@@ -1,29 +1,15 @@
-import {getChromedriverDir, retrieveData, getOsInfo, convertToInt, getCpuType} from '../utils.js';
 import path from 'node:path';
-import {asyncmap} from 'asyncbox';
+
 import {system, fs, logger, tempDir, zip, util, net} from '@appium/support';
-import {
-  STORAGE_REQ_TIMEOUT_MS,
-  GOOGLEAPIS_CDN,
-  USER_AGENT,
-  CHROMELABS_URL,
-  ARCH,
-  OS,
-  CPU,
-} from '../constants.js';
-import {parseGoogleapiStorageXml} from './googleapis.js';
-import {
-  parseKnownGoodVersionsWithDownloadsJson,
-  parseLatestKnownGoodVersionsJson,
-} from './chromelabs.js';
+import {asyncmap} from 'asyncbox';
 import {compareVersions} from 'compare-versions';
 import * as semver from 'semver';
-import type {
-  ChromedriverStorageClientOpts,
-  SyncOptions,
-  OSInfo,
-  ChromedriverDetailsMapping,
-} from '../types.js';
+
+import {STORAGE_REQ_TIMEOUT_MS, GOOGLEAPIS_CDN, USER_AGENT, CHROMELABS_URL, ARCH, OS, CPU} from '../constants.js';
+import type {ChromedriverStorageClientOpts, SyncOptions, OSInfo, ChromedriverDetailsMapping} from '../types.js';
+import {getChromedriverDir, retrieveData, getOsInfo, convertToInt, getCpuType} from '../utils.js';
+import {parseKnownGoodVersionsWithDownloadsJson, parseLatestKnownGoodVersionsJson} from './chromelabs.js';
+import {parseGoogleapiStorageXml} from './googleapis.js';
 
 const MAX_PARALLEL_DOWNLOADS = 5;
 
@@ -68,10 +54,7 @@ export class ChromedriverStorageClient {
    * @returns Promise<ChromedriverDetailsMapping>
    */
   async retrieveMapping(shouldParseNotes = true): Promise<ChromedriverDetailsMapping> {
-    const retrieveResponseSafely = async ({
-      url,
-      accept,
-    }: StorageInfo): Promise<string | undefined> => {
+    const retrieveResponseSafely = async ({url, accept}: StorageInfo): Promise<string | undefined> => {
       try {
         return await retrieveData(
           url,
@@ -130,8 +113,7 @@ export class ChromedriverStorageClient {
       return [];
     }
     log.debug(
-      `Got ${util.pluralize('driver', driversToSync.length, true)} to sync: ` +
-        JSON.stringify(driversToSync, null, 2),
+      `Got ${util.pluralize('driver', driversToSync.length, true)} to sync: ` + JSON.stringify(driversToSync, null, 2),
     );
 
     const synchronizedDrivers: string[] = [];
@@ -150,10 +132,7 @@ export class ChromedriverStorageClient {
       await fs.rimraf(archivesRoot);
     }
     if (!util.isEmpty(synchronizedDrivers)) {
-      log.info(
-        `Successfully synchronized ` +
-          `${util.pluralize('chromedriver', synchronizedDrivers.length, true)}`,
-      );
+      log.info(`Successfully synchronized ` + `${util.pluralize('chromedriver', synchronizedDrivers.length, true)}`);
     } else {
       log.info(`No chromedrivers were synchronized`);
     }
@@ -204,9 +183,7 @@ export class ChromedriverStorageClient {
     if (!util.isEmpty(versions)) {
       // Handle only selected versions if requested
       log.debug(`Selecting chromedrivers whose versions match to ${versions}`);
-      driversToSync = driversToSync.filter((cdName) =>
-        versions.includes(`${this.mapping[cdName].version}`),
-      );
+      driversToSync = driversToSync.filter((cdName) => versions.includes(`${this.mapping[cdName].version}`));
 
       log.debug(`Got ${util.pluralize('item', driversToSync.length, true)}`);
       if (util.isEmpty(driversToSync)) {
@@ -217,16 +194,11 @@ export class ChromedriverStorageClient {
     const minBrowserVersionInt = convertToInt(minBrowserVersion);
     if (minBrowserVersionInt !== null) {
       // Only select drivers that support the current browser whose major version number equals to `minBrowserVersion`
-      log.debug(
-        `Selecting chromedrivers whose minimum supported browser version matches to ${minBrowserVersionInt}`,
-      );
+      log.debug(`Selecting chromedrivers whose minimum supported browser version matches to ${minBrowserVersionInt}`);
       let closestMatchedVersionNumber = 0;
       // Select the newest available and compatible chromedriver
       for (const cdName of driversToSync) {
-        const currentMinBrowserVersion = parseInt(
-          String(this.mapping[cdName].minBrowserVersion),
-          10,
-        );
+        const currentMinBrowserVersion = parseInt(String(this.mapping[cdName].minBrowserVersion), 10);
         if (
           !Number.isNaN(currentMinBrowserVersion) &&
           currentMinBrowserVersion <= minBrowserVersionInt &&
@@ -314,9 +286,7 @@ export class ChromedriverStorageClient {
         for (const sortedVersions of Object.values(patchesMap)) {
           selectedVersions.add(sortedVersions[0]);
         }
-        driversToSync = driversToSync.filter((cdName) =>
-          selectedVersions.has(this.mapping[cdName].version),
-        );
+        driversToSync = driversToSync.filter((cdName) => selectedVersions.has(this.mapping[cdName].version));
       }
     }
 
@@ -423,13 +393,10 @@ export class ChromedriverStorageClient {
       const chromedriverPath = await fs.walkDir(
         tmpRoot,
         true,
-        (itemPath, isDirectory) =>
-          !isDirectory && path.parse(itemPath).name.toLowerCase() === 'chromedriver',
+        (itemPath, isDirectory) => !isDirectory && path.parse(itemPath).name.toLowerCase() === 'chromedriver',
       );
       if (!chromedriverPath) {
-        throw new Error(
-          'The archive was unzipped properly, but we could not find any chromedriver executable',
-        );
+        throw new Error('The archive was unzipped properly, but we could not find any chromedriver executable');
       }
       log.debug(`Moving the extracted '${path.basename(chromedriverPath)}' to '${dst}'`);
       await fs.mv(chromedriverPath, dst, {

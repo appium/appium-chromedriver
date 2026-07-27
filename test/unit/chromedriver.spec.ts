@@ -1,13 +1,15 @@
+import path from 'node:path';
+import {describe, beforeEach, afterEach, it, before} from 'node:test';
+import {fileURLToPath} from 'node:url';
+
+import {fs, node} from '@appium/support';
 import {expect, use} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import sinon from 'sinon';
-import {fs, node} from '@appium/support';
-import path from 'node:path';
-import {fileURLToPath} from 'node:url';
 import esmock from 'esmock';
-import * as utils from '../../lib/utils.js';
+import sinon from 'sinon';
+
 import type * as ChromedriverModule from '../../lib/chromedriver.js';
-import {describe, beforeEach, afterEach, it, before} from 'node:test';
+import * as utils from '../../lib/utils.js';
 
 const FIXTURES_DIR = path.resolve(
   node.getModuleRootSync('appium-chromedriver', fileURLToPath(import.meta.url))!,
@@ -198,16 +200,7 @@ describe('chromedriver', function () {
           } as any);
 
         const chromedrivers = await (cd as any).getChromedrivers(utils.CHROMEDRIVER_CHROME_MAPPING);
-        const expectedVersions = [
-          '74.0.3729.6',
-          '2.36',
-          '2.35',
-          '2.34',
-          '2.33',
-          '2.32',
-          '2.31',
-          '2.30',
-        ];
+        const expectedVersions = ['74.0.3729.6', '2.36', '2.35', '2.34', '2.33', '2.32', '2.31', '2.30'];
         for (let i = 0; i < chromedrivers.length; i++) {
           const chromedriver = chromedrivers[i];
           const expectedVersion = expectedVersions[i];

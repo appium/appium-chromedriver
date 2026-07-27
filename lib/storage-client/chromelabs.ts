@@ -1,6 +1,8 @@
 import path from 'node:path';
+
 import {logger} from '@appium/support';
 import * as semver from 'semver';
+
 import {ARCH, CPU} from '../constants.js';
 import type {ChromedriverDetailsMapping} from '../types.js';
 
@@ -42,17 +44,14 @@ const log = logger.getLogger('ChromedriverChromelabsStorageClient');
  * @returns A mapping of chromedriver entry keys to their details
  * @throws {Error} if the JSON cannot be parsed or has an unsupported format
  */
-export function parseKnownGoodVersionsWithDownloadsJson(
-  jsonStr: string,
-): ChromedriverDetailsMapping {
+export function parseKnownGoodVersionsWithDownloadsJson(jsonStr: string): ChromedriverDetailsMapping {
   let json: KnownGoodVersionsJson;
   try {
     json = JSON.parse(jsonStr);
   } catch (e) {
-    throw new Error(
-      `Storage JSON cannot be parsed. Original error: ${e instanceof Error ? e.message : String(e)}`,
-      {cause: e},
-    );
+    throw new Error(`Storage JSON cannot be parsed. Original error: ${e instanceof Error ? e.message : String(e)}`, {
+      cause: e,
+    });
   }
   /**
    * Example output:
@@ -110,14 +109,11 @@ export function parseKnownGoodVersionsWithDownloadsJson(
       }
       const osNameMatch = /^[a-z]+/i.exec(downloadEntry.platform);
       if (!osNameMatch) {
-        log.debug(
-          `The entry '${downloadEntry.url}' does not contain valid platform name. Skipping it`,
-        );
+        log.debug(`The entry '${downloadEntry.url}' does not contain valid platform name. Skipping it`);
         continue;
       }
       const key =
-        `${path.basename(path.dirname(path.dirname(downloadEntry.url)))}/` +
-        `${path.basename(downloadEntry.url)}`;
+        `${path.basename(path.dirname(path.dirname(downloadEntry.url)))}/` + `${path.basename(downloadEntry.url)}`;
       mapping[key] = {
         url: downloadEntry.url,
         etag: null,
@@ -149,10 +145,9 @@ export function parseLatestKnownGoodVersionsJson(jsonStr: string): string {
   try {
     json = JSON.parse(jsonStr);
   } catch (e) {
-    throw new Error(
-      `Storage JSON cannot be parsed. Original error: ${e instanceof Error ? e.message : String(e)}`,
-      {cause: e},
-    );
+    throw new Error(`Storage JSON cannot be parsed. Original error: ${e instanceof Error ? e.message : String(e)}`, {
+      cause: e,
+    });
   }
   /**
    * Example output:
