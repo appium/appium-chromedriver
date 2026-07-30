@@ -1,13 +1,11 @@
 import assert from 'node:assert/strict';
 import path from 'node:path';
-import {describe, beforeEach, afterEach, it, before} from 'node:test';
+import {describe, beforeEach, afterEach, it, before, mock} from 'node:test';
 import {fileURLToPath} from 'node:url';
 
 import {fs, node} from '@appium/support';
-import esmock from 'esmock';
 import sinon from 'sinon';
 
-import type * as ChromedriverModule from '../../lib/chromedriver.js';
 import * as utils from '../../lib/utils.js';
 
 const FIXTURES_DIR = path.resolve(
@@ -19,17 +17,15 @@ const FIXTURES_DIR = path.resolve(
 let currentGetChromedriverBinaryPath: (...args: any[]) => any = utils.getChromedriverBinaryPath;
 let currentGetChromeVersion: (...args: any[]) => any = utils.getChromeVersion;
 
-const {Chromedriver} = await esmock<typeof ChromedriverModule>(
-  '../../lib/chromedriver.js',
-  import.meta.url,
-  {},
-  {
-    '../../lib/utils.js': {
-      getChromedriverBinaryPath: (...args: any[]) => currentGetChromedriverBinaryPath(...args),
-      getChromeVersion: (...args: any[]) => currentGetChromeVersion(...args),
-    },
+mock.module('../../lib/utils.js', {
+  namedExports: {
+    ...utils,
+    getChromedriverBinaryPath: (...args: any[]) => currentGetChromedriverBinaryPath(...args),
+    getChromeVersion: (...args: any[]) => currentGetChromeVersion(...args),
   },
-);
+});
+
+const {Chromedriver} = await import('../../lib/chromedriver.js');
 
 describe('chromedriver', function () {
   let sandbox: sinon.SinonSandbox;
