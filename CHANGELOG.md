@@ -1,3 +1,9 @@
+## [9.0.5](https://github.com/appium/appium-chromedriver/compare/v9.0.4...v9.0.5) (2026-07-30)
+
+### Miscellaneous Chores
+
+* Drop esmock ([#610](https://github.com/appium/appium-chromedriver/issues/610)) ([0af785e](https://github.com/appium/appium-chromedriver/commit/0af785ef82033aed825dea4619f5d294b9fdaf9c))
+
 ## [9.0.4](https://github.com/appium/appium-chromedriver/compare/v9.0.3...v9.0.4) (2026-07-30)
 
 ### Miscellaneous Chores
