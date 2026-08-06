@@ -1,6 +1,6 @@
 import events from 'node:events';
 
-import {JWProxy, PROTOCOLS} from '@appium/base-driver';
+import {WebDriverProxy, PROTOCOLS} from '@appium/base-driver';
 import {logger, util} from '@appium/support';
 import type {ProxyOptions, HTTPMethod, HTTPBody} from '@appium/types';
 import type {ADB} from 'appium-adb';
@@ -57,7 +57,7 @@ export class Chromedriver extends events.EventEmitter<ChromedriverEventMap> {
   executableVerified: boolean;
   state: string;
   _execFunc: typeof exec;
-  jwproxy: JWProxy;
+  jwproxy: WebDriverProxy;
   readonly isCustomExecutableDir: boolean;
   readonly verbose?: boolean;
   readonly logPath?: string;
@@ -123,7 +123,7 @@ export class Chromedriver extends events.EventEmitter<ChromedriverEventMap> {
     if (reqBasePath) {
       proxyOpts.reqBasePath = reqBasePath;
     }
-    this.jwproxy = new JWProxy(proxyOpts);
+    this.jwproxy = new WebDriverProxy(proxyOpts);
     if (executableDir) {
       this.executableDir = executableDir;
       this.isCustomExecutableDir = true;
