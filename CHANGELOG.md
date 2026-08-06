@@ -1,3 +1,9 @@
+## [9.0.7](https://github.com/appium/appium-chromedriver/compare/v9.0.6...v9.0.7) (2026-08-06)
+
+### Miscellaneous Chores
+
+* rename safe occurrences of JWProxy ([#612](https://github.com/appium/appium-chromedriver/issues/612)) ([3367142](https://github.com/appium/appium-chromedriver/commit/33671429c60baec02bdce41a397c95cb8e18d388))
+
 ## [9.0.6](https://github.com/appium/appium-chromedriver/compare/v9.0.5...v9.0.6) (2026-08-05)
 
 ### Miscellaneous Chores
