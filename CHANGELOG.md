@@ -1,3 +1,9 @@
+## [9.0.14](https://github.com/appium/appium-chromedriver/compare/v9.0.13...v9.0.14) (2026-08-29)
+
+### Miscellaneous Chores
+
+* bump support ([#620](https://github.com/appium/appium-chromedriver/issues/620)) ([20c2163](https://github.com/appium/appium-chromedriver/commit/20c21632d8d2c4934689dad8576c616ffb28858d))
+
 ## [9.0.13](https://github.com/appium/appium-chromedriver/compare/v9.0.12...v9.0.13) (2026-08-29)
 
 ### Miscellaneous Chores

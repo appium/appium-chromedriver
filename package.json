@@ -1,6 +1,6 @@
 {
   "name": "appium-chromedriver",
-  "version": "9.0.13",
+  "version": "9.0.14",
   "description": "Node.js wrapper around chromedriver.",
   "keywords": [
     "android",
