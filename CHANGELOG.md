@@ -1,3 +1,9 @@
+## [9.0.13](https://github.com/appium/appium-chromedriver/compare/v9.0.12...v9.0.13) (2026-08-29)
+
+### Miscellaneous Chores
+
+* add chromedriver 151.0.7922.138 ([#619](https://github.com/appium/appium-chromedriver/issues/619)) ([a672ab6](https://github.com/appium/appium-chromedriver/commit/a672ab696d911d114b54a3f7eadb497ede53a4b5)), closes [#614](https://github.com/appium/appium-chromedriver/issues/614)
+
 ## [9.0.12](https://github.com/appium/appium-chromedriver/compare/v9.0.11...v9.0.12) (2026-08-29)
 
 ### Miscellaneous Chores
