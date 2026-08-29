@@ -48,7 +48,7 @@
     "e2e-test": "node --enable-source-maps --test --test-force-exit --test-concurrency=1 --test-timeout=600000 \"./build/test/functional/**/*.spec.js\""
   },
   "dependencies": {
-    "@appium/base-driver": "^10.0.0-rc.2",
+    "@appium/base-driver": "^10.8.0",
     "@appium/support": "^7.2.2",
     "@xmldom/xmldom": "^0.x",
     "appium-adb": "^16.0.0",
