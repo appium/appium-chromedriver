@@ -51,12 +51,12 @@
     "@appium/base-driver": "^10.8.0",
     "@appium/support": "^7.2.6",
     "@xmldom/xmldom": "^0.x",
-    "appium-adb": "^16.0.0",
-    "asyncbox": "^6.0.1",
-    "axios": "^1.16.0",
+    "appium-adb": "^16.0.4",
+    "asyncbox": "^6.4.3",
+    "axios": "^1.18.0",
     "compare-versions": "^6.0.0",
     "semver": "^7.0.0",
-    "teen_process": "^4.0.4",
+    "teen_process": "^4.2.0",
     "xpath": "^0.x"
   },
   "devDependencies": {
