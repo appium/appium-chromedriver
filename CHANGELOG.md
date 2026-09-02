@@ -1,3 +1,9 @@
+## [9.0.17](https://github.com/appium/appium-chromedriver/compare/v9.0.16...v9.0.17) (2026-09-02)
+
+### Miscellaneous Chores
+
+* fix format ([#623](https://github.com/appium/appium-chromedriver/issues/623)) ([668d081](https://github.com/appium/appium-chromedriver/commit/668d0815370a6bab9a55725d9b5e6acb8fe20772))
+
 ## [9.0.16](https://github.com/appium/appium-chromedriver/compare/v9.0.15...v9.0.16) (2026-09-02)
 
 ### Miscellaneous Chores
