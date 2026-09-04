@@ -1,8 +1,6 @@
 import type {EventEmitter} from 'node:events';
 
-// `keyof typeof PROTOCOLS` requires the runtime `PROTOCOLS` binding (not `import type`).
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports -- see above
-import {PROTOCOLS, type WebDriverProxy} from '@appium/base-driver';
+import type {WebDriverProxy} from '@appium/base-driver';
 import type {AppiumLogger} from '@appium/types';
 import type {ADB} from 'appium-adb';
 import type * as TeenProcess from 'teen_process';
@@ -29,7 +27,6 @@ export interface ChromedriverCommandContext extends EventEmitter {
   _execFunc: typeof TeenProcess.exec;
   _driverVersion: string | null;
   _onlineStatus: Record<string, any> | null;
-  _desiredProtocol: keyof typeof PROTOCOLS | null;
   capabilities: Record<string, any>;
   jwproxy: WebDriverProxy;
   log: AppiumLogger;
