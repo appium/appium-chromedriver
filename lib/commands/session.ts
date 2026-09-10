@@ -1,4 +1,4 @@
-import {PROTOCOLS, isStandardCap} from '@appium/base-driver';
+import {isStandardCap} from '@appium/base-driver';
 import {util} from '@appium/support';
 import * as semver from 'semver';
 
@@ -40,16 +40,12 @@ export function toW3cCapNames(originalCaps: Record<string, any> = {}): Record<st
 }
 
 /**
- * Creates a new Chromedriver session using the negotiated downstream protocol.
+ * Creates a new W3C Chromedriver session.
  */
 export async function startSession(this: ChromedriverCommandContext): Promise<SessionCapabilities> {
-  const sessionCaps =
-    this._desiredProtocol === PROTOCOLS.W3C
-      ? {capabilities: {alwaysMatch: toW3cCapNames(this.capabilities)}}
-      : {desiredCapabilities: this.capabilities};
-  this.log.info(
-    `Starting ${this._desiredProtocol} Chromedriver session with capabilities: ` + JSON.stringify(sessionCaps, null, 2),
-  );
+  applyW3cCapabilityQuirks.call(this);
+  const sessionCaps = {capabilities: {alwaysMatch: toW3cCapNames(this.capabilities)}};
+  this.log.info(`Starting W3C Chromedriver session with capabilities: ` + JSON.stringify(sessionCaps, null, 2));
   const response = (await this.jwproxy.command('/session', 'POST', sessionCaps)) as Record<string, any>;
   this.log.prefix = generateLogPrefix(this, this.jwproxy.sessionId);
   changeState.call(this, CHROMEDRIVER_STATES.ONLINE);
@@ -57,32 +53,28 @@ export async function startSession(this: ChromedriverCommandContext): Promise<Se
 }
 
 /**
- * Chooses W3C or MJSONWP protocol based on driver/capability constraints.
+ * Warns/adjusts capabilities for drivers with partial or opt-in W3C support.
+ * The legacy JSONWP protocol is no longer supported, so the W3C protocol is always requested.
  */
-export function syncProtocol(this: ChromedriverCommandContext): keyof typeof PROTOCOLS {
+function applyW3cCapabilityQuirks(this: ChromedriverCommandContext): void {
   if (this.driverVersion) {
     const coercedVersion = semver.coerce(this.driverVersion);
     if (!coercedVersion || coercedVersion.major < MIN_CD_VERSION_WITH_W3C_SUPPORT) {
-      this.log.info(
-        `The ChromeDriver v. ${this.driverVersion} does not fully support ${PROTOCOLS.W3C} protocol. ` +
-          `Defaulting to ${PROTOCOLS.MJSONWP}`,
+      this.log.warn(
+        `The ChromeDriver v. ${this.driverVersion} might not fully support the W3C WebDriver protocol. ` +
+          `Only versions ${MIN_CD_VERSION_WITH_W3C_SUPPORT}+ are guaranteed to work, since the legacy JSONWP protocol is no longer supported.`,
       );
-      this._desiredProtocol = PROTOCOLS.MJSONWP;
-      return this._desiredProtocol;
     }
+  }
+
+  const chromeOptions = getCapValue(this.capabilities, 'chromeOptions');
+  if (util.isPlainObject(chromeOptions) && chromeOptions.w3c === false) {
+    this.log.warn(`The 'chromeOptions.w3c: false' capability is no longer supported. Forcing the W3C protocol.`);
   }
 
   const statusMsg = this._onlineStatus?.message;
   const isOperaDriver = typeof statusMsg === 'string' && statusMsg.includes('OperaDriver');
-  const chromeOptions = getCapValue(this.capabilities, 'chromeOptions');
-  if (util.isPlainObject(chromeOptions) && chromeOptions.w3c === false) {
-    this.log.info(
-      `The ChromeDriver v. ${this.driverVersion} supports ${PROTOCOLS.W3C} protocol, ` +
-        `but ${PROTOCOLS.MJSONWP} one has been explicitly requested`,
-    );
-    this._desiredProtocol = PROTOCOLS.MJSONWP;
-    return this._desiredProtocol;
-  } else if (isOperaDriver) {
+  if (isOperaDriver) {
     // OperaDriver requires explicit W3C request or it falls back to JWP.
     if (util.isPlainObject(chromeOptions)) {
       chromeOptions.w3c = true;
@@ -90,9 +82,6 @@ export function syncProtocol(this: ChromedriverCommandContext): keyof typeof PRO
       this.capabilities[toW3cCapName('chromeOptions')] = {w3c: true};
     }
   }
-
-  this._desiredProtocol = PROTOCOLS.W3C;
-  return this._desiredProtocol;
 }
 
 /**
