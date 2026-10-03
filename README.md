@@ -3,6 +3,9 @@ appium-chromedriver
 
 [![Release](https://github.com/appium/appium-chromedriver/actions/workflows/publish.js.yml/badge.svg)](https://github.com/appium/appium-chromedriver/actions/workflows/publish.js.yml)
 
+> **This repository has moved.** Development now continues in the [appium-android monorepo](https://github.com/appium/appium-android/tree/main/packages/chromedriver).
+
+
 Node.js wrapper around [Chromedriver](https://sites.google.com/chromium.org/driver/)
 and [Microsoft Edge WebDriver](https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/).
 The Microsoft Edge WebDriver support is since v5.4.0.
